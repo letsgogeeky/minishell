@@ -6,16 +6,16 @@
 #    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2023/12/15 21:07:25 by ramymoussa       ###   ########.fr        #
+#    Updated: 2023/12/15 22:13:03 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
 NAME:= minishell
 
-CFLAGS	:= -Wextra -Wall -Werror -g
+CFLAGS	:= -Wextra -Wall -Werror -g -lreadline
 HEADERS := -I ./include
 SRCS := main.c
+
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 
 all: ${NAME}
