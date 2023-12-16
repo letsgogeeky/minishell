@@ -6,15 +6,20 @@
 #    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2023/12/15 22:13:03 by ramymoussa       ###   ########.fr        #
+#    Updated: 2023/12/16 19:05:18 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME:= minishell
 
-CFLAGS	:= -Wextra -Wall -Werror -g -lreadline
+CFLAGS	:= -g -lreadline # -Wextra -Wall -Werror 
 HEADERS := -I ./include
-SRCS := main.c
+
+SRC_ERROR := error/execution_error.c error/parser_error.c
+SRC_BUILTINS := execution/builtins/pwd.c
+SRC_MAIN := main.c 
+
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) 
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 
