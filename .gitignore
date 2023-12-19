@@ -119,3 +119,5 @@ push_swap_visualizer/
 ./philo/philo
 ./minishell
 test.c
+lib
+minishell
