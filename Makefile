@@ -6,7 +6,7 @@
 #    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2023/12/19 19:28:11 by ramymoussa       ###   ########.fr        #
+#    Updated: 2023/12/19 20:14:50 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,11 @@ NAME:= minishell
 BASELIB := ./lib/ft-baselib
 CFLAGS	:= -lreadline -Wextra -Wall -Werror -g
 HEADERS := -I ./include -I ${BASELIB}/include
-SRCS := main.c
+SRC_ERROR := error/execution_error.c error/parser_error.c
+SRC_BUILTINS := execution/builtins/pwd.c
+SRC_MAIN := main.c 
+
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) 
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a
