@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
+#    By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2023/12/19 20:14:50 by ramymoussa       ###   ########.fr        #
+#    Updated: 2023/12/26 20:02:21 by ramoussa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,10 @@ CFLAGS	:= -lreadline -Wextra -Wall -Werror -g
 HEADERS := -I ./include -I ${BASELIB}/include
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins/pwd.c
-SRC_MAIN := main.c 
+SRC_EXECUTION := execution/command_path.c execution/executor.c
+SRC_MAIN := main.c
 
-SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) 
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a
