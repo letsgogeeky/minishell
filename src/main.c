@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2023/12/16 19:01:09 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2023/12/26 19:26:15 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int interactive_mode()
 {
     char    *line;
 
-    line = readline("massiveshell$ ");
+    line = readline("massiveshell🌚$ ");
     while (line)
     {
         if (line && line[0])
@@ -29,7 +29,7 @@ static int interactive_mode()
             // TODO: add to history and do execution magic and return exit code after
             builtins_pwd();
         }
-        line = readline("massiveshell$ ");
+        line = readline("massiveshell🌚$ ");
     }
     return (0);
 }
