@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:38:37 by ramymoussa        #+#    #+#             */
-/*   Updated: 2023/12/19 20:19:30 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2023/12/29 21:38:49 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-//TODO: Remove and use a libft function
 #include <stdio.h>
 
 #include "minishell/error.h"

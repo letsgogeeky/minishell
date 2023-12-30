@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/16 18:52:50 by ramymoussa        #+#    #+#             */
-/*   Updated: 2023/12/29 21:57:57 by ramoussa         ###   ########.fr       */
+/*   Created: 2023/12/26 19:33:40 by ramoussa          #+#    #+#             */
+/*   Updated: 2023/12/30 00:37:32 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
 
-# include <unistd.h>
-# include <errno.h>
+# include <stdio.h>
+# include "baselib.h"
 
-void    print_builtin_error(char *cmd, char *arg, char *msg);
-void	print_execve_error(char *cmd, char *msg);
+struct s_executor
+{
+	pid_t	last_pid;
+	char	**envp;
+	int		pipe_in_fd;
+	int		pipe_out_fd;
+};
+
+char	*get_path(char *cmd, char **envp);
+int		exec_cmd(char *cmd, char **envp);
 
 #endif
