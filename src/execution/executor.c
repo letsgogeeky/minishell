@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2023/12/27 18:35:26 by ramoussa         ###   ########.fr       */
+/*   Updated: 2023/12/30 22:29:26 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,26 @@
 // TODO: change arguments to be the expected structs
 int	exec_cmd(char *cmd, char **envp)
 {
-	// TODO: handle when path is NULL
-	printf("%s\n", get_path(cmd, envp));
+	char	*path;
+	char	**parts;
+	pid_t	pid;
+	int	status;
+
+	parts = ft_split(cmd, ' ');
+	path = get_path(parts[0], envp);
+	// TODO: check if EXIT_FAILURE is the right return value
+	if (!path)
+		return (EXIT_FAILURE);
+	printf("path: %s\n", path);
+	int i = 0;
+	while (parts[i])
+	{
+		printf("parts[%d]: %s\n", i, parts[i]);
+		i++;
+	}
+	pid = fork();
+	if (pid == 0)
+		execve(path, parts, envp);
+	pid = waitpid(pid, &status, 0);
 	return (EXIT_SUCCESS);
 }
