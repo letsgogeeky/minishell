@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 19:33:40 by ramoussa          #+#    #+#             */
-/*   Updated: 2023/12/30 00:37:32 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/01/06 21:06:42 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTOR_H
 
 # include <stdio.h>
+# include <stdbool.h>
 # include "baselib.h"
 
 struct s_executor
@@ -26,5 +27,9 @@ struct s_executor
 
 char	*get_path(char *cmd, char **envp);
 int		exec_cmd(char *cmd, char **envp);
+void	do_input_redirection(int *pipe_io, bool is_first_cmd);
+void	do_output_redirection(int *pipe_io, bool is_last_cmd, int system_out_fd);
+void	restore_io(int *system_io, int *pipe_io);
+void	executor(char **cmds, char **envp);
 
 #endif
