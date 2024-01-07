@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/06 21:14:47 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/06 23:32:28 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	exec_cmd(char *cmd, char **envp)
 {
 	char	*path;
 	char	**parts;
-	pid_t	pid;
 
 	// TODO: check if builtin
 	parts = ft_split(cmd, ' ');

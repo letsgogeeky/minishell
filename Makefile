@@ -6,20 +6,21 @@
 #    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2024/01/06 19:16:48 by ramymoussa       ###   ########.fr        #
+#    Updated: 2024/01/07 00:49:19 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME:= minishell
 
 BASELIB := ./lib/ft-baselib
-CFLAGS	:= -lreadline -Wextra -Wall -Werror -g
+CFLAGS	:= -Wextra -Wall -Werror -g
+# LINKS := -L/usr/local/opt/readline/lib -l readline
 HEADERS := -I ./include -I ${BASELIB}/include
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins/pwd.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
-SRC_MAIN := main.c
+SRC_MAIN := signals.c main.c
 
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
 
@@ -29,10 +30,10 @@ LIBS := ${BASELIB}/baselib.a
 all: BASELIB ${NAME}
 
 %.o: %.c
-	@$(CC) $(HEADERS) -o $@ -c $<
+	@$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
-${NAME}: ${OBJS}
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) && echo "Successful $(NAME) build...!"
+${NAME}: $(LIBS) $(OBJS)
+	@$(CC) $(OBJS) $(LINKS) $(LIBS) $(HEADERS) -o $(NAME) && echo "Successful $(NAME) build...!"
 
 BASELIB:
 	@if [ -d ${BASELIB} ]; then\
