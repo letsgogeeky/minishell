@@ -6,14 +6,13 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/06 20:29:02 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/07 00:04:20 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <readline/readline.h>
+
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
@@ -26,6 +25,7 @@ static int interactive_mode(char **envp)
     line = readline("massiveshell$ ");
     while (line)
     {
+        use_signals();
         if (line && line[0])
         {
             // TODO: add to history and do execution magic and return exit code after
@@ -45,6 +45,7 @@ int main(int argc, char **argv, char **envp)
         return (1); // TODO: handle non-interactive mode if required or desired
     if (isatty(STDIN_FILENO))
     {
+        use_signals();
         // TODO: Start an interactive shell and do magic
         interactive_mode(envp);
     }
