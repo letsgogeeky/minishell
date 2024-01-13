@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/13 19:14:18 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/13 19:31:43 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ static int interactive_mode(char **envp)
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
             cmds = ft_split(line, '|');
+            reset_terminos();
 			executor(cmds, envp); // TODO: make this proper executor
+            update_terminos();
         }
         line = readline("massiveshell$ ");
     }
     printf("CTRL+D\n");
+    // TODO: free memory before exiting
     // This function should also be called when exiting the shell using `exit` builtin
     reset_terminos();
     return (0);

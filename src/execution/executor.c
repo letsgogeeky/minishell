@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/13 19:19:08 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/13 19:31:39 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	executor(char **cmds, char **envp)
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
 	system_io[1] = dup(STDOUT_FILENO);
-	reset_terminos();
 	while (cmds[i])
 	{
 		// do input redirection
@@ -52,7 +51,6 @@ void	executor(char **cmds, char **envp)
 	// restore io
 	restore_io(system_io, pipe_io);
 	pid = waitpid(pid, &status, 0);
-	update_terminos();
 }
 
 // TODO: change arguments to be the expected structs
