@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:25:10 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/07 01:18:13 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:18:45 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <termios.h>
 # include <unistd.h>
 
-void    use_signals();
+void	update_terminos(void);
+void    reset_terminos(void);
+void    use_parent_signals();
+void    use_child_signals();
 
 #endif

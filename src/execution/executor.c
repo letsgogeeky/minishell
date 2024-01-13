@@ -6,11 +6,12 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/06 23:32:28 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/13 19:19:08 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
+#include "minishell/minishell.h"
 
 int	exec_cmd(char *cmd, char **envp);
 // TODO: change arguments to be the expected structs
@@ -25,6 +26,7 @@ void	executor(char **cmds, char **envp)
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
 	system_io[1] = dup(STDOUT_FILENO);
+	reset_terminos();
 	while (cmds[i])
 	{
 		// do input redirection
@@ -41,6 +43,7 @@ void	executor(char **cmds, char **envp)
 		if (pid == 0)
 		{
 			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1]);
+			use_child_signals();
 			exec_cmd(cmds[i], envp);
 		}
 		i++;
@@ -49,6 +52,7 @@ void	executor(char **cmds, char **envp)
 	// restore io
 	restore_io(system_io, pipe_io);
 	pid = waitpid(pid, &status, 0);
+	update_terminos();
 }
 
 // TODO: change arguments to be the expected structs

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+         #
+#    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2024/01/07 01:18:56 by ramoussa         ###   ########.fr        #
+#    Updated: 2024/01/07 01:23:28 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ NAME:= minishell
 
 BASELIB := ./lib/ft-baselib
 CFLAGS	:= -Wextra -Wall -Werror -g
-LINKS := -lreadline
-HEADERS := -I ./include -I ${BASELIB}/include
+LINKS := -lreadline -L/usr/local/opt/readline/lib
+HEADERS := -I ./include -I ${BASELIB}/include -I/usr/local/opt/readline/include
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins/pwd.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
