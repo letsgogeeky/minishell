@@ -6,11 +6,12 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/13 19:31:39 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/13 19:50:27 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
+#include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
 int	exec_cmd(char *cmd, char **envp);
@@ -34,6 +35,12 @@ void	executor(char **cmds, char **envp)
 		pipe(pipe_io);
 		// check if builtin runs on parent
 		// if builtin runs on parent, continue without forking
+		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
+		{
+			exec_builtin(cmds[i], envp);
+			i++;
+			continue ;
+		}
 		// else do fork
 		pid = fork();
 		// do redirection
