@@ -6,11 +6,13 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/06 21:14:47 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/13 19:50:27 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
+#include "minishell/execution/builtins.h"
+#include "minishell/minishell.h"
 
 int	exec_cmd(char *cmd, char **envp);
 // TODO: change arguments to be the expected structs
@@ -33,6 +35,12 @@ void	executor(char **cmds, char **envp)
 		pipe(pipe_io);
 		// check if builtin runs on parent
 		// if builtin runs on parent, continue without forking
+		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
+		{
+			exec_builtin(cmds[i], envp);
+			i++;
+			continue ;
+		}
 		// else do fork
 		pid = fork();
 		// do redirection
@@ -41,6 +49,7 @@ void	executor(char **cmds, char **envp)
 		if (pid == 0)
 		{
 			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1]);
+			use_child_signals();
 			exec_cmd(cmds[i], envp);
 		}
 		i++;
@@ -56,7 +65,6 @@ int	exec_cmd(char *cmd, char **envp)
 {
 	char	*path;
 	char	**parts;
-	pid_t	pid;
 
 	// TODO: check if builtin
 	parts = ft_split(cmd, ' ');

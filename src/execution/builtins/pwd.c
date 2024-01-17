@@ -3,18 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:38:37 by ramymoussa        #+#    #+#             */
-/*   Updated: 2023/12/29 21:38:49 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:41:01 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <limits.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
 
 #include "minishell/error.h"
 #include "minishell/execution/builtins.h"
