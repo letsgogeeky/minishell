@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/13 19:50:27 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 14:27:11 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	exec_cmd(char *cmd, char **envp);
 // TODO: change arguments to be the expected structs
-void	executor(char **cmds, char **envp)
+void	executor(char **cmds, char **envp, int file_fd)
 {
 	int		pipe_io[2];
 	int		system_io[2];
@@ -48,7 +48,7 @@ void	executor(char **cmds, char **envp)
 		// call exec_cmd
 		if (pid == 0)
 		{
-			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1]);
+			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], file_fd);
 			use_child_signals();
 			exec_cmd(cmds[i], envp);
 		}

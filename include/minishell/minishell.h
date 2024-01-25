@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:25:10 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/13 19:18:45 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 13:33:34 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 # include <signal.h>
 # include <termios.h>
 # include <unistd.h>
+# include "baselib.h"
 
 void	update_terminos(void);
 void    reset_terminos(void);
 void    use_parent_signals();
 void    use_child_signals();
+int     open_file(char *path, int flags);
 
 #endif

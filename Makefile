@@ -6,7 +6,7 @@
 #    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2024/01/13 19:52:01 by ramymoussa       ###   ########.fr        #
+#    Updated: 2024/01/25 13:33:54 by ramymoussa       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/pwd.c execution/builtins/env.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
-SRC_MAIN := signals.c main.c
+SRC_MAIN := file_manager.c signals.c main.c
 
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
 

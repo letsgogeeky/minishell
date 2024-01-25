@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/06 21:19:05 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 14:22:29 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,17 @@ void	do_input_redirection(int *pipe_io, bool is_first_cmd)
         close(pipe_io[0]);
         close(pipe_io[1]);
     }
-    
 }
 
-void	do_output_redirection(int *pipe_io, bool is_last_cmd, int system_out_fd)
+void	do_output_redirection(int *pipe_io, bool is_last_cmd, int system_out_fd, int file_fd)
 {
-    if (is_last_cmd)
+    if (is_last_cmd && file_fd != -1)
+    {
+        // ft_putendl_fd("here", STDERR_FILENO);
+        dup2(file_fd, STDOUT_FILENO);
+        close(file_fd);
+    }
+    else if (is_last_cmd)
         dup2(system_out_fd, STDOUT_FILENO);
     else
         dup2(pipe_io[1], STDOUT_FILENO);
