@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/25 14:41:55 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 16:06:34 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int interactive_mode(char **envp)
     char    *line;
     char    **cmds;
     int     out_file_fd;
+    bool    is_append;
 
     line = readline("massiveshell$ ");
     while (line && line[0] != EOF)
@@ -29,11 +30,20 @@ static int interactive_mode(char **envp)
         use_parent_signals();
         if (line && line[0])
         {
-            // for >> append redirection. append is slower to flush data to file
-            // because we're not allowed to use fflush
-            out_file_fd = open_file("./out.txt", O_APPEND);
-            // for > truncate redirection, it takes effect immedicately
-            out_file_fd = open_file("./out.txt", O_TRUNC);
+            // TODO: call parser here
+            is_append = false;
+            // temporary solution for output file until is handled by parser
+            if (is_append)
+            {
+                // for >> append redirection. append is slower to flush data to file
+                // because we're not allowed to use fflush
+                out_file_fd = open_file("./out.txt", O_APPEND);
+            }
+            else
+            {
+                // for > truncate redirection, it takes effect immedicately
+                out_file_fd = open_file("./out.txt", O_TRUNC);
+            }
             printf("file fd: %d\n", out_file_fd);
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
