@@ -6,18 +6,22 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/25 14:22:29 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 16:27:41 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
 
-void	do_input_redirection(int *pipe_io, bool is_first_cmd)
+void	do_input_redirection(int *pipe_io, bool is_first_cmd, int file_fd)
 {
     //  TODO: update to check if input is stdin or file
-    if (is_first_cmd)
-        return ;
-    dup2(pipe_io[0], STDIN_FILENO);
+    if (is_first_cmd && file_fd != -1)
+    {
+        dup2(file_fd, STDIN_FILENO);
+        close(file_fd);
+    }
+    else
+        dup2(pipe_io[0], STDIN_FILENO);
     if (!is_first_cmd)
     {
         close(pipe_io[0]);
