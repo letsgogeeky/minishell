@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:59:01 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/13 19:58:34 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/26 14:08:29 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 
 int builtins_pwd();
 int builtins_env(char **envp);
+int builtins_exit(char **cmds, char **envp);
 
 int is_builtin(char *cmd);
 int runs_on_parent(char *cmd);
-int exec_builtin(char *cmd, char **envp);
+int exec_builtin(char **cmds, char *cmd, char **envp);
 
 #endif

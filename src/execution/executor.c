@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/13 19:50:27 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/26 14:08:49 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	executor(char **cmds, char **envp)
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			exec_builtin(cmds[i], envp);
+			exec_builtin(cmds, cmds[i], envp);
 			i++;
 			continue ;
 		}
