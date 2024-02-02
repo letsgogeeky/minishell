@@ -6,11 +6,12 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/25 16:27:41 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/02 14:32:18 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
+#include "minishell/minishell.h"
 
 void	do_input_redirection(int *pipe_io, bool is_first_cmd, int file_fd)
 {
@@ -55,4 +56,27 @@ void restore_io(int *system_io, int *pipe_io)
     close(pipe_io[1]);
     close(pipe_io[0]);
     
+}
+
+int parse_heredoc(char *demlimiter, char **envp)
+{
+    char	*doc;
+	char	*limiter;
+	int		ipc[2];
+
+	if (pipe(ipc))
+		printf("pipe error\n");
+    if (isatty(STDIN_FILENO))
+        doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
+	while (doc && ft_strncmp(limiter, doc, ft_strlen(doc)))
+	{
+		ft_putstr_fd(doc, ipc[1]);
+		free(doc);
+		doc = readline("heredoc> ");
+	}
+	if (doc)
+		free(doc);
+	dup2(ipc[0], 0);
+	close(ipc[0]);
+	close(ipc[1]);
 }
