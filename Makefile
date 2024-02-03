@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
+#    By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2024/01/06 19:16:48 by ramymoussa       ###   ########.fr        #
+#    Updated: 2024/01/29 01:43:25 by fvoicu           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,10 @@ SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins/pwd.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
+SRC_PARSER := $(wildcard parser/lexer/*.c)
 SRC_MAIN := main.c
 
-SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a
