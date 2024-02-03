@@ -1,4 +1,10 @@
 // #include "minishell/parsing/lexer.h"
+// NOTETOSELF: word can be anything but the spaces, pipe, etc 
+			// ,doesn t need to be specifically alphanumeric, change this
+// TODO: command -arg is not working, it is not recognizing the -arg as a word
+// TODO: brackets, escape characters, quotes, etc are not handled
+// TODO: separate the funcs
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -108,7 +114,7 @@ void	update_state(t_lexer *lexer, char curr_ch)
 		lexer->state = IN_ASSIGNMENT;
 	else if (curr_ch == '\n')
 		lexer->state = START;
-	else if (isalpha(curr_ch) || isdigit(curr_ch)|| curr_ch == '_')
+	else if (isalnum(curr_ch) || curr_ch == '_')
 		lexer->state = IN_WORD;
 	else
 		lexer->state = IN_ERROR;
@@ -459,20 +465,21 @@ int main()
 	// run_test(" <  |   >  ");
 	// run_test("  <    >  |  ");
     // run_test("| < > << >> =");
-	
-	// TEST
 	// run_test("word");
     // run_test("word1 word2 word3");
     // run_test("<<word1>> =|");
     // run_test("1234 5678");
     // run_test("command1 < input.txt > output.txt | command2");
     // run_test(">>>>");
-    // run_test("command -arg");
-    // run_test("variable=value");
-    // run_test("");
-    // run_test("#");
-    // run_test("echo \"Hello, World!\"");
+	// run_test("variable=value");
+	// run_test("");
 	// run_test(" ls");
+	
+	// unhandled cases:
+
+    // run_test("command -arg");
+	// run_test("#");
+    // run_test("echo \"Hello, World!\"");
     // run_test("if [ -d $directory ]; then echo 'Exists'; fi");
     return 0;
 }
