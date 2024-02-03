@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/25 16:43:58 by ramymoussa       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell/execution/executor.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
@@ -37,7 +25,7 @@ void	executor(char **cmds, char **envp, int out_fd, int in_fd)
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			exec_builtin(cmds[i], envp);
+			exec_builtin(cmds, cmds[i], envp);
 			i++;
 			continue ;
 		}
