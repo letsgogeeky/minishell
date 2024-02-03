@@ -1,4 +1,3 @@
-
 NAME:= minishell
 
 BASELIB := ./lib/ft-baselib
@@ -8,7 +7,7 @@ HEADERS := -I ./include -I ${BASELIB}/include -I/usr/local/opt/readline/include
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/pwd.c execution/builtins/env.c \
-	execution/builtins/exit.c
+	execution/builtins/exit.c execution/builtins/echo.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
 SRC_MAIN := file_manager.c signals.c main.c
