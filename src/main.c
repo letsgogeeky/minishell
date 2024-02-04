@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/25 16:37:57 by ramymoussa       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -51,7 +39,7 @@ static int interactive_mode(char **envp)
             // builtins_pwd();
             cmds = ft_split(line, '|');
             reset_terminos();
-			executor(cmds, envp, out_file_fd, in_fd); // TODO: make this proper executor
+			      executor(cmds, &envp, out_file_fd, in_fd); // TODO: make this proper executor
             update_terminos();
         }
         line = readline("massiveshell$ ");

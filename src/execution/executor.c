@@ -1,22 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/25 16:43:58 by ramymoussa       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell/execution/executor.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-int	exec_cmd(char *cmd, char **envp);
+int	exec_cmd(char **cmds, char *cmd, char ***envp);
 // TODO: change arguments to be the expected structs
-void	executor(char **cmds, char **envp, int out_fd, int in_fd)
+void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 {
 	int		pipe_io[2];
 	int		system_io[2];
@@ -37,8 +25,16 @@ void	executor(char **cmds, char **envp, int out_fd, int in_fd)
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			exec_builtin(cmds[i], envp);
+			exec_builtin(cmds, cmds[i], envp);
 			i++;
+			// TODO: remove this debug print
+			int j = 0;
+			while ((*envp)[j])
+			{
+				printf("envp[%d]: %s\n", j, (*envp)[j]);
+				j++;
+			}
+			// end of debug print
 			continue ;
 		}
 		// else do fork
@@ -50,7 +46,7 @@ void	executor(char **cmds, char **envp, int out_fd, int in_fd)
 		{
 			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], out_fd);
 			use_child_signals();
-			exec_cmd(cmds[i], envp);
+			exec_cmd(cmds, cmds[i], envp);	
 		}
 		i++;
 	}
@@ -61,14 +57,16 @@ void	executor(char **cmds, char **envp, int out_fd, int in_fd)
 }
 
 // TODO: change arguments to be the expected structs
-int	exec_cmd(char *cmd, char **envp)
+int	exec_cmd(char **cmds, char *cmd, char ***envp)
 {
 	char	*path;
 	char	**parts;
 
+	if (is_builtin(cmd))
+		return (exec_builtin(cmds, cmd, envp));
 	// TODO: check if builtin
 	parts = ft_split(cmd, ' ');
-	path = get_path(parts[0], envp);
+	path = get_path(parts[0], *envp);
 	// TODO: check if EXIT_FAILURE is the right return value
 	if (!path)
 		return (EXIT_FAILURE);
@@ -80,7 +78,6 @@ int	exec_cmd(char *cmd, char **envp)
 		printf("parts[%d]: %s\n", i, parts[i]);
 		i++;
 	}
-	// END OF TODO
-	execve(path, parts, envp);
+	execve(path, parts, *envp);
 	return (EXIT_SUCCESS);
 }
