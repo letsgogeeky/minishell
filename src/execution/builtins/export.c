@@ -2,8 +2,6 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
 
-int is_valid_env_name(char *name);
-
 int builtins_export(char **args, char ***envp)
 {
     int i;
@@ -35,21 +33,4 @@ int builtins_export(char **args, char ***envp)
         i++;
     }
     return (EXIT_SUCCESS);
-}
-
-int is_valid_env_name(char *name)
-{
-    int i;
-
-    i = 0;
-    if (!ft_isalpha(name[i]) && name[i] != '_')
-        return (0);
-    i++;
-    while (name[i])
-    {
-        if (!ft_isalnum(name[i]) && name[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
 }
