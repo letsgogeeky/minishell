@@ -12,10 +12,9 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/export.c execution/builtins/unset.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
-
+SRC_PARSER := $(wildcard parser/lexer/*.c)
 SRC_MAIN := signals.c main.c env_manager.c file_manager.c
-
-SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a
