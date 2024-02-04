@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
-
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"

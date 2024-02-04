@@ -54,7 +54,7 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	// wait for all children
 	// restore io
 	restore_io(system_io, pipe_io);
-	pid = waitpid(pid, &g_exit_code, 0);
+	wait_for_children(pid, cmds);
 }
 
 // TODO: change arguments to be the expected structs
