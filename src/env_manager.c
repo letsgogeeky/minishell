@@ -58,3 +58,46 @@ char    **add_to_env(char *key, char *value, char **envp)
     new_envp[i + 1] = NULL;
     return (new_envp);
 }
+
+char    **remove_from_env(char *key, char **envp)
+{
+    int i;
+    int j;
+    char **new_envp;
+
+    i = exists_in_env(key, envp);
+    if (i == -1)
+        return (envp);
+    j = 0;
+    while (envp[j])
+        j++;
+    new_envp = malloc(sizeof(char *) * j);
+    j = 0;
+    while (envp[j])
+    {
+        if (j < i)
+            new_envp[j] = envp[j];
+        else if (j > i)
+            new_envp[j - 1] = envp[j];
+        j++;
+    }
+    new_envp[j - 1] = NULL;
+    return (new_envp);
+}
+
+int is_valid_env_name(char *name)
+{
+    int i;
+
+    i = 0;
+    if (!ft_isalpha(name[i]) && name[i] != '_')
+        return (0);
+    i++;
+    while (name[i])
+    {
+        if (!ft_isalnum(name[i]) && name[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
+}
