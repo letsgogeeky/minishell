@@ -1,6 +1,7 @@
 #include "minishell/execution/executor.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
+#include "minishell/error.h"
 
 int	exec_cmd(char **cmds, char *cmd, char ***envp);
 // TODO: change arguments to be the expected structs
@@ -10,7 +11,7 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	int		system_io[2];
 	pid_t	pid;
 	int		i;
-	int		status;
+	// int		status;
 
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
@@ -25,7 +26,7 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			exec_builtin(cmds, cmds[i], envp);
+			g_exit_code = exec_builtin(cmds, cmds[i], envp);
 			i++;
 			// TODO: remove this debug print
 			int j = 0;
@@ -53,7 +54,7 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	// wait for all children
 	// restore io
 	restore_io(system_io, pipe_io);
-	pid = waitpid(pid, &status, 0);
+	pid = waitpid(pid, &g_exit_code, 0);
 }
 
 // TODO: change arguments to be the expected structs
@@ -69,15 +70,16 @@ int	exec_cmd(char **cmds, char *cmd, char ***envp)
 	path = get_path(parts[0], *envp);
 	// TODO: check if EXIT_FAILURE is the right return value
 	if (!path)
-		return (EXIT_FAILURE);
-	// TODO: remove next lines as they will write to output
-	printf("path: %s\n", path);
-	int i = 0;
-	while (parts[i])
+		err(cmd, "command not found", 127);
+	if (execve(path, parts, *envp) == -1)
 	{
-		printf("parts[%d]: %s\n", i, parts[i]);
-		i++;
+		// TODO: remove perror line
+		perror("execve");
+		free(path);
+		free(parts);
+		if (!access(path, F_OK) && access(path, X_OK))
+			err(cmd, "Permission denied", 126);
+		err(cmd, "command not found", 127);
 	}
-	execve(path, parts, *envp);
 	return (EXIT_SUCCESS);
 }

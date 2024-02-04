@@ -11,6 +11,8 @@
 # include <stdbool.h>
 # include "baselib.h"
 
+extern int g_exit_code;
+
 void	update_terminos(void);
 void    reset_terminos(void);
 void    use_parent_signals();
