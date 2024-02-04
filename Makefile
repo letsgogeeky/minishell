@@ -1,14 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/12/15 20:55:14 by ramoussa          #+#    #+#              #
-#    Updated: 2024/02/04 13:06:21 by ramymoussa       ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 NAME:= minishell
 
@@ -23,7 +12,8 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/export.c execution/builtins/unset.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c
-SRC_MAIN := signals.c main.c env_manager.c
+
+SRC_MAIN := signals.c main.c env_manager.c file_manager.c
 
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION)
 

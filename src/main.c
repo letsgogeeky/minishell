@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/03 20:17:17 by ramymoussa       ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -21,6 +9,9 @@ static int interactive_mode(char **envp)
 {
     char    *line;
     char    **cmds;
+    int     out_file_fd;
+    int     in_fd;
+    bool    is_append;
 
     line = readline("massiveshell$ ");
     while (line && line[0] != EOF)
@@ -28,11 +19,27 @@ static int interactive_mode(char **envp)
         use_parent_signals();
         if (line && line[0])
         {
+            // TODO: call parser here
+            is_append = false;
+            // temporary solution for output file until is handled by parser
+            if (is_append)
+            {
+                // for >> append redirection. append is slower to flush data to file
+                // because we're not allowed to use fflush
+                out_file_fd = open_file("./out.txt", O_APPEND);
+            }
+            else
+            {
+                // for > truncate redirection, it takes effect immedicately
+                out_file_fd = open_file("./out.txt", O_TRUNC);
+            }
+            in_fd = open_file("./in.txt", O_RDONLY);
+            printf("file fd: %d\n", out_file_fd);
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
             cmds = ft_split(line, '|');
             reset_terminos();
-			executor(cmds, &envp); // TODO: make this proper executor
+			      executor(cmds, &envp, out_file_fd, in_fd); // TODO: make this proper executor
             update_terminos();
         }
         line = readline("massiveshell$ ");
