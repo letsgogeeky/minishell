@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 19:33:40 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/06 21:06:42 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/03 20:13:00 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ struct s_executor
 };
 
 char	*get_path(char *cmd, char **envp);
-int		exec_cmd(char *cmd, char **envp);
 void	do_input_redirection(int *pipe_io, bool is_first_cmd);
 void	do_output_redirection(int *pipe_io, bool is_last_cmd, int system_out_fd);
 void	restore_io(int *system_io, int *pipe_io);
-void	executor(char **cmds, char **envp);
+void	executor(char **cmds, char ***envp);
 
 #endif
