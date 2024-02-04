@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:43:22 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/01/25 14:27:11 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 16:43:58 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 int	exec_cmd(char *cmd, char **envp);
 // TODO: change arguments to be the expected structs
-void	executor(char **cmds, char **envp, int file_fd)
+void	executor(char **cmds, char **envp, int out_fd, int in_fd)
 {
 	int		pipe_io[2];
 	int		system_io[2];
@@ -30,7 +30,7 @@ void	executor(char **cmds, char **envp, int file_fd)
 	while (cmds[i])
 	{
 		// do input redirection
-		do_input_redirection(pipe_io, !i);
+		do_input_redirection(pipe_io, !i, in_fd);
 		// do pipe
 		pipe(pipe_io);
 		// check if builtin runs on parent
@@ -48,7 +48,7 @@ void	executor(char **cmds, char **envp, int file_fd)
 		// call exec_cmd
 		if (pid == 0)
 		{
-			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], file_fd);
+			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], out_fd);
 			use_child_signals();
 			exec_cmd(cmds[i], envp);
 		}
@@ -72,6 +72,7 @@ int	exec_cmd(char *cmd, char **envp)
 	// TODO: check if EXIT_FAILURE is the right return value
 	if (!path)
 		return (EXIT_FAILURE);
+	// TODO: remove next lines as they will write to output
 	printf("path: %s\n", path);
 	int i = 0;
 	while (parts[i])
@@ -79,6 +80,7 @@ int	exec_cmd(char *cmd, char **envp)
 		printf("parts[%d]: %s\n", i, parts[i]);
 		i++;
 	}
+	// END OF TODO
 	execve(path, parts, envp);
 	return (EXIT_SUCCESS);
 }

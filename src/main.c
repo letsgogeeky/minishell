@@ -6,7 +6,7 @@
 /*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 21:12:46 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/01/25 16:06:34 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/01/25 16:37:57 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int interactive_mode(char **envp)
     char    *line;
     char    **cmds;
     int     out_file_fd;
+    int     in_fd;
     bool    is_append;
 
     line = readline("massiveshell$ ");
@@ -44,12 +45,13 @@ static int interactive_mode(char **envp)
                 // for > truncate redirection, it takes effect immedicately
                 out_file_fd = open_file("./out.txt", O_TRUNC);
             }
+            in_fd = open_file("./in.txt", O_RDONLY);
             printf("file fd: %d\n", out_file_fd);
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
             cmds = ft_split(line, '|');
             reset_terminos();
-			executor(cmds, envp, out_file_fd); // TODO: make this proper executor
+			executor(cmds, envp, out_file_fd, in_fd); // TODO: make this proper executor
             update_terminos();
         }
         line = readline("massiveshell$ ");
