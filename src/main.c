@@ -36,6 +36,7 @@ static int interactive_mode(char **envp)
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
             cmds = ft_split(line, '|');
+			add_history(line);
             reset_terminos();
             expand(&cmds, &envp);
             int i = 0;

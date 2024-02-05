@@ -25,7 +25,7 @@ int exec_builtin(char **cmds, char *cmd, char ***envp)
     if (!ft_strncmp(cmd, "env", 3))
         return (builtins_env(*envp));
     if (!ft_strncmp(cmd, "exit", 4))
-        return (builtins_exit(cmds, *envp));
+        return (builtins_exit(cmds, *envp), 0);
     if (!ft_strncmp(cmd, "echo", 4))
         return (builtins_echo(ft_split(cmd, ' '))); // TODO: update this to use commands tree
     if (!ft_strncmp(cmd, "export", 6))
