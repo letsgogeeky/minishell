@@ -37,6 +37,12 @@ static int interactive_mode(char **envp)
             // builtins_pwd();
             cmds = ft_split(line, '|');
             reset_terminos();
+            expand(&cmds, &envp);
+            int i = 0;
+            for (i = 0; cmds[i]; i++)
+            {
+                printf("cmds[%d]: %s\n", i, cmds[i]);
+            }
 			executor(cmds, &envp, -1, -1); // TODO: make this proper executor
             update_terminos();
         }

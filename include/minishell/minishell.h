@@ -25,4 +25,6 @@ char    **add_to_env(char *key, char *value, char **envp);
 char    **remove_from_env(char *key, char **envp);
 int     is_valid_env_name(char *name);
 
+int     expand(char ***cmds, char ***envp);
+
 #endif

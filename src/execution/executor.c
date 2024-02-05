@@ -68,16 +68,13 @@ int	exec_cmd(char **cmds, char *cmd, char ***envp)
 	// TODO: check if builtin
 	parts = ft_split(cmd, ' ');
 	path = get_path(parts[0], *envp);
-	// TODO: check if EXIT_FAILURE is the right return value
-	if (!path)
-		err(cmd, "command not found", 127);
 	if (execve(path, parts, *envp) == -1)
 	{
 		// TODO: remove perror line
 		perror("execve");
 		free(path);
 		free(parts);
-		if (!access(path, F_OK) && access(path, X_OK))
+		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			err(cmd, "Permission denied", 126);
 		err(cmd, "command not found", 127);
 	}
