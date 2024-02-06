@@ -17,24 +17,16 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	system_io[1] = dup(STDOUT_FILENO);
 	while (cmds[i])
 	{
-		// do input redirection
-		do_input_redirection(pipe_io, !i, in_fd);
 		// do pipe
 		pipe(pipe_io);
+		// do input redirection
+		do_input_redirection(pipe_io, !i, in_fd);
 		// check if builtin runs on parent
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
 			g_exit_code = exec_builtin(cmds, cmds[i], envp);
 			i++;
-			// TODO: remove this debug print
-			int j = 0;
-			while ((*envp)[j])
-			{
-				printf("envp[%d]: %s\n", j, (*envp)[j]);
-				j++;
-			}
-			// end of debug print
 			continue ;
 		}
 		// else do fork
@@ -62,14 +54,10 @@ int	exec_cmd(char **cmds, char *cmd, char ***envp)
 
 	if (is_builtin(cmd))
 		return (exec_builtin(cmds, cmd, envp));
-	// TODO: check if builtin
 	parts = ft_split(cmd, ' ');
 	path = get_path(parts[0], *envp);
 	if (execve(path, parts, *envp) == -1)
 	{
-		// TODO: remove perror line
-		perror("execve");
-		free(path);
 		free(parts);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			err(cmd, "Permission denied", 126);

@@ -6,6 +6,7 @@
 # include <stdbool.h>
 # include "baselib.h"
 # include "minishell/execution/builtins.h"
+# include <sys/wait.h>
 
 struct s_executor
 {

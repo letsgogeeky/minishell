@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/04 18:35:51 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/06 23:55:59 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int parse_heredoc(char *demlimiter, char **envp)
 	if (pipe(ipc))
 		printf("pipe error\n");
     doc = NULL;
-    if (isatty(STDIN_FILENO))
-        doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
+	if (isatty(STDIN_FILENO))
+		doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
 	while (doc && ft_strncmp(demlimiter, doc, ft_strlen(doc)))
 	{
 		ft_putstr_fd(doc, ipc[1]);

@@ -9,13 +9,15 @@ SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/pwd.c execution/builtins/env.c \
 	execution/builtins/exit.c execution/builtins/echo.c \
-	execution/builtins/export.c execution/builtins/unset.c
+	execution/builtins/export.c execution/builtins/unset.c \
+	execution/builtins/cd.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
 	execution/io.c execution/utils.c
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := $(wildcard parser/lexer/*.c)
-SRC_MAIN := signals.c main.c env_manager.c file_manager.c
-SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER)
+SRC_ENV := env/manager.c env/utils.c
+SRC_MAIN := signals.c main.c file_manager.c
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a

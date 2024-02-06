@@ -1,8 +1,5 @@
 #include "minishell/minishell.h"
 
-char *get_env_value(char *key, char **envp);
-char *get_env_key(char *key);
-
 int expand(char ***cmds_lst, char ***envp)
 {
     int i;
@@ -37,36 +34,4 @@ int expand(char ***cmds_lst, char ***envp)
         i++;
     }
     return (EXIT_SUCCESS);
-}
-
-char *get_env_value(char *key, char **envp)
-{
-    int i;
-    int j;
-    char *value;
-
-    i = 0;
-    while (envp[i])
-    {
-        j = 0;
-        while (envp[i][j] && envp[i][j] == key[j])
-            j++;
-        if (envp[i][j] == '=' && !key[j])
-        {
-            value = ft_strdup(envp[i] + j + 1);
-            return (value);
-        }
-        i++;
-    }
-    return (ft_strdup(""));
-}
-
-char *get_env_key(char *key)
-{
-    int i;
-
-    i = 0;
-    while (key[i] && key[i] != '=')
-        i++;
-    return (ft_substr(key, 0, i));
 }

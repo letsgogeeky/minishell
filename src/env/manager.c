@@ -22,14 +22,16 @@ int update_env_variable(char *key, char *value, char ***envp)
 {
     int i;
     char **env;
+	char *tmp;
 
     env = *envp;
     i = exists_in_env(key, env);
     if (i == -1)
 		return (-1);
 	free(env[i]);
-	key = ft_strjoin(key, "=");
-	env[i] = ft_strjoin(key, value);
+	tmp = ft_strjoin(key, "=");
+	env[i] = ft_strjoin(tmp, value);
+	free(tmp);
 	return (EXIT_SUCCESS);
 }
 

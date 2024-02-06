@@ -24,6 +24,10 @@ int     update_env_variable(char *key, char *value, char ***envp);
 char    **add_to_env(char *key, char *value, char **envp);
 char    **remove_from_env(char *key, char **envp);
 int     is_valid_env_name(char *name);
+char 	*get_env_value(char *key, char **envp);
+char 	*get_env_key(char *key);
+char	**copy_env(char **envp);
+int		free_env(char **envp);
 
 int     expand(char ***cmds, char ***envp);
 

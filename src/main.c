@@ -47,10 +47,9 @@ static int interactive_mode(char **envp)
 			executor(cmds, &envp, -1, -1); // TODO: make this proper executor
             update_terminos();
         }
-		printf("exit code: %d\n", g_exit_code);
         line = readline("massiveshell$ ");
     }
-    printf("Cya.. byeEeEeEe...\n");
+    printf("byeEeEeEe...\n");
     // TODO: free memory before exiting
     // This function should also be called when exiting the shell using `exit` builtin
     reset_terminos();
@@ -59,14 +58,18 @@ static int interactive_mode(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
+	char **envp_copy;
+
     (void)argv;
     if (argc >= 2)
         return (1); // TODO: handle non-interactive mode if required or desired
     if (isatty(STDIN_FILENO))
     {
+		envp_copy = copy_env(envp);
         use_parent_signals();
         // TODO: Start an interactive shell and do magic
-        interactive_mode(envp);
+        interactive_mode(envp_copy);
     }
     return (g_exit_code);
 }
+

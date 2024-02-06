@@ -9,5 +9,6 @@ void builtins_exit(char **cmds, char **envp)
     // TODO: free all memory and exit with relevant exit code.
 	clear_history();
     reset_terminos();
+	free_env(envp);
     exit(g_exit_code);
 }
