@@ -24,6 +24,7 @@ int builtins_export(char **args, char ***envp)
             print_builtin_error("export", key, "not a valid identifier"), 
             EXIT_FAILURE);
         value = ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
+		printf("exists_in_env(key, *envp): %d\n", exists_in_env(key, *envp));
         if (exists_in_env(key, *envp) == -1)
             *envp = add_to_env(key, value, *envp);
         else

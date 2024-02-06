@@ -21,21 +21,16 @@ int    exists_in_env(char *key, char **envp)
 int update_env_variable(char *key, char *value, char ***envp)
 {
     int i;
-    int j;
     char **env;
 
     env = *envp;
     i = exists_in_env(key, env);
-    j = 0;
     if (i == -1)
-        return (-1);
-    if (env[i][j] == '=' && !key[j])
-    {
-        free(env[i]);
-        env[i] = ft_strjoin(key, value);
-        return (0);
-    }
-    return (-1);
+		return (-1);
+	free(env[i]);
+	key = ft_strjoin(key, "=");
+	env[i] = ft_strjoin(key, value);
+	return (EXIT_SUCCESS);
 }
 
 char    **add_to_env(char *key, char *value, char **envp)

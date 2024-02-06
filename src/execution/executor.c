@@ -11,7 +11,6 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	int		system_io[2];
 	pid_t	pid;
 	int		i;
-	// int		status;
 
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
@@ -51,8 +50,6 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 		}
 		i++;
 	}
-	// wait for all children
-	// restore io
 	restore_io(system_io, pipe_io);
 	wait_for_children(pid, cmds);
 }

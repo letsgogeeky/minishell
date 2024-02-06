@@ -50,7 +50,7 @@ static int interactive_mode(char **envp)
 		printf("exit code: %d\n", g_exit_code);
         line = readline("massiveshell$ ");
     }
-    printf("CTRL+D\n");
+    printf("Cya.. byeEeEeEe...\n");
     // TODO: free memory before exiting
     // This function should also be called when exiting the shell using `exit` builtin
     reset_terminos();
