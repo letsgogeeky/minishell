@@ -23,6 +23,7 @@ int expand(char ***cmds_lst, char ***envp)
                     expanded = ft_strjoin(tmp, ft_itoa(g_exit_code));
                 else
 				{
+                    printf("key: %s\n", get_env_key(cmds[i] + j + 1));
 					value = get_env_value(cmds[i] + j + 1, *envp);
 					expanded = ft_strjoin(tmp, value);
 					free(value);

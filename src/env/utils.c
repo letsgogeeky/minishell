@@ -12,7 +12,7 @@ char *get_env_value(char *key, char **envp)
         j = 0;
         while (envp[i][j] && envp[i][j] == key[j])
             j++;
-        if (envp[i][j] == '=' && !key[j])
+        if (envp[i][j] == '=' && (!key[j] || key[j] == ' '))
         {
             value = ft_strdup(envp[i] + j + 1);
             return (value);
@@ -27,7 +27,7 @@ char *get_env_key(char *key)
     int i;
 
     i = 0;
-    while (key[i] && key[i] != '=')
+    while (key[i] && key[i] != ' ' && key[i] != '$' && key[i] != '?' && key[i] != '=')
         i++;
     return (ft_substr(key, 0, i));
 }
