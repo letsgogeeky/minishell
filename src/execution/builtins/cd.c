@@ -14,11 +14,9 @@ int	builtins_cd(char **cmds, char ***envp)
 		return (print_builtin_error("cd", NULL, "no envp"), EXIT_FAILURE);
 	
 	path = get_cd_path(cmds, envp);
-	printf("path: %s\n", path);
 	if (!path)
 		return (EXIT_FAILURE);
 	oldpwd = getcwd(NULL, 0);
-	printf("oldpwd: %s\n", oldpwd);
 	if (chdir(path) == -1)
 	{
 		free(path);
