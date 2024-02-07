@@ -2,7 +2,7 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
 
-int builtins_echo(char **cmds)
+void    builtins_echo(char **cmds)
 {
     int i = 1;
     int newline = 1;
@@ -21,5 +21,4 @@ int builtins_echo(char **cmds)
     }
     if (newline)
         printf("\n");
-    return (EXIT_SUCCESS);
 }

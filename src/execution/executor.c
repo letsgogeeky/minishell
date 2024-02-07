@@ -15,6 +15,7 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
 	system_io[1] = dup(STDOUT_FILENO);
+	pid = 1;
 	while (cmds[i])
 	{
 		// do input redirection
@@ -54,7 +55,11 @@ int	exec_cmd(char **cmds, char *cmd, char ***envp)
 	char	**parts;
 
 	if (is_builtin(cmd))
-		return (exec_builtin(cmds, cmd, envp));
+	{
+		exec_builtin(cmds, cmd, envp);
+		// TODO: free allocated memory
+		exit(g_exit_code);
+	}
 	parts = ft_split(cmd, ' ');
 	path = get_path(parts[0], *envp);
 	if (execve(path, parts, *envp) == -1)

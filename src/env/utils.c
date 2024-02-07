@@ -7,9 +7,6 @@ char *get_env_value(char *key, char **envp)
     char *value;
 
     i = 0;
-	int envp_i = -1;
-	while (envp[++envp_i])
-		printf("envp[%d]: %s\n", envp_i, envp[envp_i]);
     while (envp[i])
     {
         j = 0;
