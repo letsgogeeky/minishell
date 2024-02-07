@@ -36,16 +36,18 @@ static int interactive_mode(char **envp)
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
             cmds = ft_split(line, '|');
+			int x = 0;
+			while (cmds[x])
+			{
+				cmds[x] = trim_start(trim_end(cmds[x]));
+				x++;
+			}
 			add_history(line);
             reset_terminos();
             expand(&cmds, &envp);
-            int i = 0;
-            for (i = 0; cmds[i]; i++)
-            {
-                printf("cmds[%d]: %s\n", i, cmds[i]);
-            }
 			executor(cmds, &envp, -1, -1); // TODO: make this proper executor
             update_terminos();
+			str_arr_free(cmds);
         }
         line = readline("massiveshell$ ");
     }
@@ -61,11 +63,12 @@ int main(int argc, char **argv, char **envp)
 	char **envp_copy;
 
     (void)argv;
+	(void)envp;
     if (argc >= 2)
         return (1); // TODO: handle non-interactive mode if required or desired
     if (isatty(STDIN_FILENO))
     {
-		envp_copy = copy_env(envp);
+		envp_copy = get_environment();
         use_parent_signals();
         // TODO: Start an interactive shell and do magic
         interactive_mode(envp_copy);

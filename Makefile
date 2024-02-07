@@ -16,7 +16,7 @@ SRC_EXECUTION := execution/command_path.c execution/executor.c \
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := $(wildcard parser/lexer/*.c)
 SRC_ENV := env/manager.c env/utils.c
-SRC_MAIN := signals.c main.c file_manager.c
+SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}

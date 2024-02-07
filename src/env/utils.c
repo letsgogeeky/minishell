@@ -7,6 +7,9 @@ char *get_env_value(char *key, char **envp)
     char *value;
 
     i = 0;
+	int envp_i = -1;
+	while (envp[++envp_i])
+		printf("envp[%d]: %s\n", envp_i, envp[envp_i]);
     while (envp[i])
     {
         j = 0;
@@ -30,6 +33,28 @@ char *get_env_key(char *key)
     while (key[i] && key[i] != '=')
         i++;
     return (ft_substr(key, 0, i));
+}
+
+char	**get_environment(void)
+{
+	extern char	**environ;
+	char		**envp;
+	int			i;
+
+	i = 0;
+	while (environ[i])
+		i++;
+	envp = malloc(sizeof(char *) * (i + 1));
+	if (!envp)
+		return (NULL);
+	i = 0;
+	while (environ[i])
+	{
+		envp[i] = ft_strdup(environ[i]);
+		i++;
+	}
+	envp[i] = NULL;
+	return (envp);
 }
 
 char	**copy_env(char **envp)

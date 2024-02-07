@@ -17,15 +17,15 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	system_io[1] = dup(STDOUT_FILENO);
 	while (cmds[i])
 	{
-		// do pipe
-		pipe(pipe_io);
 		// do input redirection
 		do_input_redirection(pipe_io, !i, in_fd);
+		// do pipe
+		pipe(pipe_io);
 		// check if builtin runs on parent
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			g_exit_code = exec_builtin(cmds, cmds[i], envp);
+			g_exit_code = exec_builtin(cmds, trim_end(trim_start(cmds[i])), envp);
 			i++;
 			continue ;
 		}
@@ -38,13 +38,14 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 		{
 			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], out_fd);
 			use_child_signals();
-			exec_cmd(cmds, cmds[i], envp);	
+			exec_cmd(cmds, trim_end(trim_start(cmds[i])), envp);	
 		}
 		i++;
 	}
 	restore_io(system_io, pipe_io);
 	wait_for_children(pid, cmds);
 }
+
 
 // TODO: change arguments to be the expected structs
 int	exec_cmd(char **cmds, char *cmd, char ***envp)

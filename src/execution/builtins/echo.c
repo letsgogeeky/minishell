@@ -7,7 +7,6 @@ int builtins_echo(char **cmds)
     int i = 1;
     int newline = 1;
 
-    printf("heey! I'm gonna echooo0o0o0o0o\n");
     if (cmds[1] && !ft_strncmp(cmds[1], "-n", 2))
     {
         newline = 0;

@@ -7,6 +7,7 @@ int expand(char ***cmds_lst, char ***envp)
     char *expanded;
     char *tmp;
     char **cmds;
+	char *value;
 
     i = 0;
     cmds = *cmds_lst;
@@ -21,7 +22,11 @@ int expand(char ***cmds_lst, char ***envp)
                 if (cmds[i][j+1] && cmds[i][j+1] == '?')
                     expanded = ft_strjoin(tmp, ft_itoa(g_exit_code));
                 else
-                    expanded = ft_strjoin(tmp, get_env_value(cmds[i] + j + 1, *envp));
+				{
+					value = get_env_value(cmds[i] + j + 1, *envp);
+					expanded = ft_strjoin(tmp, value);
+					free(value);
+				}
                 free(tmp);
                 tmp = expanded;
                 expanded = ft_strjoin(expanded, cmds[i] + j + 1 + ft_strlen(get_env_key(cmds[i] + j + 1)));
