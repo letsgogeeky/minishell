@@ -16,6 +16,9 @@ int error_permission_denied(char *path)
     return (-1);
 }
 
+// >> O_APPEND
+// > O_TRUNC
+// < O_RDONLY
 int open_file(char *path, int flags)
 {
     int fd;
