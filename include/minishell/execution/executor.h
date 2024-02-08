@@ -5,6 +5,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include "baselib.h"
+# include "minishell/execution/builtins.h"
+# include <sys/wait.h>
 
 struct s_executor
 {
@@ -19,5 +21,6 @@ void	do_input_redirection(int *pipe_io, bool is_first_cmd, int file_fd);
 void	do_output_redirection(int *pipe_io, bool is_last_cmd, int system_out_fd, int file_fd);
 void	restore_io(int *system_io, int *pipe_io);
 void	executor(char **cmds, char ***envp, int out_fd, int in_fd);
+void	wait_for_children(pid_t last_pid, char **cmds);
 
 #endif

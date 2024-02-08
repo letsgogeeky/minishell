@@ -21,21 +21,18 @@ int    exists_in_env(char *key, char **envp)
 int update_env_variable(char *key, char *value, char ***envp)
 {
     int i;
-    int j;
     char **env;
+	char *tmp;
 
     env = *envp;
     i = exists_in_env(key, env);
-    j = 0;
     if (i == -1)
-        return (-1);
-    if (env[i][j] == '=' && !key[j])
-    {
-        free(env[i]);
-        env[i] = ft_strjoin(key, value);
-        return (0);
-    }
-    return (-1);
+		return (-1);
+	free(env[i]);
+	tmp = ft_strjoin(key, "=");
+	env[i] = ft_strjoin(tmp, value);
+	free(tmp);
+	return (EXIT_SUCCESS);
 }
 
 char    **add_to_env(char *key, char *value, char **envp)
@@ -79,6 +76,8 @@ char    **remove_from_env(char *key, char **envp)
             new_envp[j] = envp[j];
         else if (j > i)
             new_envp[j - 1] = envp[j];
+		else
+			free(envp[j]);
         j++;
     }
     new_envp[j - 1] = NULL;

@@ -18,11 +18,10 @@ int builtins_export(char **args, char ***envp)
         while (args[i][j] && args[i][j] != '=')
             j++;
         key = ft_substr(args[i], 0, j);
-        printf("key: %s\n", key);
         if (!is_valid_env_name(key))
-            return (free(key),
-            print_builtin_error("export", key, "not a valid identifier"), 
-            EXIT_FAILURE);
+			return (print_builtin_error("export", key, "not a valid identifier"), \
+			free(key), \
+			EXIT_FAILURE);
         value = ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
         if (exists_in_env(key, *envp) == -1)
             *envp = add_to_env(key, value, *envp);

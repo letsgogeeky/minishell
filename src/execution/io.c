@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/03 15:28:10 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/06 23:55:59 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ void restore_io(int *system_io, int *pipe_io)
 int parse_heredoc(char *demlimiter, char **envp)
 {
     char	*doc;
-	char	*limiter;
 	int		ipc[2];
 
+	(void)envp;
 	if (pipe(ipc))
 		printf("pipe error\n");
     doc = NULL;
-    if (isatty(STDIN_FILENO))
-        doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
-	while (doc && ft_strncmp(limiter, doc, ft_strlen(doc)))
+	if (isatty(STDIN_FILENO))
+		doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
+	while (doc && ft_strncmp(demlimiter, doc, ft_strlen(doc)))
 	{
 		ft_putstr_fd(doc, ipc[1]);
 		free(doc);
@@ -80,4 +80,5 @@ int parse_heredoc(char *demlimiter, char **envp)
 	dup2(ipc[0], 0);
 	close(ipc[0]);
 	close(ipc[1]);
+	return (0);
 }

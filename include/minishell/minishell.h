@@ -11,6 +11,8 @@
 # include <stdbool.h>
 # include "baselib.h"
 
+extern int g_exit_code;
+
 void	update_terminos(void);
 void    reset_terminos(void);
 void    use_parent_signals();
@@ -22,5 +24,15 @@ int     update_env_variable(char *key, char *value, char ***envp);
 char    **add_to_env(char *key, char *value, char **envp);
 char    **remove_from_env(char *key, char **envp);
 int     is_valid_env_name(char *name);
+char 	*get_env_value(char *key, char **envp);
+char 	*get_env_key(char *key);
+char	**copy_env(char **envp);
+int		free_env(char **envp);
+char	**get_environment(void);
+
+void	expand(char ***cmds_lst, char ***envp);
+
+char	*trim_start(char *str, bool free_str);
+char	*trim_end(char *str, bool free_str);
 
 #endif

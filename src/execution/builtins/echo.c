@@ -2,12 +2,11 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
 
-int builtins_echo(char **cmds)
+void    builtins_echo(char **cmds)
 {
     int i = 1;
     int newline = 1;
 
-    printf("heey! I'm gonna echooo0o0o0o0o\n");
     if (cmds[1] && !ft_strncmp(cmds[1], "-n", 2))
     {
         newline = 0;
@@ -22,5 +21,4 @@ int builtins_echo(char **cmds)
     }
     if (newline)
         printf("\n");
-    return (EXIT_SUCCESS);
 }

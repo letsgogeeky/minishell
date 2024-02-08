@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 19:31:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2023/12/26 19:46:12 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/04 21:08:04 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,14 @@ static char	*find_path_in_env(char **envp, char *program)
 
 char	*get_path(char *cmd, char **envp)
 {
+	char *path;
+
 	if (!envp || str_arr_len(envp) == 0)
 		return (ft_strjoin(ft_strdup("/usr/bin/"), cmd));
 	if (ft_strncmp(cmd, "./", 2) == 0)
 		return (ft_strdup("/bin/sh"));
-	return (find_path_in_env(envp, cmd));
+	path = find_path_in_env(envp, cmd);
+	if (!path)
+		return (ft_strdup(cmd));
+	return (path);
 }
