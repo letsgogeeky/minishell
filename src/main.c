@@ -39,7 +39,7 @@ static int interactive_mode(char **envp)
 			int x = 0;
 			while (cmds[x])
 			{
-				cmds[x] = trim_start(trim_end(cmds[x]));
+				cmds[x] = trim_start(trim_end(cmds[x], true), true);
 				x++;
 			}
 			add_history(line);

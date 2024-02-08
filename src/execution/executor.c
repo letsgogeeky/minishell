@@ -15,6 +15,8 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 	i = 0;
 	system_io[0] = dup(STDIN_FILENO);
 	system_io[1] = dup(STDOUT_FILENO);
+	pipe_io[0] = 0;
+	pipe_io[1] = 0;
 	pid = 1;
 	while (cmds[i])
 	{
@@ -26,7 +28,8 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 		// if builtin runs on parent, continue without forking
 		if (is_builtin(cmds[i]) && runs_on_parent(cmds[i]))
 		{
-			g_exit_code = exec_builtin(cmds, trim_end(trim_start(cmds[i])), envp);
+			cmds[i] = trim_end(trim_start(cmds[i], true), true);
+			g_exit_code = exec_builtin(cmds, cmds[i], envp);
 			i++;
 			continue ;
 		}
@@ -39,7 +42,8 @@ void	executor(char **cmds, char ***envp, int out_fd, int in_fd)
 		{
 			do_output_redirection(pipe_io, !cmds[i + 1], system_io[1], out_fd);
 			use_child_signals();
-			exec_cmd(cmds, trim_end(trim_start(cmds[i])), envp);	
+			cmds[i] = trim_end(trim_start(cmds[i], true), true);
+			exec_cmd(cmds, cmds[i], envp);
 		}
 		i++;
 	}

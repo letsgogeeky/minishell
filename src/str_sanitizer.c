@@ -1,6 +1,6 @@
 #include "minishell/minishell.h"
 
-char	*trim_start(char *str)
+char	*trim_start(char *str, bool free_str)
 {
 	char *trimmed;
 	int i;
@@ -19,10 +19,12 @@ char	*trim_start(char *str)
 		j++;
 	}
 	trimmed[j] = '\0';
+	if (free_str)
+		free(str);
 	return (trimmed);
 }
 
-char	*trim_end(char *str)
+char	*trim_end(char *str, bool free_str)
 {
 	char *trimmed;
 	int i;
@@ -43,5 +45,7 @@ char	*trim_end(char *str)
 		j++;
 	}
 	trimmed[j] = '\0';
+	if (free_str)
+		free(str);
 	return (trimmed);
 }

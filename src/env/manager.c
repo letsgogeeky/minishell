@@ -76,6 +76,8 @@ char    **remove_from_env(char *key, char **envp)
             new_envp[j] = envp[j];
         else if (j > i)
             new_envp[j - 1] = envp[j];
+		else
+			free(envp[j]);
         j++;
     }
     new_envp[j - 1] = NULL;

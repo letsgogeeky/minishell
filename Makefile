@@ -3,8 +3,8 @@ NAME:= minishell
 
 BASELIB := ./lib/ft-baselib
 CFLAGS	:= -Wextra -Wall -Werror -g
-LINKS := -lreadline -L/usr/local/opt/readline/lib
-HEADERS := -I ./include -I ${BASELIB}/include -I/usr/local/opt/readline/include
+LINKS := -lreadline #-L/usr/local/opt/readline/lib
+HEADERS := -I ./include -I ${BASELIB}/include #-I/usr/local/opt/readline/include
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/pwd.c execution/builtins/env.c \

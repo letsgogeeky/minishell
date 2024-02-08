@@ -30,9 +30,9 @@ char	**copy_env(char **envp);
 int		free_env(char **envp);
 char	**get_environment(void);
 
-int     expand(char ***cmds, char ***envp);
+void	expand(char ***cmds_lst, char ***envp);
 
-char	*trim_start(char *str);
-char	*trim_end(char *str);
+char	*trim_start(char *str, bool free_str);
+char	*trim_end(char *str, bool free_str);
 
 #endif
