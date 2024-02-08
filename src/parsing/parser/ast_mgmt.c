@@ -76,6 +76,25 @@ void	init_parser_state(t_parser_state *state, t_token *tokens)
 	state->current = 0;
 	state->root = NULL;
 }
+/*
+Just create node.
+*/
+t_ast_node	*create_node(t_ast_node_type type)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->parent = NULL;
+	node->first_child = NULL;
+	node->next_sibling = NULL;
+	node->last_child = NULL;
+	node->data = NULL;
+	node->filename = NULL;
+	return (node);
+}
 
 /*
 This function returns the current token form the parser state,
@@ -268,23 +287,36 @@ t_ast_node *parse_filename_or_heredoc(t_parser_state *state)
 	return (node);
 }
 
-// t_ast_node *ast_new_node(t_ast_node_type type, char *value)
-// {
-// 	t_ast_node *node;
 
-// 	node = malloc(sizeof(t_ast_node));
-// 	if (!node)
-// 		return (NULL);
+/*************************************************************************************/
+/****************************************TEST*****************************************/
+/*************************************************************************************/
 
-// 	node->type = type;
-// 	node->parent = NULL;
-// 	node->first_child = NULL;
-// 	node->next_sibling = NULL;
-// 	node->last_child = NULL;
-// 	node->data = strdup(value);
-// 	if (!node->data)
-// 		return(free(node), NULL);
-// 	node->filename = NULL;
-// 	return (node);
-// }
+
+t_token ls_tokens [] = {
+	{WORD, "ls", 1},
+	{WORD, "-l", 1},
+	{EOF_TOKEN, NULL, 1}
+};
+
+t_token echo_tokens [] = {
+	{WORD, "echo", 1},
+	{WORD, "hello", 1},
+	{GREAT, ">", 1},
+	{WORD, "out_file.txt", 1},
+	{EOF_TOKEN, NULL, 1}
+};
+
+t_token cat_tokens [] = {
+	{WORD, "cat", 1},
+	{WORD, "in_file.txt", 1},
+	{PIPE, "|", 1},
+	{WORD, "grep", 1},
+	{WORD, "pattern", 1},
+	{PIPE, "|", 1},
+	{WORD, "sort", 1},
+	{GREAT, ">", 1},
+	{WORD, "out_file.txt", 1},
+	{EOF_TOKEN, NULL, 1}
+};
 
