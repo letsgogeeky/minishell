@@ -36,7 +36,7 @@ char	*get_cd_path(char **cmd, char ***envp)
 {
 	char *path;
 
-	if (!cmd[1])
+	if (!cmd[1] || !ft_strncmp(cmd[1], "~", 1) || !ft_strncmp(cmd[1], "~/", 2))
 	{
 		path = get_env_value("HOME", *envp);
 		if (!path)
