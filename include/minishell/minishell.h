@@ -12,6 +12,7 @@
 # include "baselib.h"
 # include <stdlib.h>
 
+extern struct termios	settings;
 typedef struct	s_minishell {
 	char	**envp;
 	char	**args;

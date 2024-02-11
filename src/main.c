@@ -2,6 +2,21 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
 
+struct termios	settings;
+static	bool is_empty(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 static int interactive_mode(t_minishell *ms)
 {
     // int     out_file_fd;
@@ -11,8 +26,7 @@ static int interactive_mode(t_minishell *ms)
     ms->input = readline("massiveshell$ ");
     while (ms->input && ms->input[0] != EOF)
     {
-        use_parent_signals();
-		if (ms->input[0] != '\0')
+		if (ms->input[0] != '\0' && !is_empty(ms->input))
 		{
             // TODO: call parser here
             // is_append = false;
@@ -47,6 +61,7 @@ static int interactive_mode(t_minishell *ms)
 			str_arr_free(ms->cmds);
         }
         ms->input = readline("massiveshell$ ");
+		use_parent_signals();
     }
     printf("byeEeEeEe...\n");
     // TODO: free memory before exiting
@@ -67,6 +82,7 @@ int main(int argc, char **argv)
 		ms->args = argv;
 		ms->in_fd = -1;
 		ms->out_fd = -1;
+		ms->exit_code = 0;
 		ms->envp = get_environment();
         use_parent_signals();
         // TODO: Start an interactive shell and do magic
