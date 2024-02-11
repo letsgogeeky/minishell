@@ -85,9 +85,7 @@ int main(int argc, char **argv)
 		ms->exit_code = 0;
 		ms->envp = get_environment();
         use_parent_signals();
-        // TODO: Start an interactive shell and do magic
         interactive_mode(ms);
     }
     return (ms->exit_code);
 }
-
