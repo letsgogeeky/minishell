@@ -10,8 +10,20 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include "baselib.h"
+# include <stdlib.h>
 
-extern int g_exit_code;
+typedef struct	s_minishell {
+	char	**envp;
+	char	**args;
+	char	*input;
+	char	**cmds;
+	int		pipe_fd[2];
+	int		system_fd[2];
+	int		in_fd;
+	int		out_fd;
+	int		exit_code;
+
+}	t_minishell;
 
 void	update_terminos(void);
 void    reset_terminos(void);
@@ -30,7 +42,7 @@ char	**copy_env(char **envp);
 int		free_env(char **envp);
 char	**get_environment(void);
 
-void	expand(char ***cmds_lst, char ***envp);
+void	expand(t_minishell *ms);
 
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);

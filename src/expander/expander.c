@@ -1,31 +1,29 @@
 #include "minishell/minishell.h"
 
-char	*expand_variable(char *cursor, int j, char **envp);
+char	*expand_variable(char *cursor, int j, char **envp, int exit_code);
 int	key_length(char *start);
 
-void expand(char ***cmds_lst, char ***envp)
+void expand(t_minishell *ms)
 {
     int i;
     int j;
     char *expanded;
     char *tmp;
-    char **cmds;
 
     i = -1;
-    cmds = *cmds_lst;
-    while (cmds[++i])
+    while (ms->cmds[++i])
     {
         j = -1;
-        while (cmds[i][++j])
+        while (ms->cmds[i][++j])
         {
-            if (cmds[i][j] == '$')
+            if (ms->cmds[i][j] == '$')
             {
-				expanded = expand_variable(cmds[i], j, *envp);
+				expanded = expand_variable(ms->cmds[i], j, ms->envp, ms->exit_code);
                 tmp = expanded;
-                expanded = ft_strjoin(expanded, cmds[i] + j + 1 + key_length(cmds[i] + j + 1));
+                expanded = ft_strjoin(expanded, ms->cmds[i] + j + 1 + key_length(ms->cmds[i] + j + 1));
                 free(tmp);
-                free(cmds[i]);
-                cmds[i] = expanded;
+                free(ms->cmds[i]);
+                ms->cmds[i] = expanded;
             }
         }
     }
@@ -42,7 +40,7 @@ int	key_length(char *start)
 	return (len);
 }
 
-char	*expand_variable(char *cursor, int j, char **envp)
+char	*expand_variable(char *cursor, int j, char **envp, int exit_code)
 {
 	char *expanded;
 	char *tmp;
@@ -50,7 +48,7 @@ char	*expand_variable(char *cursor, int j, char **envp)
 
 	tmp = ft_substr(cursor, 0, j);
 	if (cursor[j+1] && cursor[j+1] == '?')
-		expanded = ft_strjoin(tmp, ft_itoa(g_exit_code));
+		expanded = ft_strjoin(tmp, ft_itoa(exit_code));
 	else
 	{
 		value = get_env_value(cursor + j + 1, envp);

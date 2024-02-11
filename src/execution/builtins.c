@@ -1,4 +1,5 @@
 #include "minishell/execution/builtins.h"
+#include "minishell/minishell.h"
 
 int is_builtin(char *cmd)
 {
@@ -18,21 +19,21 @@ int runs_on_parent(char *cmd)
     return (0);
 }
 
-int exec_builtin(char **cmds, char *cmd, char ***envp)
+int exec_builtin(t_minishell *ms, char *cmd)
 {
 	if (!ft_strncmp(cmd, "pwd", 3))
 		return (builtins_pwd());
 	if (!ft_strncmp(cmd, "env", 3))
-		return (builtins_env(*envp));
+		return (builtins_env(ms->envp));
 	if (!ft_strncmp(cmd, "exit", 4))
-		return (builtins_exit(cmds, *envp), 0);
+		return (builtins_exit(ms), 0);
 	if (!ft_strncmp(cmd, "echo", 4))
 		return (builtins_echo(ft_split(cmd, ' ')), 1); // TODO: update this to use commands tree
 	if (!ft_strncmp(cmd, "export", 6))
-		return (builtins_export(ft_split(ft_substr(cmd, 7, ft_strlen(cmd) - 7), ' '), envp));
+		return (builtins_export(ft_split(ft_substr(cmd, 7, ft_strlen(cmd) - 7), ' '), ms));
 	if (!ft_strncmp(cmd, "unset", 5))
-		return (builtins_unset(ft_split(ft_substr(cmd, 6, ft_strlen(cmd) - 6), ' '), envp));
+		return (builtins_unset(ft_split(ft_substr(cmd, 6, ft_strlen(cmd) - 6), ' '), ms));
 	if (!ft_strncmp(cmd, "cd", 2))
-		return (builtins_cd(ft_split(cmd, ' '), envp));
+		return (builtins_cd(ft_split(cmd, ' '), &ms->envp));
 	return (0);
 }
