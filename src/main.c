@@ -2,21 +2,18 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
 
-int g_exit_code = 0;
-static int interactive_mode(char **envp)
+static int interactive_mode(t_minishell *ms)
 {
-    char    *line;
-    char    **cmds;
     // int     out_file_fd;
     // int     in_fd;
     // bool    is_append;
 
-    line = readline("massiveshell$ ");
-    while (line && line[0] != EOF)
+    ms->input = readline("massiveshell$ ");
+    while (ms->input && ms->input[0] != EOF)
     {
         use_parent_signals();
-        if (line && line[0])
-        {
+		if (ms->input[0] != '\0')
+		{
             // TODO: call parser here
             // is_append = false;
             // // temporary solution for output file until is handled by parser
@@ -35,21 +32,21 @@ static int interactive_mode(char **envp)
             // printf("file fd: %d\n", out_file_fd);
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
-            cmds = ft_split(line, '|');
+            ms->cmds = ft_split(ms->input, '|');
 			int x = 0;
-			while (cmds[x])
+			while (ms->cmds[x])
 			{
-				cmds[x] = trim_start(trim_end(cmds[x], true), true);
+				ms->cmds[x] = trim_start(trim_end(ms->cmds[x], true), true);
 				x++;
 			}
-			add_history(line);
+			add_history(ms->input);
             reset_terminos();
-            expand(&cmds, &envp);
-			executor(cmds, &envp, -1, -1); // TODO: make this proper executor
+            expand(ms);
+			executor(ms); // TODO: make this proper executor
             update_terminos();
-			str_arr_free(cmds);
+			str_arr_free(ms->cmds);
         }
-        line = readline("massiveshell$ ");
+        ms->input = readline("massiveshell$ ");
     }
     printf("byeEeEeEe...\n");
     // TODO: free memory before exiting
@@ -58,21 +55,23 @@ static int interactive_mode(char **envp)
     return (0);
 }
 
-int main(int argc, char **argv, char **envp)
+int main(int argc, char **argv)
 {
-	char **envp_copy;
+	t_minishell *ms;
 
-    (void)argv;
-	(void)envp;
+	ms = (t_minishell *)malloc(sizeof(t_minishell));
     if (argc >= 2)
         return (1); // TODO: handle non-interactive mode if required or desired
     if (isatty(STDIN_FILENO))
     {
-		envp_copy = get_environment();
+		ms->args = argv;
+		ms->in_fd = -1;
+		ms->out_fd = -1;
+		ms->envp = get_environment();
         use_parent_signals();
         // TODO: Start an interactive shell and do magic
-        interactive_mode(envp_copy);
+        interactive_mode(ms);
     }
-    return (g_exit_code);
+    return (ms->exit_code);
 }
 

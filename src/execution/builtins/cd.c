@@ -2,7 +2,7 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
 
-char	*get_cd_path(char **cmd, char ***envp);
+char	*get_cd_path(char **cmd, char **envp);
 
 int	builtins_cd(char **cmds, char ***envp)
 {
@@ -13,7 +13,7 @@ int	builtins_cd(char **cmds, char ***envp)
 	if (!envp)
 		return (print_builtin_error("cd", NULL, "no envp"), EXIT_FAILURE);
 	
-	path = get_cd_path(cmds, envp);
+	path = get_cd_path(cmds, *envp);
 	if (!path)
 		return (EXIT_FAILURE);
 	oldpwd = getcwd(NULL, 0);
@@ -32,13 +32,13 @@ int	builtins_cd(char **cmds, char ***envp)
 	return (EXIT_SUCCESS);
 }
 
-char	*get_cd_path(char **cmd, char ***envp)
+char	*get_cd_path(char **cmd, char **envp)
 {
 	char *path;
 
 	if (!cmd[1] || !ft_strncmp(cmd[1], "~", 1) || !ft_strncmp(cmd[1], "~/", 2))
 	{
-		path = get_env_value("HOME", *envp);
+		path = get_env_value("HOME", envp);
 		if (!path)
 			return (print_builtin_error("cd", "HOME", "not set"), NULL);
 	}
@@ -46,7 +46,7 @@ char	*get_cd_path(char **cmd, char ***envp)
 		path = ft_strdup(cmd[1]);
 	else
 	{
-		path = get_env_value("OLDPWD", *envp);
+		path = get_env_value("OLDPWD", envp);
 		if (!path)
 			return (print_builtin_error("cd", "OLDPWD", "not set"), NULL);
 	}

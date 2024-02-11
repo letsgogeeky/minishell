@@ -27,7 +27,7 @@ char *get_env_key(char *key)
     int i;
 
     i = 0;
-    while (key[i] && key[i] != ' ' && key[i] != '$' && key[i] != '?' && key[i] != '=')
+    while (key[i] && key[i] != ' ' && key[i] != '$' && key[i] != '=')
         i++;
     return (ft_substr(key, 0, i));
 }

@@ -2,14 +2,14 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
 
-int builtins_export(char **args, char ***envp)
+int builtins_export(char **args, t_minishell *ms)
 {
     int i;
     int j;
     char *key;
     char *value;
 
-    if (!envp)
+    if (!ms->envp)
         return (print_builtin_error("export", NULL, "no envp"), EXIT_FAILURE);
     i = 0;
     while (args[i])
@@ -23,10 +23,10 @@ int builtins_export(char **args, char ***envp)
 			free(key), \
 			EXIT_FAILURE);
         value = ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
-        if (exists_in_env(key, *envp) == -1)
-            *envp = add_to_env(key, value, *envp);
+        if (exists_in_env(key, ms->envp) == -1)
+            ms->envp = add_to_env(key, value, ms->envp);
         else
-            update_env_variable(key, value, envp);
+            update_env_variable(key, value, &ms->envp);
         free(key);
         free(value);
         i++;
