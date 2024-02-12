@@ -1,6 +1,7 @@
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
+#include "minishell/parsing/parser.h"
 
 struct termios	settings;
 static	bool is_empty(char *str)
@@ -46,6 +47,8 @@ static int interactive_mode(t_minishell *ms)
             // printf("file fd: %d\n", out_file_fd);
             // TODO: add to history and do execution magic and return exit code after
             // builtins_pwd();
+			ms->ast = parse_input(ms->input);
+			print_ast(ms->ast, 0);
             ms->cmds = ft_split(ms->input, '|');
 			int x = 0;
 			while (ms->cmds[x])

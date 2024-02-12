@@ -11,8 +11,10 @@
 # include <stdbool.h>
 # include "baselib.h"
 # include <stdlib.h>
+# include "minishell/parsing/parser.h"
 
 extern struct termios	settings;
+
 typedef struct	s_minishell {
 	char	**envp;
 	char	**args;
@@ -23,7 +25,7 @@ typedef struct	s_minishell {
 	int		in_fd;
 	int		out_fd;
 	int		exit_code;
-
+	struct t_ast_node	*ast;
 }	t_minishell;
 
 void	update_terminos(void);

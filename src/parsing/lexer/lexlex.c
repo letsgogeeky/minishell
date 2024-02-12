@@ -364,61 +364,61 @@ void run_test(const char *test_input) {
     free(tokens);
 }
 
-int main()
-{
-	run_test("|");
-	// run_test(">");
-	// run_test("<");
-	// run_test(">>");
-	// run_test("<<");
-	// run_test("=");
-	// run_test("word");
+// int main()
+// {
+// 	run_test("|");
+// 	// run_test(">");
+// 	// run_test("<");
+// 	// run_test(">>");
+// 	// run_test("<<");
+// 	// run_test("=");
+// 	// run_test("word");
 
-	// run_test(" | ");
-	// run_test("|	word");
-	// run_test("|word");
-	// printf("\n");
-	// run_test("word |");
-	// run_test("word|");
-	// run_test("word | word");
-	// run_test("| word |");
-	// run_test("|word |");
-	// run_test("ls | cat | wc");
-    // run_test("   |    <    >  ");
-	// run_test(" <  |   >  ");
-	// run_test("  <    >  |  ");
-    // run_test("| < > << >> =");
-	// run_test("word");
-    run_test("word1 word2 word3");
-    // run_test("<<word1>> =|");
-    // run_test("1234 5678");
-    // run_test("command1 < input.txt > output.txt | command2");
-    // run_test(">>>>");
-	// run_test("variable=value");
-	// run_test("");
-	// run_test(" ls");
-    // run_test("command -arg");
-	run_test("command -arg1 -arg2");
-	run_test("command --arg1");
-	// run_test("-arg");	
-	// run_test("#");
-    // run_test("echo \"Hello, World!\"\"\"");
-	// run_test("echo 'Hello, World!'");
-	// run_test("echo 'This is a test'");
-	// run_test("echo \"Another test\"");
-	// run_test("echo \"This is a \\\"quoted\\\" word\"");
-	// run_test("echo \"This is a \\\"quoted\\\" word\"");
-	// run_test("echo 'Single \"double\" quotes'");
-	// run_test("echo \"Double 'single' quotes\"");
-	// run_test("A \\| B \\> C \\< D");
+// 	// run_test(" | ");
+// 	// run_test("|	word");
+// 	// run_test("|word");
+// 	// printf("\n");
+// 	// run_test("word |");
+// 	// run_test("word|");
+// 	// run_test("word | word");
+// 	// run_test("| word |");
+// 	// run_test("|word |");
+// 	// run_test("ls | cat | wc");
+//     // run_test("   |    <    >  ");
+// 	// run_test(" <  |   >  ");
+// 	// run_test("  <    >  |  ");
+//     // run_test("| < > << >> =");
+// 	// run_test("word");
+//     run_test("word1 word2 word3");
+//     // run_test("<<word1>> =|");
+//     // run_test("1234 5678");
+//     // run_test("command1 < input.txt > output.txt | command2");
+//     // run_test(">>>>");
+// 	// run_test("variable=value");
+// 	// run_test("");
+// 	// run_test(" ls");
+//     // run_test("command -arg");
+// 	run_test("command -arg1 -arg2");
+// 	run_test("command --arg1");
+// 	// run_test("-arg");	
+// 	// run_test("#");
+//     // run_test("echo \"Hello, World!\"\"\"");
+// 	// run_test("echo 'Hello, World!'");
+// 	// run_test("echo 'This is a test'");
+// 	// run_test("echo \"Another test\"");
+// 	// run_test("echo \"This is a \\\"quoted\\\" word\"");
+// 	// run_test("echo \"This is a \\\"quoted\\\" word\"");
+// 	// run_test("echo 'Single \"double\" quotes'");
+// 	// run_test("echo \"Double 'single' quotes\"");
+// 	// run_test("A \\| B \\> C \\< D");
 
-	// run_test("echo \"Newline:\\nTab:\\t\"");
-	// run_test("echo \"Nested \\\"quotes\\\" with \\\"escapes\\\"\"");
-	// run_test("echo \"Unmatched quote test");
-	// run_test("echo \"$(uname -a)\"");
-	// run_test("echo \"Complex string: 'Single quotes', \\\"Escaped double quotes\\\", and \\\\escaped backslashes\\\\\"");
+// 	// run_test("echo \"Newline:\\nTab:\\t\"");
+// 	// run_test("echo \"Nested \\\"quotes\\\" with \\\"escapes\\\"\"");
+// 	// run_test("echo \"Unmatched quote test");
+// 	// run_test("echo \"$(uname -a)\"");
+// 	// run_test("echo \"Complex string: 'Single quotes', \\\"Escaped double quotes\\\", and \\\\escaped backslashes\\\\\"");
 
-	// run_test("grep -R \"search term\" ./ | sort | uniq -c > output.txt");
+// 	// run_test("grep -R \"search term\" ./ | sort | uniq -c > output.txt");
 
-    return 0;
-}
+//     return 0;
+// }

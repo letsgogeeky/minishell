@@ -8,95 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-typedef enum e_token_type
-{
-	WORD,
-	OPTION,
-	ASSIGNMENT_WORD,
-	DLESS,
-	DGREAT,
-	LESS,
-	GREAT,
-	PIPE,
-	EOF_TOKEN ,
-	ERROR_TOKEN
-}	t_token_type;
-
-
-typedef struct s_token
-{
-  t_token_type	type;
-  char			*lexeme;
-  int			line;
-} t_token;
-
-typedef enum e_ast_node_type
-{
-	N_COMMAND,
-	N_PIPE,
-	N_CMD_WORD,
-	N_CMD_PREFIX,
-	N_CMD_SUFFIX,
-	N_CMD_PARAM,
-	N_INFILE,
-	N_OUTFILE,
-	N_HEREDOC,
-	N_ERROR
-}	t_ast_node_type;
-
-typedef struct s_ast_node t_ast_node;
-
-typedef struct s_ast_node
-{
-	t_ast_node_type		type;
-	t_ast_node 			*parent;
-	t_ast_node 			*child;
-	t_ast_node			*sibling;
-	char				*data;
-	bool				is_heredoc;
-	int					fd;
-}	t_ast_node;
-
-typedef struct s_parser_state
-{
-	t_token		*tokens;
-	int			current;
-} t_parser_state;
-
-int error_file_not_found(char *path)
-{
-    // ft_putstr_fd("minishell: ", STDERR_FILENO);
-    // ft_putstr_fd(path, STDERR_FILENO);
-    // ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	fprintf(stderr, "minishell: %s: No such file or directory\n", path);
-    return (-1);
-}
-
-int error_permission_denied(char *path)
-{
-    // ft_putstr_fd("minishell: ", STDERR_FILENO);
-    // ft_putstr_fd(path, STDERR_FILENO);
-    // ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-	fprintf(stderr, "minishell: %s: Permission denied\n", path);
-    return (-1);
-}
-
-int open_file(char *path, int flags)
-{
-    int fd;
-
-    if (flags == O_RDONLY && access(path, F_OK) == -1)
-        return (error_file_not_found(path));
-    if (flags == O_RDONLY && access(path, R_OK) == -1)
-        return (error_permission_denied(path));
-    if (flags > O_RDONLY && !access(path, F_OK) && access(path, W_OK) == -1)
-        return (error_permission_denied(path));
-    if (flags == O_RDONLY)
-        fd = open(path, flags);
-    else
-        fd = open(path, O_WRONLY | O_CREAT | flags, 0644);
-    return (fd);
-}
+#include "minishell/parsing/parser.h"
 
 
 //UTIL FUNCTIONS
@@ -320,7 +232,7 @@ t_ast_node *parse_complete_command(t_parser_state *state)
 	if (match(state, PIPE))
 	{
 		pipe = create_node(N_PIPE);
-		pipe->data = strdup("|"); //TODO: remove this
+		// pipe->data = strdup("|"); //TODO: remove this
 		next_cmd = parse_complete_command(state);
 		pipe->child = command;
 		command->parent = pipe;
@@ -349,7 +261,7 @@ t_ast_node	*parse_input(const char *input)
 	t_parser_state	state;
 	t_ast_node		*ast;
 
-	// tokens = lex(input);
+	tokens = lex(input);
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
 
@@ -394,7 +306,8 @@ void print_ast(t_ast_node *node, int level)
 	if (node == NULL) return;
 	for (int i = 0; i < level; ++i) printf("  ");
 	printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
-	printf("fd: %d\n", node->fd);
+	// printf("fd: %d\n", node->fd);
+	// printf("is_heredoc: %d\n", node->is_heredoc);
 	if (node->child)
 		print_ast(node->child, level + 2);
 	if (node->sibling)
@@ -402,15 +315,15 @@ void print_ast(t_ast_node *node, int level)
 }
 
 
-int main() {
-    t_token *tokens = create_mock_tokens();
-    t_parser_state state;
-    init_parser_state(&state, tokens);
+// int main() {
+//     t_token *tokens = create_mock_tokens();
+//     t_parser_state state;
+//     init_parser_state(&state, tokens);
 
-    t_ast_node *ast = parse_complete_command(&state);
-    print_ast(ast, 0);
+//     t_ast_node *ast = parse_complete_command(&state);
+//     print_ast(ast, 0);
 
 
-	destroy_ast(ast);
-    return 0;
-}
+// 	destroy_ast(ast);
+//     return 0;
+// }
