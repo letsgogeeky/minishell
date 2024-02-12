@@ -2,28 +2,8 @@
 # define PARSER_H
 
 # include "minishell/minishell.h"
+# include "minishell/parsing/lexer.h"
 
-typedef enum e_token_type
-{
-	WORD,
-	OPTION,
-	ASSIGNMENT_WORD,
-	DLESS,
-	DGREAT,
-	LESS,
-	GREAT,
-	PIPE,
-	EOF_TOKEN ,
-	ERROR_TOKEN
-}	t_token_type;
-
-
-typedef struct s_token
-{
-  t_token_type	type;
-  char			*lexeme;
-  int			line;
-} t_token;
 
 typedef enum e_ast_node_type
 {
@@ -58,9 +38,9 @@ typedef struct s_parser_state
 	int			current;
 } t_parser_state;
 
+
 t_ast_node	*parse_input(const char *input);
 void print_ast(t_ast_node *node, int level);
-t_token	*lex(const char *input);
 // #include <stdbool.h>
 
 // typedef enum ast_node_type_s

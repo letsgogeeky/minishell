@@ -15,6 +15,8 @@
 
 extern struct termios	settings;
 
+typedef struct s_ast_node t_ast_node;
+
 typedef struct	s_minishell {
 	char	**envp;
 	char	**args;
@@ -25,7 +27,7 @@ typedef struct	s_minishell {
 	int		in_fd;
 	int		out_fd;
 	int		exit_code;
-	struct t_ast_node	*ast;
+	t_ast_node	*ast;
 }	t_minishell;
 
 void	update_terminos(void);

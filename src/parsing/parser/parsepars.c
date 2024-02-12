@@ -82,7 +82,7 @@ t_ast_node_type determine_node_type(t_token_type type)
 		return (N_CMD_WORD);
 	else if (type == OPTION)
 		return (N_CMD_PARAM);
-	else if (type == ASSIGNMENT_WORD)
+	else if (type == ASSIGNMENT)
 		return (N_CMD_PARAM);
 	else if (type == GREAT || type == LESS \
 		|| type == DLESS || type == DGREAT)
@@ -133,7 +133,7 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
     t_ast_node *current = NULL;
     t_ast_node *node = NULL;
 
-	while (peek(state).type == ASSIGNMENT_WORD || is_redirect(state) \
+	while (peek(state).type == ASSIGNMENT || is_redirect(state) \
 		|| peek(state).type == OPTION || peek(state).type == WORD)
 	{
 		if(is_redirect(state))
@@ -160,11 +160,11 @@ t_ast_node *parse_cmd_prefix(t_parser_state *state)
 	t_ast_node *current = NULL;
 	t_ast_node *node = NULL;
 
-	while(is_redirect(state) || peek(state).type == ASSIGNMENT_WORD)
+	while(is_redirect(state) || peek(state).type == ASSIGNMENT)
 	{
 		if (is_redirect(state))
 			node = parse_redirect(state);
-		else if (peek(state).type == ASSIGNMENT_WORD)
+		else if (peek(state).type == ASSIGNMENT)
 		{
 			node = create_node(determine_node_type(peek(state).type));
 			node->data = strdup(peek(state).lexeme);
@@ -188,7 +188,7 @@ t_ast_node *parse_command(t_parser_state *state)
 	t_ast_node *cmd_prefix = NULL;
 	t_ast_node *cmd_word = NULL;
 
-	if (is_redirect(state) || peek(state).type == ASSIGNMENT_WORD)
+	if (is_redirect(state) || peek(state).type == ASSIGNMENT)
 	{
 		cmd_prefix = parse_cmd_prefix(state);
 		cmd->child = cmd_prefix;
@@ -207,7 +207,7 @@ t_ast_node *parse_command(t_parser_state *state)
 			cmd->child = cmd_word;
 		last_child = cmd_word;
 	}
-	if (peek(state).type == ASSIGNMENT_WORD || is_redirect(state) \
+	if (peek(state).type == ASSIGNMENT || is_redirect(state) \
 		|| peek(state).type == WORD)
 	{
 		cmd_suffix = parse_cmd_suffix(state);
@@ -228,7 +228,17 @@ t_ast_node *parse_complete_command(t_parser_state *state)
 	t_ast_node *next_cmd;
 	t_ast_node *error;
 
+	printf("parse_complete_command\n");
+	int i = 0;
+	while (state->tokens[i].type != EOF_TOKEN)
+	{
+		printf("token: %d\n", state->tokens[i].type);
+		i++;
+	}
 	command = parse_command(state);
+	printf("command: %d\n", command->type);
+	// printf("siblings: %d\n", command->sibling->type);
+	// printf("child: %d\n", command->child->type);
 	if (match(state, PIPE))
 	{
 		pipe = create_node(N_PIPE);
@@ -264,7 +274,7 @@ t_ast_node	*parse_input(const char *input)
 	tokens = lex(input);
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
-
+	print_ast(ast, 0);
 	return (ast);
 }
 
@@ -294,9 +304,9 @@ t_token *create_mock_tokens() {
 		// {WORD,"grep", 0},
 		// {WORD, "grep", 0},
 		// {WORD, "test", 0},
-		{LESS, "<", 0},
-		{WORD, "grammar_rules.txt", 0},
-        {EOF_TOKEN, NULL, 0}
+		// {LESS, "<", 0},
+		// {WORD, "grammar_rules.txt", 0},
+        // {EOF_TOKEN, NULL, 0}
     };
     return tokens;
 }

@@ -6,53 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "minishell/parsing/lexer.h"
 
-typedef enum e_token_type
-{
-	WORD ,
-	ASSIGNMENT,
-	OPTION,
-	DLESS,
-	DGREAT,
-	LESS,
-	GREAT,
-	PIPE,
-	EOF_TOKEN ,
-	ERROR_TOKEN
-}	t_token_type;
 
-typedef enum e_state
-{
-	start,
-	in_word,
-	in_option,
-	in_separator,
-	in_dless,
-	in_dgreat,
-	in_less,
-	in_great,
-	in_pipe,
-	in_assignment,
-	in_dqoute,
-	in_squote,
-	in_escape,
-	in_error
-}	t_state;
 
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*lexeme;
-}	t_token;
 
-typedef struct s_lexer
-{
-	char	*input_buffer;
-	char	*current;
-	char	*start;
-	t_state	state;
-}	t_lexer;
-
+void print_token(const t_token* token);
 void	init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input_buffer = strdup(input);
@@ -102,7 +61,7 @@ void	update_state(t_lexer *lexer, char curr_ch)
 	else if (curr_ch == '=')
 		lexer->state = in_assignment;
 	else if (curr_ch == '-')
-		lexer->state = in_option;
+		lexer->state = in_word;
 	else if (curr_ch == '"')
 		lexer->state = in_dqoute;
 	else if (curr_ch == '\'')
@@ -293,6 +252,12 @@ t_token *lex(const char *input)
 		++tokens_size;
 	}
 	destroy_lexer(&lexer);
+	int i = 0;
+	while(tokens[i].type != EOF_TOKEN)
+	{
+		print_token(&tokens[i]);
+		i++;
+	}
 	return (tokens);
 }
 

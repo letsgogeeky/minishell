@@ -6,6 +6,7 @@
 int	exec_cmd(t_minishell *ms, char *cmd);
 void	init_fds(t_minishell *ms);
 // TODO: change arguments to be the expected structs
+
 void	executor(t_minishell *ms)
 {
 	pid_t	pid;
