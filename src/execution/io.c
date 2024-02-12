@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/06 23:55:59 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/11 20:29:40 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void restore_io(int *system_io, int *pipe_io)
     close(system_io[1]);
     close(pipe_io[1]);
     close(pipe_io[0]);
-    
 }
 
 int parse_heredoc(char *demlimiter, char **envp)
