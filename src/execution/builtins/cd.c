@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/12 00:42:58 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/12 00:44:28 by ramoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/error.h"
@@ -12,7 +24,6 @@ int	builtins_cd(char **cmds, char ***envp)
 
 	if (!envp)
 		return (print_builtin_error("cd", NULL, "no envp"), EXIT_FAILURE);
-	
 	path = get_cd_path(cmds, *envp);
 	if (!path)
 		return (EXIT_FAILURE);
@@ -20,8 +31,8 @@ int	builtins_cd(char **cmds, char ***envp)
 	if (chdir(path) == -1)
 	{
 		free(path);
-		printf("errno: %d\n", errno);
-		return (print_builtin_error("cd", cmds[1], strerror(errno)), EXIT_FAILURE);
+		return (print_builtin_error("cd", cmds[1], strerror(errno)),
+			EXIT_FAILURE);
 	}
 	pwd = getcwd(NULL, 0);
 	update_env_variable("OLDPWD", oldpwd, envp);
@@ -34,7 +45,7 @@ int	builtins_cd(char **cmds, char ***envp)
 
 char	*get_cd_path(char **cmd, char **envp)
 {
-	char *path;
+	char	*path;
 
 	if (!cmd[1] || !ft_strncmp(cmd[1], "~", 1) || !ft_strncmp(cmd[1], "~/", 2))
 	{

@@ -1,25 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/12 00:40:29 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/12 00:42:29 by ramoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-int is_builtin(char *cmd)
+int	is_builtin(char *cmd)
 {
-    if (!ft_strncmp(cmd, "pwd", 3) || !ft_strncmp(cmd, "env", 3) ||
-        !ft_strncmp(cmd, "exit", 4) || !ft_strncmp(cmd, "echo", 4) ||
-        !ft_strncmp(cmd, "export", 6) || !ft_strncmp(cmd, "unset", 5) ||
+	if (!ft_strncmp(cmd, "pwd", 3) || !ft_strncmp(cmd, "env", 3) || \
+		!ft_strncmp(cmd, "exit", 4) || !ft_strncmp(cmd, "echo", 4) || \
+		!ft_strncmp(cmd, "export", 6) || !ft_strncmp(cmd, "unset", 5) || \
 		!ft_strncmp(cmd, "cd", 2))
-        return (1);
-    return (0);
+		return (1);
+	return (0);
 }
 
-int runs_on_parent(char *cmd)
+int	runs_on_parent(char *cmd)
 {
-    if (!ft_strncmp(cmd, "export", 6) || !ft_strncmp(cmd, "unset", 5) ||
+	if (!ft_strncmp(cmd, "export", 6) || !ft_strncmp(cmd, "unset", 5) || \
 		!ft_strncmp(cmd, "exit", 4))
-        return (1);
-    return (0);
+		return (1);
+	return (0);
 }
 
-int exec_builtin(t_minishell *ms, char *cmd)
+int	exec_builtin(t_minishell *ms, char *cmd)
 {
 	if (!ft_strncmp(cmd, "pwd", 3))
 		return (builtins_pwd());
@@ -28,7 +40,7 @@ int exec_builtin(t_minishell *ms, char *cmd)
 	if (!ft_strncmp(cmd, "exit", 4))
 		return (builtins_exit(ms), 0);
 	if (!ft_strncmp(cmd, "echo", 4))
-		return (builtins_echo(ft_split(cmd, ' ')), 1); // TODO: update this to use commands tree
+		return (builtins_echo(ft_split(cmd, ' ')), 1);
 	if (!ft_strncmp(cmd, "export", 6))
 		return (builtins_export(ft_split(ft_substr(cmd, 7, ft_strlen(cmd) - 7), ' '), ms), 0);
 	if (!ft_strncmp(cmd, "unset", 5))
