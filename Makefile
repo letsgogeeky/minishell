@@ -5,6 +5,7 @@ BASELIB := ./lib/ft-baselib
 CFLAGS	:= -Wextra -Wall -Werror -g
 LINKS := -lreadline -L/usr/local/opt/readline/lib
 HEADERS := -I ./include -I ${BASELIB}/include -I/usr/local/opt/readline/include
+SRC_DS := ds/stack.c
 SRC_ERROR := error/execution_error.c error/parser_error.c
 SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/pwd.c execution/builtins/env.c \
@@ -17,7 +18,7 @@ SRC_EXPANDER := expander/expander.c
 SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c
 SRC_ENV := env/manager.c env/utils.c
 SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c
-SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV)
+SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV) $(SRC_DS)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
 LIBS := ${BASELIB}/baselib.a

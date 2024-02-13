@@ -2,6 +2,7 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 #include "minishell/error.h"
+#include "minishell/stack.h"
 
 int	exec_cmd(t_minishell *ms, char *cmd, char **options);
 void	init_fds(t_minishell *ms);
@@ -20,61 +21,6 @@ int	count_cmds(t_minishell *ms, t_ast_node *node, bool is_child)
 		return (1);
 	}
 	return (count_cmds(ms, node->child, true) + count_cmds(ms, node->sibling, false));
-}
-
-typedef struct {
-    t_ast_node *node;
-    bool is_child;
-} StackData;
-
-typedef struct StackNode {
-    StackData data;
-    struct StackNode *next;
-} StackNode;
-
-StackNode* createStackNode(t_ast_node *node, bool is_child) {
-    StackNode *newNode = (StackNode*)malloc(sizeof(StackNode));
-    if (!newNode) {
-        printf("Memory error\n");
-        return NULL;
-    }
-    newNode->data.node = node;
-    newNode->data.is_child = is_child;
-    newNode->next = NULL;
-    return newNode;
-}
-
-void push(StackNode **top, t_ast_node *node, bool is_child) {
-    StackNode *newNode = createStackNode(node, is_child);
-    if (!newNode) return;
-    newNode->next = *top;
-    *top = newNode;
-}
-
-StackData pop(StackNode **top) {
-    if (*top == NULL) {
-        printf("Stack underflow\n");
-        StackData emptyData = {NULL, false};
-        return emptyData;
-    }
-    StackNode *temp = *top;
-    StackData poppedData = temp->data;
-    *top = (*top)->next;
-    free(temp);
-    return poppedData;
-}
-
-StackData stackTop(StackNode *top) {
-    if (top == NULL) {
-        printf("Stack is empty\n");
-        StackData emptyData = {NULL, false};
-        return emptyData;
-    }
-    return top->data;
-}
-
-bool isEmpty(StackNode *top) {
-    return top == NULL;
 }
 
 char	**siblings_to_array(t_ast_node *node)
@@ -141,13 +87,13 @@ void execute_ast(t_minishell *ms, t_ast_node *root) {
 	char	**siblings;
 	t_ast_node	*file_node;
 	init_fds(ms);
-    StackNode *stack = NULL;
+    t_stack_node *stack = NULL;
 	file_node = NULL;
 	order = 0;
-    push(&stack, root, false);
+    stack_push(&stack, root, false);
 
-    while (!isEmpty(stack)) {
-        StackData top = pop(&stack);
+    while (!stack_is_empty(stack)) {
+        t_stack_data top = stack_pop(&stack);
         t_ast_node *node = top.node;
         bool is_child = top.is_child;
 
@@ -195,18 +141,15 @@ void execute_ast(t_minishell *ms, t_ast_node *root) {
 			}
 			order++;
         }
-
-        if (node->sibling) {
-            push(&stack, node->sibling, false);
-        }
-
-        if (node->child) {
-            push(&stack, node->child, true);
-        }
+        if (node->sibling)
+            stack_push(&stack, node->sibling, false);
+        if (node->child)
+            stack_push(&stack, node->child, true);
     }
 	restore_io(ms->system_fd, ms->pipe_fd, count == 0);
 	wait_for_children(ms->last_pid, ms);
 }
+
 
 void	executor(t_minishell *ms, int order)
 {
