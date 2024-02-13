@@ -59,8 +59,10 @@ static int interactive_mode(t_minishell *ms)
 			}
 			add_history(ms->input);
             reset_terminos();
-            expand(ms);
-			executor(ms); // TODO: make this proper executor
+			iterate_ast(ms, ms->ast, 0);
+            // expand(ms);
+			execute_ast(ms, ms->ast);
+			// executor(ms, 0); // TODO: make this proper executor
             update_terminos();
 			str_arr_free(ms->cmds);
         }

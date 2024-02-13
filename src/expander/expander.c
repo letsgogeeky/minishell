@@ -3,34 +3,46 @@
 char	*expand_variable(char *cursor, int j, char **envp, int exit_code);
 int	key_length(char *start);
 
-void expand(t_minishell *ms)
+void	iterate_ast(t_minishell *ms, t_ast_node *node, int level)
+{
+	if (node == NULL) return;
+	// for (int i = 0; i < level; ++i) printf("  ");
+	// printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
+	if (node->type == N_CMD_WORD)
+		node->data = expand(ms, node->data);
+	// printf("fd: %d\n", node->fd);
+	// printf("is_heredoc: %d\n", node->is_heredoc);
+	if (node->child)
+		iterate_ast(ms, node->child, level + 2);
+	if (node->sibling)
+		iterate_ast(ms, node->sibling, level);
+}
+
+char *expand(t_minishell *ms, char *cmds)
 {
     int i;
-    int j;
     char *expanded;
     char *tmp;
 	bool	is_quoted;
 
 	is_quoted = false;
     i = -1;
-    while (ms->cmds[++i])
+    while (cmds[++i])
     {
-        j = -1;
-        while (ms->cmds[i][++j])
-        {
-			if (ms->cmds[i][j] == '\'')
-				is_quoted = !is_quoted;
-            if (ms->cmds[i][j] == '$' && !is_quoted)
-            {
-				expanded = expand_variable(ms->cmds[i], j, ms->envp, ms->exit_code);
-                tmp = expanded;
-                expanded = ft_strjoin(expanded, ms->cmds[i] + j + 1 + key_length(ms->cmds[i] + j + 1));
-                free(tmp);
-                free(ms->cmds[i]);
-                ms->cmds[i] = expanded;
-            }
-        }
-    }
+		if (cmds[i] == '\'')
+			is_quoted = !is_quoted;
+		if (cmds[i] == '$' && !is_quoted)
+		{
+			expanded = expand_variable(cmds, i, ms->envp, ms->exit_code);
+			tmp = expanded;
+			expanded = ft_strjoin(expanded, cmds + i + 1 + key_length(cmds + i + 1));
+			free(tmp);
+			free(cmds);
+			cmds = expanded;
+		}
+	}
+	printf("expanded: %s\n", cmds);
+	return (cmds);
 }
 
 int	key_length(char *start)

@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:49:10 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/12 00:57:42 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:31:09 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,19 @@ int	builtins_export(char **args, t_minishell *ms)
 	i = -1;
 	while (args[++i])
 	{
+		printf("args[%d]: %s\n", i, args[i]);
+		if (ft_strncmp(args[i], "=", 1))
+			continue;
 		j = 0;
-		while (args[i][j] && args[i][j] != '=')
-			j++;
-		key = ft_substr(args[i], 0, j);
+		// while (args[i][j] && args[i][j] != '=')
+		// 	j++;
+		key = args[i-1];
+		printf("key: %s\n", key);
 		if (!is_valid_env_name(key))
 			return (print_builtin_error(
 					"export", key, "not a valid identifier"), \
 				free(key), EXIT_FAILURE);
-		value = ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
+		value = args[i+1]; //ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
 		add_or_update_env_variable(key, value, ms);
 		free(key);
 		free(value);

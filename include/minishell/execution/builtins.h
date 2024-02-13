@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:59:01 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/12 00:54:56 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/13 04:00:49 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ void builtins_echo(char **cmds);
 int builtins_export(char **args, t_minishell *ms);
 int builtins_unset(char **args, t_minishell *ms);
 int	builtins_cd(char **cmds, char ***envp);
-
 int is_builtin(char *cmd);
 int runs_on_parent(char *cmd);
-int exec_builtin(t_minishell *ms, char *cmd);
+int exec_builtin(t_minishell *ms, char *cmd, char **options);
 
 #endif

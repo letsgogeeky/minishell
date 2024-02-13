@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:40:29 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/12 03:49:24 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/13 02:25:29 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	runs_on_parent(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_minishell *ms, char *cmd)
+int	exec_builtin(t_minishell *ms, char *cmd, char **options)
 {
 	if (!ft_strncmp(cmd, "pwd", 3))
 		return (builtins_pwd());
@@ -40,12 +40,12 @@ int	exec_builtin(t_minishell *ms, char *cmd)
 	if (!ft_strncmp(cmd, "exit", 4))
 		return (builtins_exit(ms), 0);
 	if (!ft_strncmp(cmd, "echo", 4))
-		return (builtins_echo(ft_split(cmd, ' ')), 1);
+		return (builtins_echo(options), 1);
 	if (!ft_strncmp(cmd, "export", 6))
-		return (builtins_export(ft_split(ft_substr(cmd, 7, ft_strlen(cmd) - 7), ' '), ms), 0);
+		return (builtins_export(options, ms), 0);
 	if (!ft_strncmp(cmd, "unset", 5))
-		return (builtins_unset(ft_split(ft_substr(cmd, 6, ft_strlen(cmd) - 6), ' '), ms));
+		return (builtins_unset(options, ms));
 	if (!ft_strncmp(cmd, "cd", 2))
-		return (builtins_cd(ft_split(cmd, ' '), &ms->envp));
+		return (builtins_cd(options, &ms->envp));
 	return (0);
 }

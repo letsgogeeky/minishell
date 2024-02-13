@@ -252,12 +252,12 @@ t_token *lex(const char *input)
 		++tokens_size;
 	}
 	destroy_lexer(&lexer);
-	int i = 0;
-	while(tokens[i].type != EOF_TOKEN)
-	{
-		print_token(&tokens[i]);
-		i++;
-	}
+	size_t i = 0;
+    while (tokens[i].type != EOF_TOKEN) {
+        printf("-->");
+        print_token(&tokens[i]);
+        i++;
+    }
 	return (tokens);
 }
 

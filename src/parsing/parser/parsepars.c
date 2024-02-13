@@ -108,10 +108,12 @@ t_ast_node *parse_redirect(t_parser_state *state)
 	t_token			file;
 
 	type = peek(state).type;
+	printf("type: %d\n", type);
 	consume(state);
 	file = consume(state);
 	node = create_node(determine_node_type(type));
 	node->data = strdup(file.lexeme);
+	printf("file: %s\n", file.lexeme);
 	if (type == GREAT)
 		node->fd = open_file(file.lexeme, O_TRUNC);
 	else if (type == DGREAT)
@@ -133,6 +135,7 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
     t_ast_node *current = NULL;
     t_ast_node *node = NULL;
 
+	printf("parse_cmd_suffix\n");
 	while (peek(state).type == ASSIGNMENT || is_redirect(state) \
 		|| peek(state).type == OPTION || peek(state).type == WORD)
 	{
@@ -219,8 +222,6 @@ t_ast_node *parse_command(t_parser_state *state)
 	return (cmd);
 }
 
-
-
 t_ast_node *parse_complete_command(t_parser_state *state)
 {
 	t_ast_node *command;
@@ -228,17 +229,7 @@ t_ast_node *parse_complete_command(t_parser_state *state)
 	t_ast_node *next_cmd;
 	t_ast_node *error;
 
-	printf("parse_complete_command\n");
-	int i = 0;
-	while (state->tokens[i].type != EOF_TOKEN)
-	{
-		printf("token: %d\n", state->tokens[i].type);
-		i++;
-	}
 	command = parse_command(state);
-	printf("command: %d\n", command->type);
-	// printf("siblings: %d\n", command->sibling->type);
-	// printf("child: %d\n", command->child->type);
 	if (match(state, PIPE))
 	{
 		pipe = create_node(N_PIPE);

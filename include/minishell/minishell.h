@@ -27,6 +27,7 @@ typedef struct	s_minishell {
 	int		in_fd;
 	int		out_fd;
 	int		exit_code;
+	pid_t	last_pid;
 	t_ast_node	*ast;
 }	t_minishell;
 
@@ -47,8 +48,8 @@ char	**copy_env(char **envp);
 int		free_env(char **envp);
 char	**get_environment(void);
 
-void	expand(t_minishell *ms);
-
+char	*expand(t_minishell *ms, char *str);
+void	iterate_ast(t_minishell *ms, t_ast_node *node, int level);
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);
 
