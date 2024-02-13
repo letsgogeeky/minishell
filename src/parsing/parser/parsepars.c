@@ -108,12 +108,10 @@ t_ast_node *parse_redirect(t_parser_state *state)
 	t_token			file;
 
 	type = peek(state).type;
-	printf("type: %d\n", type);
 	consume(state);
 	file = consume(state);
 	node = create_node(determine_node_type(type));
 	node->data = strdup(file.lexeme);
-	printf("file: %s\n", file.lexeme);
 	if (type == GREAT)
 		node->fd = open_file(file.lexeme, O_TRUNC);
 	else if (type == DGREAT)

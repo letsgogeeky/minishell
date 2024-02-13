@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/13 15:32:41 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/13 23:34:36 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 {
     //  TODO: update to check if input is stdin or file
-    if (is_first_cmd && file->fd != -1)
+    if (is_first_cmd && file)
     {
         dup2(file->fd, STDIN_FILENO);
         close(file->fd);
@@ -32,8 +32,11 @@ void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 
 void	do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file)
 {
-    if (is_last_cmd && file->fd != -1)
+    if (is_last_cmd && file)
     {
+		printf("file: %s\n", file->data);
+		printf("file type: %d\n", file->type);
+		printf("file fd: %d\n", file->fd);
         ft_putendl_fd("here", STDERR_FILENO);
         dup2(file->fd, STDOUT_FILENO);
         close(file->fd);

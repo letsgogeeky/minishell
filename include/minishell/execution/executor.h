@@ -23,7 +23,7 @@ void	do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file);
 void	restore_io(int *system_io, int *pipe_io, bool is_empty);
 void	executor(t_minishell *ms, int order);
 void	execute_ast(t_minishell *ms, t_ast_node *root);
-int	count_cmds(t_minishell *ms, t_ast_node *node, bool is_child);
+int		count_cmds(t_minishell *ms, t_ast_node *node, bool is_child);
 void	wait_for_children(pid_t last_pid, t_minishell *ms);
 
 #endif

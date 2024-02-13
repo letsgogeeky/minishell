@@ -7,17 +7,18 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options);
 void	init_fds(t_minishell *ms);
 // TODO: change arguments to be the expected structs
 
+bool	executable_node(t_ast_node *node)
+{
+	return (node->type == N_CMD_WORD || node->type == N_INFILE || node->type == N_OUTFILE);
+}
+
 int	count_cmds(t_minishell *ms, t_ast_node *node, bool is_child)
 {
 	if (node == NULL) return (0);
-	// for (int i = 0; i < level; ++i) printf("  ");
-	// printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
-	if (node->type == N_CMD_WORD && is_child)
+	if (is_child && executable_node(node))
 	{
 		return (1);
 	}
-	// printf("fd: %d\n", node->fd);
-	// printf("is_heredoc: %d\n", node->is_heredoc);
 	return (count_cmds(ms, node->child, true) + count_cmds(ms, node->sibling, false));
 }
 
@@ -95,7 +96,6 @@ char	**siblings_to_array(t_ast_node *node)
 	while (sibling)
 	{
 		arr[i] = ft_strdup(sibling->data);
-		printf("arr[%d]: %s\n", i, arr[i]);
 		i++;
 		sibling = sibling->sibling;
 	}
@@ -113,13 +113,36 @@ t_ast_node	*get_last_sibiling(t_ast_node *node)
 	return (sibling);
 }
 
+char	**get_arr_without_last(char **arr)
+{
+	int		i;
+	char	**new_arr;
+
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while (arr[i])
+		i++;
+	new_arr = (char **)malloc(sizeof(char *) * i);
+	i = 0;
+	while (arr[i + 1])
+	{
+		new_arr[i] = ft_strdup(arr[i]);
+		i++;
+	}
+	new_arr[i] = NULL;
+	return (new_arr);
+}
 void execute_ast(t_minishell *ms, t_ast_node *root) {
 	int	order;
 	int count = count_cmds(ms, root, false);
 	printf("count: %d\n", count);
 	ms->last_pid = 1;
+	char	**siblings;
+	t_ast_node	*file_node;
 	init_fds(ms);
     StackNode *stack = NULL;
+	file_node = NULL;
 	order = 0;
     push(&stack, root, false);
 
@@ -130,26 +153,45 @@ void execute_ast(t_minishell *ms, t_ast_node *root) {
 
         if (node == NULL) continue;
 
-        if (node->type == N_CMD_WORD && is_child) {
-            printf("data: %s\n", node->data);
-            t_ast_node *sibling = node->sibling;
+        if (is_child && executable_node(node))
+		{
+			if (order == 0 && node->type == N_INFILE)
+			{
+				file_node = node;
+				node = node->sibling;
+			}
+			siblings = siblings_to_array(node);
+            printf("data: %s\n", file_node? file_node->data : node->data);
+            t_ast_node *sibling = node;
             while (sibling) {
                 printf("sibling data: %s\n", sibling->data);
                 sibling = sibling->sibling;
             }
-			do_input_redirection(ms, !order, node);
+			do_input_redirection(ms, !order, file_node);
 			pipe(ms->pipe_fd);
 			if (is_builtin(node->data) && runs_on_parent(node->data))
 			{
-				ms->exit_code = exec_builtin(ms, node->data, siblings_to_array(node));
+				ms->exit_code = exec_builtin(ms, node->data, siblings);
 				continue ;
 			}
 			ms->last_pid = fork();
 			if (ms->last_pid == 0)
 			{
-				do_output_redirection(ms, order + 1 == count, get_last_sibiling(node));
+				file_node = NULL;
+				if (order + 1 == count && get_last_sibiling(node)->type == N_INFILE)
+				{
+					file_node = get_last_sibiling(node);
+					siblings = get_arr_without_last(siblings);
+					int i = 0;
+					while (siblings[i])
+					{
+						printf("siblings: %s\n", siblings[i]);
+						i++;
+					}
+				}
+				do_output_redirection(ms, order + 1 == count, file_node);
 				use_child_signals();
-				exec_cmd(ms, node->data, siblings_to_array(node));
+				exec_cmd(ms, node->data, siblings);
 			}
 			order++;
         }
