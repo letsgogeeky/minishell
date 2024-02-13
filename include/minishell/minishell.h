@@ -38,7 +38,7 @@ void    use_child_signals(void);
 int     open_file(char *path, int flags);
 
 int     exists_in_env(char *key, char **envp);
-int     update_env_variable(char *key, char *value, char ***envp);
+int     update_env_variable(char *key, char *value, t_minishell *ms);
 char    **add_to_env(char *key, char *value, char **envp);
 char    **remove_from_env(char *key, char **envp);
 int     is_valid_env_name(char *name);

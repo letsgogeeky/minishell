@@ -86,8 +86,7 @@ char	**siblings_to_array(t_ast_node *node)
 	sibling = node->sibling;
 	while (sibling)
 	{
-		if (sibling->type == N_CMD_WORD)
-			i++;
+		i++;
 		sibling = sibling->sibling;
 	}
 	arr = (char **)malloc(sizeof(char *) * (i + 1));
@@ -95,8 +94,8 @@ char	**siblings_to_array(t_ast_node *node)
 	sibling = node->sibling;
 	while (sibling)
 	{
-		if (sibling->type == N_CMD_WORD)
-			arr[i] = ft_strdup(sibling->data);
+		arr[i] = ft_strdup(sibling->data);
+		printf("arr[%d]: %s\n", i, arr[i]);
 		i++;
 		sibling = sibling->sibling;
 	}

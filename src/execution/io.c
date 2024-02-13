@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/13 04:09:25 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:32:41 by ramymoussa       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 {
-	printf("is_first_cmd: %d\n", is_first_cmd);
-	printf("file_fd: %d\n", file->fd);
     //  TODO: update to check if input is stdin or file
     if (is_first_cmd && file->fd != -1)
     {
@@ -34,8 +32,6 @@ void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 
 void	do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file)
 {
-	printf("is_last_cmd: %d\n", is_last_cmd);
-	printf("file_fd: %d\n", file->fd);
     if (is_last_cmd && file->fd != -1)
     {
         ft_putendl_fd("here", STDERR_FILENO);
