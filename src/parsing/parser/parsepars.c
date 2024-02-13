@@ -133,7 +133,6 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
     t_ast_node *current = NULL;
     t_ast_node *node = NULL;
 
-	printf("parse_cmd_suffix\n");
 	while (peek(state).type == ASSIGNMENT || is_redirect(state) \
 		|| peek(state).type == OPTION || peek(state).type == WORD)
 	{
