@@ -122,8 +122,6 @@ t_ast_node *parse_redirect(t_parser_state *state)
 		node->fd = open_file(file.lexeme, O_RDONLY);
 	else if (type == DLESS)
 		node->is_heredoc = true;
-	if (node->fd == -1)
-		exit(EXIT_FAILURE);
 	return (node);
 }
 
@@ -171,13 +169,13 @@ t_ast_node *parse_cmd_prefix(t_parser_state *state)
 		{
 			node = create_node(determine_node_type(peek(state).type));
 			node->data = strdup(peek(state).lexeme);
+			consume(state);
 		}
 		if (!head)
 			head = node;
 		else
 			current->sibling = node;
 		current = node;
-		consume(state);
 	}
 	return (head);
 }
@@ -201,7 +199,7 @@ t_ast_node *parse_command(t_parser_state *state)
 	}
 	if (peek(state).type == WORD)
 	{
-	cmd_word = create_node(N_CMD_WORD);
+		cmd_word = create_node(N_CMD_WORD);
 		cmd_word->data = strdup(peek(state).lexeme);
 		consume(state);
 		if (last_child)
@@ -233,7 +231,6 @@ t_ast_node *parse_complete_command(t_parser_state *state)
 	if (match(state, PIPE))
 	{
 		pipe = create_node(N_PIPE);
-		// pipe->data = strdup("|"); //TODO: remove this
 		next_cmd = parse_complete_command(state);
 		pipe->child = command;
 		command->parent = pipe;
@@ -263,6 +260,7 @@ t_ast_node	*parse_input(const char *input)
 	t_ast_node		*ast;
 
 	tokens = lex(input);
+
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
 	print_ast(ast, 0);
@@ -277,30 +275,34 @@ t_ast_node	*parse_input(const char *input)
 
 
 // Mock function to create an array of tokens for testing
-t_token *create_mock_tokens() {
-    static t_token tokens[] = {
-		// {WORD, "export", 0},
-        // {ASSIGNMENT_WORD, "VAR=value", 0},
-        // {WORD, "echo", 0},
-		// {WORD, "$VAR", 0},
-        // {WORD, "Hello, world!", 0},
-		// {WORD,"ls", 0},
-		// {WORD,"-l", 0},
-		// {WORD,"-a", 0},
-		// {PIPE, "|", 0},
-		// {WORD,"cat", 0},
-		// {PIPE, "|", 0},
-		// {WORD,"wc", 0},
-		// {WORD,"-w", 0},
-		// {WORD,"grep", 0},
-		// {WORD, "grep", 0},
-		// {WORD, "test", 0},
-		// {LESS, "<", 0},
-		// {WORD, "grammar_rules.txt", 0},
-        // {EOF_TOKEN, NULL, 0}
-    };
-    return tokens;
-}
+// t_token *create_mock_tokens() {
+//     static t_token tokens[] = {
+// 		// {WORD, "export", 0},
+//         // {ASSIGNMENT_WORD, "VAR=value", 0},
+//         // {WORD, "echo", 0},
+// 		// {WORD, "$VAR", 0},
+//         // {WORD, "Hello, world!", 0},
+// 		// {WORD,"-l", 0},
+// 		{LESS, "<"}
+// 		{WORD,"in.txt"},
+// 		{WORD,"ls"},
+// 		{WORD,"-a"},
+// 		{PIPE, "|"},
+// 		{WORD,"cat"},
+// 		{GREAT, ">"},
+// 		{WORD,"out.txt"},
+// 		// {PIPE, "|", 0},
+// 		// {WORD,"wc", 0},
+// 		// {WORD,"-w", 0},
+// 		// {WORD,"grep", 0},
+// 		// {WORD, "grep", 0},
+// 		// {WORD, "test", 0},
+// 		// {LESS, "<", 0},
+// 		// {WORD, "grammar_rules.txt", 0},
+//         // {EOF_TOKEN, NULL, 0}
+//     };
+//     return tokens;
+// }
 
 void print_ast(t_ast_node *node, int level)
 {
