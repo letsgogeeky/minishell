@@ -18,21 +18,21 @@ int    exists_in_env(char *key, char **envp)
     return (-1);
 }
 
-int update_env_variable(char *key, char *value, char ***envp)
+int update_env_variable(char *key, char *value, t_minishell *ms)
 {
     int i;
-    char **env;
-	char *tmp;
+    char *tmp;
 
-    env = *envp;
-    i = exists_in_env(key, env);
+    i = exists_in_env(key, ms->envp);
+    printf("i: %d\n", i);
     if (i == -1)
-		return (-1);
-	free(env[i]);
-	tmp = ft_strjoin(key, "=");
-	env[i] = ft_strjoin(tmp, value);
-	free(tmp);
-	return (EXIT_SUCCESS);
+        return (-1);
+    free(ms->envp[i]);
+    tmp = ft_strjoin(key, "=");
+    ms->envp[i] = ft_strjoin(tmp, value);
+    printf("ms->envp[%d]: %s\n", i, ms->envp[i]);
+    free(tmp);
+    return (EXIT_SUCCESS);
 }
 
 char    **add_to_env(char *key, char *value, char **envp)

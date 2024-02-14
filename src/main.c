@@ -1,6 +1,7 @@
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
+#include "minishell/parsing/parser.h"
 
 struct termios	settings;
 static	bool is_empty(char *str)
@@ -19,46 +20,21 @@ static	bool is_empty(char *str)
 
 static int interactive_mode(t_minishell *ms)
 {
-    // int     out_file_fd;
-    // int     in_fd;
-    // bool    is_append;
-
     ms->input = readline("massiveshell$ ");
     while (ms->input && ms->input[0] != EOF)
     {
 		if (ms->input[0] != '\0' && !is_empty(ms->input))
 		{
-            // TODO: call parser here
-            // is_append = false;
-            // // temporary solution for output file until is handled by parser
-            // if (is_append)
-            // {
-            //     // for >> append redirection. append is slower to flush data to file
-            //     // because we're not allowed to use fflush
-            //     out_file_fd = open_file("./out.txt", O_APPEND);
-            // }
-            // else
-            // {
-            //     // for > truncate redirection, it takes effect immedicately
-            //     out_file_fd = open_file("./out.txt", O_TRUNC);
-            // }
-            // in_fd = open_file("./in.txt", O_RDONLY);
-            // printf("file fd: %d\n", out_file_fd);
-            // TODO: add to history and do execution magic and return exit code after
-            // builtins_pwd();
-            ms->cmds = ft_split(ms->input, '|');
-			int x = 0;
-			while (ms->cmds[x])
-			{
-				ms->cmds[x] = trim_start(trim_end(ms->cmds[x], true), true);
-				x++;
-			}
+			printf("input: %s\n", ms->input);
+			ms->ast = parse_input(ms->input);
+			print_ast(ms->ast, 0);
 			add_history(ms->input);
             reset_terminos();
-            expand(ms);
-			executor(ms); // TODO: make this proper executor
+			expand_ast(ms, ms->ast, 0);
+			ms->count = count_cmds(ms, ms->ast, false);
+			init_fds(ms);
+			execute_ast(ms, ms->ast);
             update_terminos();
-			str_arr_free(ms->cmds);
         }
         ms->input = readline("massiveshell$ ");
 		use_parent_signals();
@@ -80,9 +56,8 @@ int main(int argc, char **argv)
     if (isatty(STDIN_FILENO))
     {
 		ms->args = argv;
-		ms->in_fd = -1;
-		ms->out_fd = -1;
 		ms->exit_code = 0;
+		ms->file_node = NULL;
 		ms->envp = get_environment();
         use_parent_signals();
         interactive_mode(ms);
