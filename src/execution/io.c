@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/14 01:06:25 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 03:03:42 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,3 @@ void restore_io(int *system_io, int *pipe_io, bool is_empty)
     close(pipe_io[0]);
 }
 
-int parse_heredoc(char *demlimiter, char **envp)
-{
-    char	*doc;
-	int		ipc[2];
-
-	(void)envp;
-	if (pipe(ipc))
-		printf("pipe error\n");
-    doc = NULL;
-	if (isatty(STDIN_FILENO))
-		doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
-	while (doc && ft_strncmp(demlimiter, doc, ft_strlen(doc)))
-	{
-		ft_putstr_fd(doc, ipc[1]);
-		free(doc);
-		doc = readline("heredoc> ");
-	}
-	if (doc)
-		free(doc);
-	dup2(ipc[0], 0);
-	close(ipc[0]);
-	close(ipc[1]);
-	return (0);
-}

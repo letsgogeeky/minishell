@@ -6,8 +6,7 @@
 
 int		exec_cmd(t_minishell *ms, char *cmd, char **options);
 void	executor(t_minishell *ms, t_ast_node *node, int order);
-void	init_fds(t_minishell *ms);
-
+t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order);
 
 void execute_ast(t_minishell *ms, t_ast_node *root)
 {
@@ -25,13 +24,7 @@ void execute_ast(t_minishell *ms, t_ast_node *root)
         if (node == NULL) continue;
         if (top.is_child && is_executable_node(node))
 		{
-			if (order == 0 && node->type == N_INFILE)
-			{
-				ms->file_node = node;
-				node = node->sibling;
-			}
-			if (order == 0)
-				ms->first_cmd = ft_strdup(node->data);
+			node = pre_execute(ms, node, order);
 			executor(ms, node, order);
 			order++;
         }
@@ -44,6 +37,17 @@ void execute_ast(t_minishell *ms, t_ast_node *root)
 	wait_for_children(ms->last_pid, ms);
 }
 
+t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order)
+{
+	if (order == 0 && node->type == N_INFILE)
+	{
+		ms->file_node = node;
+		node = node->sibling;
+	}
+	if (order == 0)
+		ms->first_cmd = ft_strdup(node->data);
+	return (node);
+}
 
 void	executor(t_minishell *ms, t_ast_node *node, int order)
 {
@@ -72,27 +76,6 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 	}
 }
 
-char	**join_cmd_and_options(char *cmd, char **options)
-{
-	char	**cmd_and_options;
-	int		i;
-
-	i = 0;
-	while (options[i])
-		i++;
-	cmd_and_options = (char **)malloc(sizeof(char *) * (i + 2));
-	cmd_and_options[0] = ft_strdup(cmd);
-	i = 0;
-	while (options[i])
-	{
-		cmd_and_options[i + 1] = ft_strdup(options[i]);
-		i++;
-	}
-	cmd_and_options[i + 1] = NULL;
-	return (cmd_and_options);
-}
-
-// TODO: change arguments to be the expected structs
 int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 {
 	char	*path;
@@ -109,9 +92,14 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 	if (execve(path, parts, ms->envp) == -1)
 	{
 		str_arr_free(parts);
+		free(path);
+		str_arr_free(options);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			err(cmd, "Permission denied", 126, ms);
 		err(cmd, "command not found", 127, ms);
 	}
+	str_arr_free(parts);
+	free(path);
+	str_arr_free(options);
 	return (EXIT_SUCCESS);
 }

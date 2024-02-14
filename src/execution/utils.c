@@ -29,3 +29,23 @@ void	wait_for_children(pid_t last_pid, t_minishell *ms)
 		i++;
 	}
 }
+
+char	**join_cmd_and_options(char *cmd, char **options)
+{
+	char	**cmd_and_options;
+	int		i;
+
+	i = 0;
+	while (options[i])
+		i++;
+	cmd_and_options = (char **)malloc(sizeof(char *) * (i + 2));
+	cmd_and_options[0] = ft_strdup(cmd);
+	i = 0;
+	while (options[i])
+	{
+		cmd_and_options[i + 1] = ft_strdup(options[i]);
+		i++;
+	}
+	cmd_and_options[i + 1] = NULL;
+	return (cmd_and_options);
+}

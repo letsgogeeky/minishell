@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 00:11:28 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 00:43:11 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 03:08:41 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,6 @@ char	**get_arr_without_last(char **arr)
 		i++;
 	}
 	new_arr[i] = NULL;
+	str_arr_free(arr);
 	return (new_arr);
 }

@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/13 02:12:03 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 03:15:00 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void prettify_str(char *str)
 
 	i = 0;
 	is_quoted = is_wrapped_in_quotes(str);
-	printf("%d\n", is_quoted);
 	if (is_quoted)
 		i++;
 	while (str[i])

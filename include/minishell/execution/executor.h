@@ -18,6 +18,7 @@ void		init_fds(t_minishell *ms);
 void		execute_ast(t_minishell *ms, t_ast_node *root);
 int			count_cmds(t_minishell *ms, t_ast_node *node, bool is_child);
 void		wait_for_children(pid_t last_pid, t_minishell *ms);
+char		**join_cmd_and_options(char *cmd, char **options);
 
 bool		is_executable_node(t_ast_node *node);
 char		**siblings_to_array(t_ast_node *node);
