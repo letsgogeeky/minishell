@@ -5,10 +5,10 @@ void	wait_for_children(pid_t last_pid, t_minishell *ms)
 {
 	int i;
 
-	if (!ms->cmds)
+	if (!ms->count)
 		return ;
-	if (str_arr_len(ms->cmds) == 0 || (
-		str_arr_len(ms->cmds) == 1 && runs_on_parent(ms->cmds[0])))
+	if (ms->count == 0 || (
+		ms->count == 1 && runs_on_parent(ms->first_cmd)))
 		return ;
 	signal(SIGINT, SIG_IGN);
 	waitpid(last_pid, &ms->exit_code, 0);
@@ -23,7 +23,7 @@ void	wait_for_children(pid_t last_pid, t_minishell *ms)
 	else
 		ms->exit_code = WEXITSTATUS(ms->exit_code);
 	i = 0;
-	while (ms->cmds[i])
+	while (ms->count > i)
 	{
 		wait(NULL);
 		i++;

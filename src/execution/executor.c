@@ -4,184 +4,72 @@
 #include "minishell/error.h"
 #include "minishell/stack.h"
 
-int	exec_cmd(t_minishell *ms, char *cmd, char **options);
+int		exec_cmd(t_minishell *ms, char *cmd, char **options);
+void	executor(t_minishell *ms, t_ast_node *node, int order);
 void	init_fds(t_minishell *ms);
-// TODO: change arguments to be the expected structs
 
-bool	executable_node(t_ast_node *node)
+
+void execute_ast(t_minishell *ms, t_ast_node *root)
 {
-	return (node->type == N_CMD_WORD || node->type == N_INFILE || node->type == N_OUTFILE);
-}
-
-int	count_cmds(t_minishell *ms, t_ast_node *node, bool is_child)
-{
-	if (node == NULL) return (0);
-	if (is_child && executable_node(node))
-	{
-		return (1);
-	}
-	return (count_cmds(ms, node->child, true) + count_cmds(ms, node->sibling, false));
-}
-
-char	**siblings_to_array(t_ast_node *node)
-{
-	int		i;
-	char	**arr;
-	t_ast_node *sibling;
-
-	i = 0;
-	sibling = node->sibling;
-	while (sibling)
-	{
-		i++;
-		sibling = sibling->sibling;
-	}
-	arr = (char **)malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	sibling = node->sibling;
-	while (sibling)
-	{
-		arr[i] = ft_strdup(sibling->data);
-		i++;
-		sibling = sibling->sibling;
-	}
-	arr[i] = NULL;
-	return (arr);
-}
-
-t_ast_node	*get_last_sibiling(t_ast_node *node)
-{
-	t_ast_node *sibling;
-
-	sibling = node;
-	while (sibling->sibling)
-		sibling = sibling->sibling;
-	return (sibling);
-}
-
-char	**get_arr_without_last(char **arr)
-{
-	int		i;
-	char	**new_arr;
-
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (arr[i])
-		i++;
-	new_arr = (char **)malloc(sizeof(char *) * i);
-	i = 0;
-	while (arr[i + 1])
-	{
-		new_arr[i] = ft_strdup(arr[i]);
-		i++;
-	}
-	new_arr[i] = NULL;
-	return (new_arr);
-}
-void execute_ast(t_minishell *ms, t_ast_node *root) {
 	int	order;
-	int count = count_cmds(ms, root, false);
-	printf("count: %d\n", count);
+	t_stack_data top;
+	t_ast_node *node;
+
 	ms->last_pid = 1;
-	char	**siblings;
-	t_ast_node	*file_node;
-	init_fds(ms);
-    t_stack_node *stack = NULL;
-	file_node = NULL;
 	order = 0;
-    stack_push(&stack, root, false);
-
-    while (!stack_is_empty(stack)) {
-        t_stack_data top = stack_pop(&stack);
-        t_ast_node *node = top.node;
-        bool is_child = top.is_child;
-
+    stack_push(&ms->stack, root, false);
+    while (!stack_is_empty(ms->stack))
+	{
+        top = stack_pop(&ms->stack);
+        node = top.node;
         if (node == NULL) continue;
-
-        if (is_child && executable_node(node))
+        if (top.is_child && is_executable_node(node))
 		{
 			if (order == 0 && node->type == N_INFILE)
 			{
-				file_node = node;
+				ms->file_node = node;
 				node = node->sibling;
 			}
-			siblings = siblings_to_array(node);
-            printf("data: %s\n", file_node? file_node->data : node->data);
-            t_ast_node *sibling = node;
-            while (sibling) {
-                printf("sibling data: %s\n", sibling->data);
-                sibling = sibling->sibling;
-            }
-			do_input_redirection(ms, !order, file_node);
-			pipe(ms->pipe_fd);
-			if (is_builtin(node->data) && runs_on_parent(node->data))
-			{
-				ms->exit_code = exec_builtin(ms, node->data, siblings);
-				continue ;
-			}
-			ms->last_pid = fork();
-			if (ms->last_pid == 0)
-			{
-				file_node = NULL;
-				if (order + 1 == count && get_last_sibiling(node)->type == N_INFILE)
-				{
-					file_node = get_last_sibiling(node);
-					siblings = get_arr_without_last(siblings);
-					int i = 0;
-					while (siblings[i])
-					{
-						printf("siblings: %s\n", siblings[i]);
-						i++;
-					}
-				}
-				do_output_redirection(ms, order + 1 == count, file_node);
-				use_child_signals();
-				exec_cmd(ms, node->data, siblings);
-			}
+			if (order == 0)
+				ms->first_cmd = ft_strdup(node->data);
+			executor(ms, node, order);
 			order++;
         }
         if (node->sibling)
-            stack_push(&stack, node->sibling, false);
+            stack_push(&(ms->stack), node->sibling, false);
         if (node->child)
-            stack_push(&stack, node->child, true);
+            stack_push(&(ms->stack), node->child, true);
     }
-	restore_io(ms->system_fd, ms->pipe_fd, count == 0);
+	restore_io(ms->system_fd, ms->pipe_fd, ms->count == 0);
 	wait_for_children(ms->last_pid, ms);
 }
 
 
-void	executor(t_minishell *ms, int order)
+void	executor(t_minishell *ms, t_ast_node *node, int order)
 {
-	int		i;
-	(void)order;
-	i = 0;
-	ms->last_pid = 1;
-	
-	init_fds(ms);
-	while (ms->cmds[i])
+	char	**siblings;
+
+	siblings = siblings_to_array(node);
+	do_input_redirection(ms, !order, ms->file_node);
+	ms->file_node = NULL;
+	if (order + 1 == ms->count && get_last_sibiling(node)->type == N_INFILE)
 	{
-		// do_input_redirection(ms->pipe_fd, !i, ms->in_fd);
-		pipe(ms->pipe_fd);
-		if (is_builtin(ms->cmds[i]) && runs_on_parent(ms->cmds[i]))
-		{
-			ms->cmds[i] = trim_end(trim_start(ms->cmds[i], true), true);
-			ms->exit_code = exec_builtin(ms, ms->cmds[i], ms->cmds);
-			i++;
-			continue ;
-		}
-		ms->last_pid = fork();
-		if (ms->last_pid == 0)
-		{
-			// do_output_redirection(ms->pipe_fd, !ms->cmds[i + 1], ms->system_fd[1], ms->out_fd);
-			use_child_signals();
-			ms->cmds[i] = trim_end(trim_start(ms->cmds[i], true), true);
-			exec_cmd(ms, ms->cmds[i], ms->cmds);
-		}
-		i++;
+		ms->file_node = get_last_sibiling(node);
+		siblings = get_arr_without_last(siblings);
 	}
-	// restore_io(ms->system_fd, ms->pipe_fd);
-	wait_for_children(ms->last_pid, ms);
+	pipe(ms->pipe_fd);
+	if (is_builtin(node->data) && runs_on_parent(node->data))
+	{
+		ms->exit_code = exec_builtin(ms, node->data, siblings);
+		return ;
+	}
+	ms->last_pid = fork();
+	if (ms->last_pid == 0)
+	{
+		do_output_redirection(ms, order + 1 == ms->count, ms->file_node);
+		use_child_signals();
+		exec_cmd(ms, node->data, siblings);
+	}
 }
 
 char	**join_cmd_and_options(char *cmd, char **options)
@@ -226,12 +114,4 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 		err(cmd, "command not found", 127, ms);
 	}
 	return (EXIT_SUCCESS);
-}
-
-void	init_fds(t_minishell *ms)
-{
-	ms->system_fd[0] = dup(STDIN_FILENO);
-	ms->system_fd[1] = dup(STDOUT_FILENO);
-	ms->pipe_fd[0] = 0;
-	ms->pipe_fd[1] = 0;
 }

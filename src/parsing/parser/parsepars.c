@@ -257,10 +257,8 @@ t_ast_node	*parse_input(const char *input)
 	t_ast_node		*ast;
 
 	tokens = lex(input);
-
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
-	print_ast(ast, 0);
 	return (ast);
 }
 

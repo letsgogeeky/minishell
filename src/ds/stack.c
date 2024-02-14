@@ -6,11 +6,11 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 23:46:26 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 00:03:25 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 02:52:09 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell/stack.h"
+#include "minishell/minishell.h"
 
 t_stack_node	*create_stack_node(t_ast_node *node, bool is_child)
 {
@@ -35,7 +35,7 @@ t_stack_data	stack_pop(t_stack_node **top)
     if (*top == NULL) {
         printf("Stack underflow\n");
         t_stack_data empty_data = {NULL, false};
-        return empty_data;
+        return (empty_data);
     }
     t_stack_node *temp = *top;
     t_stack_data popped_data = temp->data;

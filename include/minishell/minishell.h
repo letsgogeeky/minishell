@@ -11,31 +11,29 @@
 # include <stdbool.h>
 # include "baselib.h"
 # include <stdlib.h>
-# include "minishell/parsing/parser.h"
+# include "minishell/stack.h"
 
 extern struct termios	settings;
-
-typedef struct s_ast_node t_ast_node;
 
 typedef struct	s_minishell {
 	char	**envp;
 	char	**args;
 	char	*input;
-	char	**cmds;
 	int		pipe_fd[2];
 	int		system_fd[2];
-	int		in_fd;
-	int		out_fd;
 	int		exit_code;
 	pid_t	last_pid;
 	t_ast_node	*ast;
+	t_ast_node	*file_node;
+	char		*first_cmd;
+	t_stack_node	*stack;
+	int			count;
 }	t_minishell;
 
 void	update_terminos(void);
 void    reset_terminos(void);
 void    use_parent_signals(void);
 void    use_child_signals(void);
-int     open_file(char *path, int flags);
 
 int     exists_in_env(char *key, char **envp);
 int     update_env_variable(char *key, char *value, t_minishell *ms);
@@ -48,8 +46,7 @@ char	**copy_env(char **envp);
 int		free_env(char **envp);
 char	**get_environment(void);
 
-char	*expand(t_minishell *ms, char *str);
-void	iterate_ast(t_minishell *ms, t_ast_node *node, int level);
+void	expand_ast(t_minishell *ms, t_ast_node *node, int level);
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);
 

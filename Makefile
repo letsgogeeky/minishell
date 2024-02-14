@@ -13,7 +13,7 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/export.c execution/builtins/unset.c \
 	execution/builtins/cd.c
 SRC_EXECUTION := execution/command_path.c execution/executor.c \
-	execution/io.c execution/utils.c
+	execution/io.c execution/utils.c execution/executor/tree_utils.c
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c
 SRC_ENV := env/manager.c env/utils.c

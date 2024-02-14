@@ -2,8 +2,9 @@
 
 char	*expand_variable(char *cursor, int j, char **envp, int exit_code);
 int	key_length(char *start);
+char *expand(t_minishell *ms, char *cmds);
 
-void	iterate_ast(t_minishell *ms, t_ast_node *node, int level)
+void	expand_ast(t_minishell *ms, t_ast_node *node, int level)
 {
 	if (node == NULL) return;
 	// for (int i = 0; i < level; ++i) printf("  ");
@@ -13,9 +14,9 @@ void	iterate_ast(t_minishell *ms, t_ast_node *node, int level)
 	// printf("fd: %d\n", node->fd);
 	// printf("is_heredoc: %d\n", node->is_heredoc);
 	if (node->child)
-		iterate_ast(ms, node->child, level + 2);
+		expand_ast(ms, node->child, level + 2);
 	if (node->sibling)
-		iterate_ast(ms, node->sibling, level);
+		expand_ast(ms, node->sibling, level);
 }
 
 char *expand(t_minishell *ms, char *cmds)

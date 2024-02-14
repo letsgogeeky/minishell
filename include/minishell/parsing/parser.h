@@ -1,9 +1,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minishell/minishell.h"
 # include "minishell/parsing/lexer.h"
-
 
 typedef enum e_ast_node_type
 {
@@ -41,33 +39,8 @@ typedef struct s_parser_state
 
 t_ast_node	*parse_input(const char *input);
 void print_ast(t_ast_node *node, int level);
-// #include <stdbool.h>
+void destroy_ast(t_ast_node *node);
 
-// typedef enum ast_node_type_s
-// {
-// 	COMMAND,
-// 	PIPE,
-// 	REDIRECTION_IN,
-// 	REDIRECTION_OUT,
-// 	REDIRECTION_WORD
-// }	ast_node_type_t;
-
-// typedef struct ast_node_s
-// {
-// 	ast_node_type_t		type;
-// 	struct ast_node_s	*parent;
-// 	struct ast_node_s	*first_child;
-// 	struct ast_node_s	*next_sibling;
-// 	struct ast_node_s	*last_child;
-// 	char				*value;
-// 	char				*filename;				
-// }	ast_node_t;
-
-
-
-
-
-
-
+int     open_file(char *path, int flags);
 
 #endif

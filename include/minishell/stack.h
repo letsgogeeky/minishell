@@ -6,14 +6,15 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 23:48:08 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 00:03:29 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 02:41:37 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_H
 # define STACK_H
 
-# include "minishell/minishell.h"
+# include <stdbool.h>
+# include "minishell/parsing/parser.h"
 
 typedef struct s_stack_data {
     t_ast_node *node;

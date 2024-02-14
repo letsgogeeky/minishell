@@ -6,12 +6,20 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/13 23:34:36 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/14 01:06:25 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/execution/executor.h"
 #include "minishell/minishell.h"
+
+void	init_fds(t_minishell *ms)
+{
+	ms->system_fd[0] = dup(STDIN_FILENO);
+	ms->system_fd[1] = dup(STDOUT_FILENO);
+	ms->pipe_fd[0] = 0;
+	ms->pipe_fd[1] = 0;
+}
 
 void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 {
