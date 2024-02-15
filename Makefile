@@ -18,7 +18,7 @@ SRC_EXECUTION := execution/command_path.c execution/executor.c \
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c
 SRC_ENV := env/manager.c env/utils.c
-SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c
+SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c destroy.c
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV) $(SRC_DS)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}

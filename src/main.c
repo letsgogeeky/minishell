@@ -36,15 +36,15 @@ static int interactive_mode(t_minishell *ms)
 			ms->count = count_cmds(ms, ms->ast, false);
 			init_fds(ms);
 			execute_ast(ms, ms->ast);
+			post_execute_destroy(ms);
             update_terminos();
         }
         ms->input = readline("massiveshell$ ");
 		use_parent_signals();
     }
     printf("byeEeEeEe...\n");
-    // TODO: free memory before exiting
-    // This function should also be called when exiting the shell using `exit` builtin
-    reset_terminos();
+	destroy_ms(ms);
+	printf("Destroyed ms\n");
     return (0);
 }
 
@@ -60,9 +60,11 @@ int main(int argc, char **argv)
 		ms->args = argv;
 		ms->exit_code = 0;
 		ms->file_node = NULL;
+		ms->stack = NULL;
+		ms->first_cmd = NULL;
 		ms->envp = get_environment();
         use_parent_signals();
         interactive_mode(ms);
     }
-    return (ms->exit_code);
+    return (0);
 }

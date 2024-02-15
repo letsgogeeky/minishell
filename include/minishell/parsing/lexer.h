@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 01:25:36 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/12 23:00:27 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 02:49:18 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ typedef struct s_lexer
 	t_state	state;
 }	t_lexer;
 t_token	*lex(const char *input);
+void	destroy_tokens(t_token *tokens);
 
 #endif

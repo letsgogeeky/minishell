@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:49:10 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 01:12:48 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 01:36:46 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	builtins_export(char **args, t_minishell *ms)
 	{
 		if (ft_strncmp(args[i], "=", 1))
 			continue;
-		// while (args[i][j] && args[i][j] != '=')
-		// 	j++;
 		key = args[i-1];
 		if (!is_valid_env_name(key))
 			return (print_builtin_error(

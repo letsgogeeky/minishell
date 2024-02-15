@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 00:48:32 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 02:45:36 by ramoussa         ###   ########.fr       */
+/*   Created: 2024/02/15 01:43:44 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/15 03:43:54 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell/error.h"
-#include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-void	builtins_exit(t_minishell *ms, char **options)
+void	destroy_ms(t_minishell *ms)
 {
-	if (options && options[0])
-	{
-		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		ms->exit_code = 1;
-		return ;
-	}
-	printf("exit\n");
 	clear_history();
 	reset_terminos();
 	str_arr_free(ms->envp);
 	if (ms->first_cmd)
 		free(ms->first_cmd);
+	free(ms);
+}
+
+void	post_execute_destroy(t_minishell *ms)
+{
 	if (ms->input)
 		free(ms->input);
+	ms->input = NULL;
 	if (ms->ast)
-	{
-		
 		destroy_ast(ms->ast);
-	}
-		
-	free(ms);
-	exit(0);
+	if (ms->first_cmd)
+		free(ms->first_cmd);
+	ms->first_cmd = NULL;
 }

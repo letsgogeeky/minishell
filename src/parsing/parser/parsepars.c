@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "minishell/parsing/parser.h"
+#include "baselib.h"
 
 
 //UTIL FUNCTIONS
@@ -111,7 +112,7 @@ t_ast_node *parse_redirect(t_parser_state *state)
 	consume(state);
 	file = consume(state);
 	node = create_node(determine_node_type(type));
-	node->data = strdup(file.lexeme);
+	node->data = ft_strdup(file.lexeme);
 	if (type == GREAT)
 		node->fd = open_file(file.lexeme, O_TRUNC);
 	else if (type == DGREAT)
@@ -139,7 +140,7 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
 		else
 		{
         	node = create_node(determine_node_type(peek(state).type));
-			node->data = strdup(peek(state).lexeme);
+			node->data = ft_strdup(peek(state).lexeme);
 		}
 		if (!head)
 			head = node;
@@ -165,7 +166,7 @@ t_ast_node *parse_cmd_prefix(t_parser_state *state)
 		else if (peek(state).type == ASSIGNMENT)
 		{
 			node = create_node(determine_node_type(peek(state).type));
-			node->data = strdup(peek(state).lexeme);
+			node->data = ft_strdup(peek(state).lexeme);
 			consume(state);
 		}
 		if (!head)
@@ -197,7 +198,7 @@ t_ast_node *parse_command(t_parser_state *state)
 	if (peek(state).type == WORD)
 	{
 		cmd_word = create_node(N_CMD_WORD);
-		cmd_word->data = strdup(peek(state).lexeme);
+		cmd_word->data = ft_strdup(peek(state).lexeme);
 		consume(state);
 		if (last_child)
 			last_child->sibling = cmd_word;
@@ -259,6 +260,7 @@ t_ast_node	*parse_input(const char *input)
 	tokens = lex(input);
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
+	destroy_tokens(tokens);
 	return (ast);
 }
 

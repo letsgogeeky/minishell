@@ -65,6 +65,7 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 	if (is_builtin(node->data) && runs_on_parent(node->data))
 	{
 		ms->exit_code = exec_builtin(ms, node->data, siblings);
+		str_arr_free(siblings);
 		return ;
 	}
 	ms->last_pid = fork();
@@ -84,18 +85,18 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 	if (is_builtin(cmd))
 	{
 		exec_builtin(ms, cmd, options);
-		// TODO: free allocated memory
+		str_arr_free(options);
 		exit(ms->exit_code);
 	}
 	parts = join_cmd_and_options(cmd, options);
+	str_arr_free(options);
 	path = get_path(cmd, ms->envp);
 	if (execve(path, parts, ms->envp) == -1)
 	{
 		str_arr_free(parts);
-		str_arr_free(options);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			return (free(path), err(cmd, "Permission denied", 126, ms), EXIT_FAILURE);
 		return (free(path), err(cmd, "command not found", 127, ms), EXIT_FAILURE);
 	}
-	return (free(path), str_arr_free(parts), str_arr_free(options), EXIT_SUCCESS);
+	return (free(path), str_arr_free(parts), EXIT_SUCCESS);
 }

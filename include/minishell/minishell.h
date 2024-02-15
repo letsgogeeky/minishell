@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:37:16 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 19:37:20 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 02:38:00 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,8 @@ void	expand_ast(t_minishell *ms, t_ast_node *node, int level);
 char	*expand(t_minishell *ms, char *cmds);
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);
+
+void	destroy_ms(t_minishell *ms);
+void	post_execute_destroy(t_minishell *ms);
 
 #endif
