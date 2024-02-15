@@ -2,10 +2,10 @@
 
 char *get_env_value(char *key, char **envp)
 {
-    int i;
-    int j;
-    char *value;
-	printf("key: %s\n", key);
+    int		i;
+    int		j;
+    char	*value;
+
     i = 0;
     while (envp[i])
     {

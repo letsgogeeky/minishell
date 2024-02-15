@@ -3,6 +3,10 @@
 
 # include "minishell/parsing/lexer.h"
 
+# ifndef LOG_DETAILS
+#  define LOG_DETAILS 0
+#endif
+
 typedef enum e_ast_node_type
 {
 	N_COMMAND,

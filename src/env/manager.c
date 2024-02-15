@@ -29,7 +29,6 @@ int update_env_variable(char *key, char *value, t_minishell *ms)
     free(ms->envp[i]);
     tmp = ft_strjoin(key, "=");
     ms->envp[i] = ft_strjoin(tmp, value);
-    printf("ms->envp[%d]: %s\n", i, ms->envp[i]);
     free(tmp);
     return (EXIT_SUCCESS);
 }

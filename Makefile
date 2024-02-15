@@ -41,6 +41,9 @@ BASELIB:
 	fi
 	make --directory=${BASELIB}
 
+debug: 
+	@$(MAKE) CFLAGS+="-D LOG_DETAILS=1" re
+
 clean:
 	@rm -rf $(OBJS)
 

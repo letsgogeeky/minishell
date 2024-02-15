@@ -21,7 +21,6 @@ static	bool is_empty(char *str)
 static	void deploy(t_minishell *ms)
 {
 	ms->ast = parse_input(ms->input);
-	print_ast(ms->ast, 0);
 	add_history(ms->input);
 	reset_terminos();
 	expand_ast(ms, ms->ast, 0);
@@ -47,7 +46,6 @@ static int interactive_mode(t_minishell *ms)
     }
     printf("byeEeEeEe...\n");
 	destroy_ms(ms);
-	printf("Destroyed ms\n");
     return (0);
 }
 char	*join_args(char **args)

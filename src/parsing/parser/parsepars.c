@@ -260,6 +260,14 @@ t_ast_node	*parse_input(const char *input)
 	tokens = lex(input);
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
+	if (LOG_DETAILS)
+	{
+		printf("\033[1;31m Tokens:::: \033[0m \n");
+		log_tokens(tokens);
+		printf("\033[1;31m AST:::: \033[0m \n");
+		print_ast(ast, 0);
+		printf("\033[0;33m Output:::: \033[0m \n");
+	}
 	destroy_tokens(tokens);
 	return (ast);
 }
@@ -306,15 +314,13 @@ void print_ast(t_ast_node *node, int level)
 	if (node == NULL) return;
 	for (int i = 0; i < level; ++i) printf("  ");
 	printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
-	// printf("fd: %d\n", node->fd);
-	// printf("is_heredoc: %d\n", node->is_heredoc);
 	if (node->child)
 		print_ast(node->child, level + 2);
 	if (node->sibling)
 		print_ast(node->sibling, level);
 }
 
-
+/*
 // int main() {
 //     t_token *tokens = create_mock_tokens();
 //     t_parser_state state;
@@ -322,8 +328,4 @@ void print_ast(t_ast_node *node, int level)
 
 //     t_ast_node *ast = parse_complete_command(&state);
 //     print_ast(ast, 0);
-
-
-// 	destroy_ast(ast);
-//     return 0;
-// }
+*/
