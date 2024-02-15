@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:31:42 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/13 02:54:58 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:33:39 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,5 @@ int	open_file(char *path, int flags)
 		fd = open(path, flags);
 	else
 		fd = open(path, O_WRONLY | O_CREAT | flags, 0644);
-	printf("fd: %d\n", fd);
 	return (fd);
 }

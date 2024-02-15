@@ -25,5 +25,6 @@ char		**siblings_to_array(t_ast_node *node);
 t_ast_node	*get_last_sibiling(t_ast_node *node);
 char		**get_arr_without_last(char **arr);
 int			count_cmds(t_minishell *ms, t_ast_node *node, bool is_child);
+int			parse_heredoc(t_minishell *ms, t_ast_node *node);
 
 #endif

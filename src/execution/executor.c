@@ -80,7 +80,7 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 {
 	char	*path;
 	char	**parts;
-
+	
 	if (is_builtin(cmd))
 	{
 		exec_builtin(ms, cmd, options);
@@ -92,14 +92,10 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 	if (execve(path, parts, ms->envp) == -1)
 	{
 		str_arr_free(parts);
-		free(path);
 		str_arr_free(options);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
-			err(cmd, "Permission denied", 126, ms);
-		err(cmd, "command not found", 127, ms);
+			return (free(path), err(cmd, "Permission denied", 126, ms), EXIT_FAILURE);
+		return (free(path), err(cmd, "command not found", 127, ms), EXIT_FAILURE);
 	}
-	str_arr_free(parts);
-	free(path);
-	str_arr_free(options);
-	return (EXIT_SUCCESS);
+	return (free(path), str_arr_free(parts), str_arr_free(options), EXIT_SUCCESS);
 }

@@ -6,33 +6,49 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 03:03:39 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 01:15:11 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/minishell.h"
 
-int parse_heredoc(char *demlimiter, char **envp)
+char	*remove_trailing_newline(char *str)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	if (str[len - 1] == '\n')
+		str[len - 1] = '\0';
+	return (str);
+}
+
+int parse_heredoc(t_minishell *ms, t_ast_node *node)
 {
     char	*doc;
-	int		ipc[2];
+	int		fd;
+	char	*delimiter;
 
-	(void)envp;
-	if (pipe(ipc))
-		printf("pipe error\n");
+	delimiter = node->data;
+	fd = open("/tmp/demons", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     doc = NULL;
 	if (isatty(STDIN_FILENO))
 		doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
-	while (doc && ft_strncmp(demlimiter, doc, ft_strlen(doc)))
+	doc = remove_trailing_newline(doc);
+	while (doc && ft_strncmp(delimiter, doc, ft_strlen(doc)))
 	{
-		ft_putstr_fd(doc, ipc[1]);
+		doc = expand(ms, doc);
+		ft_putstr_fd(doc, fd);
+		ft_putstr_fd("\n", fd);
 		free(doc);
 		doc = readline("heredoc> ");
 	}
 	if (doc)
 		free(doc);
-	dup2(ipc[0], 0);
-	close(ipc[0]);
-	close(ipc[1]);
+	close(fd);
+	node->fd = open("/tmp/demons", O_RDONLY);
+	node->data = ft_strdup("/tmp/demons");
 	return (0);
 }
+
+
+

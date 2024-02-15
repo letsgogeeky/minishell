@@ -1,18 +1,13 @@
 #include "minishell/minishell.h"
 
 char	*expand_variable(char *cursor, int j, char **envp, int exit_code);
-int	key_length(char *start);
-char *expand(t_minishell *ms, char *cmds);
+int		key_length(char *start);
 
 void	expand_ast(t_minishell *ms, t_ast_node *node, int level)
 {
 	if (node == NULL) return;
-	// for (int i = 0; i < level; ++i) printf("  ");
-	// printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
 	if (node->type == N_CMD_WORD)
 		node->data = expand(ms, node->data);
-	// printf("fd: %d\n", node->fd);
-	// printf("is_heredoc: %d\n", node->is_heredoc);
 	if (node->child)
 		expand_ast(ms, node->child, level + 2);
 	if (node->sibling)
@@ -42,7 +37,6 @@ char *expand(t_minishell *ms, char *cmds)
 			cmds = expanded;
 		}
 	}
-	printf("expanded: %s\n", cmds);
 	return (cmds);
 }
 
