@@ -24,7 +24,6 @@ int update_env_variable(char *key, char *value, t_minishell *ms)
     char *tmp;
 
     i = exists_in_env(key, ms->envp);
-    printf("i: %d\n", i);
     if (i == -1)
         return (-1);
     free(ms->envp[i]);

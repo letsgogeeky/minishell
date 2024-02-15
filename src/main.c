@@ -18,6 +18,7 @@ static	bool is_empty(char *str)
 	return (true);
 }
 
+
 static int interactive_mode(t_minishell *ms)
 {
     ms->input = readline("massiveshell$ ");
@@ -27,6 +28,7 @@ static int interactive_mode(t_minishell *ms)
 		{
 			printf("input: %s\n", ms->input);
 			ms->ast = parse_input(ms->input);
+			printf("\nast: %p\n", ms->ast);
 			print_ast(ms->ast, 0);
 			add_history(ms->input);
             reset_terminos();
