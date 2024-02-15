@@ -11,7 +11,9 @@
 
 
 
-void print_token(const t_token* token);
+void	print_token(const t_token* token);
+void	log_tokens(t_token *tokens);
+
 void	init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input_buffer = strdup(input);
@@ -220,7 +222,6 @@ void	destroy_tokens(t_token *tokens)
 {
 	size_t i;
 
-	printf("destroying tokens\n");
 	i = 0;
 	while (tokens[i].type != EOF_TOKEN)
 	{
@@ -242,7 +243,7 @@ t_token	*realloc_token_array(t_token *tokens, size_t *capacity)
 		exit(EXIT_FAILURE);
 	}
 	ft_memcpy(temp, tokens, *capacity / 2 * sizeof(t_token));
-	destroy_tokens(tokens);
+	free(tokens);
 	return (temp);
 }
 
@@ -252,6 +253,7 @@ t_token *lex(const char *input)
 	size_t token_capacity;
 	t_token *tokens;
 	size_t tokens_size;
+	t_token	*tmp;
 
 	token_capacity = 10;
 	tokens = init_token_array(token_capacity);
@@ -261,19 +263,16 @@ t_token *lex(const char *input)
 	{
 		if (tokens_size >= token_capacity)
 			tokens = realloc_token_array(tokens, &token_capacity);
-		tokens[tokens_size] = *get_next_token(&lexer);
+		tmp = get_next_token(&lexer);
+		tokens[tokens_size] = *tmp;
+		free(tmp);
 		if (tokens[tokens_size].type == EOF_TOKEN) {
 			break;
 		}
 		++tokens_size;
 	}
 	destroy_lexer(&lexer);
-	size_t i = 0;
-    while (tokens[i].type != EOF_TOKEN) {
-        printf("-->");
-        print_token(&tokens[i]);
-        i++;
-    }
+	log_tokens(tokens);
 	return (tokens);
 }
 
@@ -297,6 +296,20 @@ void print_token(const t_token* token) {
         case ERROR_TOKEN: printf("ERROR_TOKEN "); break;
         default: printf("UNKNOWN ");
     }
+}
+
+void	log_tokens(t_token *tokens)
+{
+	size_t i;
+
+	i = 0;
+	while (tokens[i].type != EOF_TOKEN)
+	{
+		print_token(&tokens[i]);
+		i++;
+	}
+	print_token(&tokens[i]);
+	printf("\n");
 }
 
 /*

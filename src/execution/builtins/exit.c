@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:48:32 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 02:45:36 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 19:38:19 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,7 @@ void	builtins_exit(t_minishell *ms, char **options)
 	if (ms->input)
 		free(ms->input);
 	if (ms->ast)
-	{
-		
 		destroy_ast(ms->ast);
-	}
-		
 	free(ms);
 	exit(0);
 }

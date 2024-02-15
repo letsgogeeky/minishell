@@ -53,6 +53,7 @@ char    **add_to_env(char *key, char *value, char **envp)
     new_envp[i] = ft_strjoin(key, value);
     new_envp[i + 1] = NULL;
 	free(key);
+	free(envp);
     return (new_envp);
 }
 

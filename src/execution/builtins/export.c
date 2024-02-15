@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:49:10 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 01:36:46 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 19:35:37 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,8 @@ int	builtins_export(char **args, t_minishell *ms)
 			return (print_builtin_error(
 					"export", key, "not a valid identifier"), \
 				free(key), EXIT_FAILURE);
-		value = args[i+1]; //ft_substr(args[i], j + 1, ft_strlen(args[i]) - j - 1);
+		value = args[i+1];
 		add_or_update_env_variable(key, value, ms);
-		free(key);
-		free(value);
 	}
 	return (EXIT_SUCCESS);
 }

@@ -75,6 +75,7 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 		use_child_signals();
 		exec_cmd(ms, node->data, siblings);
 	}
+	str_arr_free(siblings);
 }
 
 int	exec_cmd(t_minishell *ms, char *cmd, char **options)

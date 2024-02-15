@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 03:15:00 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/15 22:59:29 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ void	builtins_echo(char **cmds)
 
 	i = 0;
 	newline = 1;
-	if (cmds[i] && !ft_strncmp(cmds[i], "-n", 2))
+	if (cmds[i] && cmds[i][0] == '-')
 	{
-		newline = 0;
+		if (!ft_strncmp(cmds[i], "-n", 2))
+			newline = 0;
 		i++;
 	}
 	while (cmds[i])
