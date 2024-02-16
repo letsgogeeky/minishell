@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 00:11:28 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 19:31:54 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/16 05:18:34 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	**siblings_to_array(t_ast_node *node)
 	char	**arr;
 	t_ast_node *sibling;
 
+	if (!node)
+		return (NULL);
 	i = 0;
 	sibling = node->sibling;
 	while (sibling)

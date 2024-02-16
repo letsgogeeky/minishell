@@ -38,9 +38,7 @@ static int interactive_mode(t_minishell *ms)
     while (ms->input && ms->input[0] != EOF)
     {
 		if (ms->input[0] != '\0' && !is_empty(ms->input))
-		{
 			deploy(ms);
-        }
         ms->input = readline("massiveshell$ ");
 		use_parent_signals();
     }
@@ -80,7 +78,7 @@ int main(int argc, char **argv)
 	ms->envp = get_environment();
 	use_parent_signals();
 	if (argc == 1 && isatty(STDIN_FILENO))
-		interactive_mode(ms);
+		return (interactive_mode(ms));
 	ms->input = join_args(argv);
 	deploy(ms);
 	exit_code = ms->exit_code;

@@ -74,6 +74,7 @@ void destroy_ast(t_ast_node *node)
 	destroy_ast(node->sibling);
 	free(node->data);
 	free(node);
+	node = NULL;
 }
 
 //Utils

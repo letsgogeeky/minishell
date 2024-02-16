@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/16 03:41:52 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/16 05:01:31 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int parse_heredoc(t_minishell *ms, t_ast_node *node)
 	fd = open("/tmp/demons", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     doc = NULL;
 	if (isatty(STDIN_FILENO))
-		doc = readline("heredoc> "); // this is a MacOS style of prompt, if you want normal shell style use "> "
+		doc = readline("heredoc> ");
 	doc = remove_trailing_newline(doc);
 	while (doc && ft_strncmp(delimiter, doc, ft_strlen(doc)))
 	{

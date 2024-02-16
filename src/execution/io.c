@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/15 01:12:16 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/16 05:25:33 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file)
 {
     if (is_first_cmd && file && file->is_heredoc)
 		parse_heredoc(ms, file);
-    if (is_first_cmd && file)
+    if (is_first_cmd && file && ms->first_cmd)
     {
         dup2(file->fd, STDIN_FILENO);
         close(file->fd);
@@ -43,7 +43,6 @@ void	do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file)
 {
     if (is_last_cmd && file)
     {
-        ft_putendl_fd("here", STDERR_FILENO);
         dup2(file->fd, STDOUT_FILENO);
         close(file->fd);
     }
