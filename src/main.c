@@ -20,6 +20,8 @@ static	bool is_empty(char *str)
 
 static	void deploy(t_minishell *ms)
 {
+
+	// USE strace in dorker to see the system calls
 	ms->ast = parse_input(ms->input);
 	add_history(ms->input);
 	reset_terminos();

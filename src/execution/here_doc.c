@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/16 05:01:31 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 00:36:15 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int parse_heredoc(t_minishell *ms, t_ast_node *node)
 		free(doc);
 	close(fd);
 	node->fd = open("/tmp/demons", O_RDONLY);
+	free(node->data);
 	node->data = ft_strdup("/tmp/demons");
 	return (0);
 }

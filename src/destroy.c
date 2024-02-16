@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:43:44 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/16 06:29:37 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 00:27:20 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,6 @@ void	post_execute_destroy(t_minishell *ms)
 	if (ms->first_cmd)
 		free(ms->first_cmd);
 	ms->first_cmd = NULL;
+	ms->ast = NULL;
+	ms->file_node = NULL;
 }

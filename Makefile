@@ -42,7 +42,7 @@ BASELIB:
 	make --directory=${BASELIB}
 
 debug: 
-	@$(MAKE) CFLAGS+="-D LOG_DETAILS=1" re
+	@$(MAKE) CFLAGS="-Wextra -Wall -Werror -g -D LOG_DETAILS=1" re
 
 clean:
 	@rm -rf $(OBJS)

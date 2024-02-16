@@ -72,9 +72,11 @@ void destroy_ast(t_ast_node *node)
 		return;
 	destroy_ast(node->child);
 	destroy_ast(node->sibling);
-	free(node->data);
+	if (LOG_DETAILS)
+		printf("Destroying node: %s\n", node->data);
+	if (node->data)
+		free(node->data);
 	free(node);
-	node = NULL;
 }
 
 //Utils
@@ -86,9 +88,10 @@ t_ast_node_type determine_node_type(t_token_type type)
 		return (N_CMD_PARAM);
 	else if (type == ASSIGNMENT)
 		return (N_CMD_PARAM);
-	else if (type == GREAT || type == LESS \
-		|| type == DLESS || type == DGREAT)
+	else if (type == LESS || type == DLESS)
 		return (N_INFILE);
+	else if (type == GREAT || type == DGREAT)
+		return (N_OUTFILE);
 	else
 		return (printf("Unknown token type encountered.\n"), \
 			N_ERROR);

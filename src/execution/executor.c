@@ -39,27 +39,35 @@ void execute_ast(t_minishell *ms, t_ast_node *root)
 
 t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order)
 {
-	t_ast_node *sibling;
+	// t_ast_node *sibling;
 
-	sibling = node;
-	if (sibling->type == N_INFILE)
+	// sibling = node;
+	// if (sibling->type == N_INFILE)
+	// {
+	// 	ms->file_node = sibling;
+	// 	node = node->sibling;
+	// }
+	// else
+	// {
+	// 	while (sibling)
+	// 	{
+	// 		if (sibling->type == N_INFILE)
+	// 		{
+	// 			ms->file_node = sibling;
+	// 			break ;
+	// 		}
+	// 		sibling = sibling->sibling;
+	// 	}
+	// }
+	// if (order == 0 && node)
+	// 	ms->first_cmd = ft_strdup(node->data);
+	// return (node);
+	if (order == 0 && node->type == N_INFILE)
 	{
-		ms->file_node = sibling;
+		ms->file_node = node;
 		node = node->sibling;
 	}
-	else
-	{
-		while (sibling)
-		{
-			if (sibling->type == N_INFILE)
-			{
-				ms->file_node = sibling;
-				break ;
-			}
-			sibling = sibling->sibling;
-		}
-	}
-	if (order == 0 && node)
+	if (order == 0)
 		ms->first_cmd = ft_strdup(node->data);
 	return (node);
 }
@@ -74,8 +82,11 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 	if (!node)
 		return ;
 	ms->file_node = NULL;
-	if (order + 1 == ms->count && get_last_sibiling(node)->type == N_INFILE)
+	if (order + 1 == ms->count && get_last_sibiling(node)->type == N_OUTFILE)
+	{
+		ms->file_node = get_last_sibiling(node);
 		siblings = get_arr_without_last(siblings);
+	}
 	pipe(ms->pipe_fd);
 	if (is_builtin(node->data) && runs_on_parent(node->data))
 	{

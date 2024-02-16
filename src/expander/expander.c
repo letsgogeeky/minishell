@@ -60,15 +60,18 @@ char	*expand_variable(char *cursor, int j, char **envp, int exit_code)
 
 	tmp = ft_substr(cursor, 0, j);
 	if (cursor[j+1] && cursor[j+1] == '?')
-		expanded = ft_strjoin(tmp, ft_itoa(exit_code));
+	{
+		key = ft_itoa(exit_code);
+		expanded = ft_strjoin(tmp, key);
+	}
 	else
 	{
 		key = get_env_key(cursor + j + 1);
 		value = get_env_value(key, envp);
 		expanded = ft_strjoin(tmp, value);
 		free(value);
-		free(key);
 	}
+	free(key);
 	free(tmp);
 	return (expanded);
 }
