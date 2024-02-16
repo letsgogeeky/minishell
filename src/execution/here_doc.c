@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 01:15:11 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/16 03:41:52 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,34 @@ int parse_heredoc(t_minishell *ms, t_ast_node *node)
 	return (0);
 }
 
+char	*get_readline_title(char *delimiter)
+{
+	if (delimiter[0] == '\'')
+		return (ft_strdup("quote> "));
+	return (ft_strdup("dquote> "));
+}
 
+char	*parse_unclosed_quote(t_minishell *ms, char *delimiter, char *base)
+{
+	char	*doc;
+	char	*tmp;
+	char	*title;
 
+	doc = ft_substr(base, 1, ft_strlen(base));
+	doc = ft_strjoin_s1_free(doc, "\n");
+	title = get_readline_title(delimiter);
+	tmp = readline(title);
+	tmp = remove_trailing_newline(tmp);
+	while (tmp && ft_strncmp(delimiter, tmp, ft_strlen(tmp)))
+	{
+		if (delimiter[0] != '\'')
+			tmp = expand(ms, tmp);
+		doc = ft_strjoin_s1_free(doc, tmp);
+		doc = ft_strjoin_s1_free(doc, "\n");
+		free(tmp);
+		tmp = readline(title);
+	}
+	free(tmp);
+	free(title);
+	return (doc);
+}

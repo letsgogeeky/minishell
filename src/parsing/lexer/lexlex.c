@@ -68,8 +68,8 @@ void	update_state(t_lexer *lexer, char curr_ch)
 		lexer->state = in_dqoute;
 	else if (curr_ch == '\'')
 		lexer->state = in_squote;
-	else if (curr_ch == '\\')
-		lexer->state = in_escape;
+	// else if (curr_ch == '\\')
+	// 	lexer->state = in_escape;
 	else if (curr_ch != '\0')
 		lexer->state = in_word;
 }
@@ -195,8 +195,8 @@ t_token	*get_next_token(t_lexer *lexer)
 			return(assignment_token(lexer));
 		else if(lexer->state == in_dqoute || lexer->state == in_squote)
 			return(quoted_token(lexer));
-		else if (lexer->state == in_escape)
-			return(escaped_token(lexer));
+		// else if (lexer->state == in_escape)
+		// 	return(escaped_token(lexer));
 		else if (lexer->state == in_separator)
 			++lexer->current;
 		else if (lexer->state == in_error)
