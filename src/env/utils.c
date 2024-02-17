@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/17 19:31:44 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/17 19:32:15 by ramoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/minishell.h"
 
 char *get_env_value(char *key, char **envp)
 {
-    int i;
-    int j;
-    char *value;
-	printf("key: %s\n", key);
+    int		i;
+    int		j;
+    char	*value;
+
     i = 0;
     while (envp[i])
     {
@@ -83,18 +95,4 @@ char	**copy_env(char **envp)
 	}
 	copy[i] = NULL;
 	return (copy);
-}
-
-int	free_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
-	return (EXIT_SUCCESS);
 }

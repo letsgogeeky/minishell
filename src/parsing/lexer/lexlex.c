@@ -7,17 +7,19 @@
 #include <string.h>
 #include <ctype.h>
 #include "minishell/parsing/lexer.h"
+#include "baselib.h"
 
 
 
+void	print_token(const t_token* token);
+void	log_tokens(t_token *tokens);
 
-void print_token(const t_token* token);
 void	init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input_buffer = strdup(input);
 	if (!lexer->input_buffer)
 	{
-		fprintf(stderr, "Failed to allocate memory for input buffer\n");
+		ft_putstr_fd("Failed to allocate memory for input buffer\n", STDERR_FILENO);
 		exit(1);
 	}
 	lexer->current = lexer->input_buffer;
@@ -35,18 +37,18 @@ t_token *new_token(t_token_type type, t_lexer *lexer)
 	t_token *token = malloc(sizeof(t_token));
 	if (!token)
 	{
-		fprintf(stderr, "Failed to allocate memory for token\n");
+		ft_putstr_fd("Failed to allocate memory for token\n", STDERR_FILENO);
 		exit(1);
 	}
 	token->type = type;
-	token->lexeme = strndup(lexer->start, lexer->current - lexer->start);
+	token->lexeme = ft_substr(lexer->start, 0, lexer->current - lexer->start);
 	return (token);
 }
 
 void	update_state(t_lexer *lexer, char curr_ch)
 {
 	lexer->state = in_error;
-	if (isspace(curr_ch))
+	if (ra_is_whiteshapce(curr_ch))
 		lexer->state = in_separator;
 	else if (curr_ch == '|')
 		lexer->state = in_pipe;
@@ -66,8 +68,8 @@ void	update_state(t_lexer *lexer, char curr_ch)
 		lexer->state = in_dqoute;
 	else if (curr_ch == '\'')
 		lexer->state = in_squote;
-	else if (curr_ch == '\\')
-		lexer->state = in_escape;
+	// else if (curr_ch == '\\')
+	// 	lexer->state = in_escape;
 	else if (curr_ch != '\0')
 		lexer->state = in_word;
 }
@@ -126,7 +128,7 @@ t_token	*option_token(t_lexer *lexer)
 		lexer->current += 2;
 	else
 		++lexer->current;
-	while (*lexer->current != '\0' && !isspace(*lexer->current) \
+	while (*lexer->current != '\0' && !ra_is_whiteshapce(*lexer->current) \
 		&& *lexer->current != '|' && *lexer->current != '<' \
 		&& *lexer->current != '>' && *lexer->current != '=')
 			++lexer->current;
@@ -193,8 +195,8 @@ t_token	*get_next_token(t_lexer *lexer)
 			return(assignment_token(lexer));
 		else if(lexer->state == in_dqoute || lexer->state == in_squote)
 			return(quoted_token(lexer));
-		else if (lexer->state == in_escape)
-			return(escaped_token(lexer));
+		// else if (lexer->state == in_escape)
+		// 	return(escaped_token(lexer));
 		else if (lexer->state == in_separator)
 			++lexer->current;
 		else if (lexer->state == in_error)
@@ -210,24 +212,39 @@ t_token	*init_token_array(size_t capacity)
 	tokens = malloc(capacity * sizeof(t_token));
 	if(!tokens)
 	{
-		fprintf(stderr, "Failed to allocate memory for tokens\n");
+		ft_putstr_fd("Failed to allocate memory for tokens\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	return (tokens);
 }
 
+void	destroy_tokens(t_token *tokens)
+{
+	size_t i;
+
+	i = 0;
+	while (tokens[i].type != EOF_TOKEN)
+	{
+		free(tokens[i].lexeme);
+		i++;
+	}
+	free(tokens[i].lexeme);
+	free(tokens);
+}
+
 t_token	*realloc_token_array(t_token *tokens, size_t *capacity)
 {
 	*capacity *= 2;
-	t_token *temp = realloc(tokens, *capacity * sizeof(t_token));
+	t_token *temp = malloc(*capacity * sizeof(t_token));
 	if (!temp)
 	{
-		fprintf(stderr, "Failed to reallocate memory for tokens\n");
-		free(tokens);
+		ft_putstr_fd("Failed to reallocate memory for tokens\n", STDERR_FILENO);
+		destroy_tokens(tokens);
 		exit(EXIT_FAILURE);
 	}
-	tokens = temp;
-	return (tokens);
+	ft_memcpy(temp, tokens, *capacity / 2 * sizeof(t_token));
+	free(tokens);
+	return (temp);
 }
 
 t_token *lex(const char *input)
@@ -236,6 +253,7 @@ t_token *lex(const char *input)
 	size_t token_capacity;
 	t_token *tokens;
 	size_t tokens_size;
+	t_token	*tmp;
 
 	token_capacity = 10;
 	tokens = init_token_array(token_capacity);
@@ -245,19 +263,15 @@ t_token *lex(const char *input)
 	{
 		if (tokens_size >= token_capacity)
 			tokens = realloc_token_array(tokens, &token_capacity);
-		tokens[tokens_size] = *get_next_token(&lexer);
+		tmp = get_next_token(&lexer);
+		tokens[tokens_size] = *tmp;
+		free(tmp);
 		if (tokens[tokens_size].type == EOF_TOKEN) {
 			break;
 		}
 		++tokens_size;
 	}
 	destroy_lexer(&lexer);
-	size_t i = 0;
-    while (tokens[i].type != EOF_TOKEN) {
-        printf("-->");
-        print_token(&tokens[i]);
-        i++;
-    }
 	return (tokens);
 }
 
@@ -281,6 +295,19 @@ void print_token(const t_token* token) {
         case ERROR_TOKEN: printf("ERROR_TOKEN "); break;
         default: printf("UNKNOWN ");
     }
+}
+
+void	log_tokens(t_token *tokens)
+{
+	size_t i = 0;
+
+    while (tokens[i].type != EOF_TOKEN) {
+        printf("-->");
+        print_token(&tokens[i]);
+        i++;
+    }
+	print_token(&tokens[i]);
+	printf("\n");
 }
 
 /*

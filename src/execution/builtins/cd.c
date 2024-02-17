@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:42:58 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/13 16:18:43 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/17 21:38:07 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	builtins_cd(char **cmds, t_minishell *ms)
 	path = get_cd_path(cmds, ms->envp);
 	if (!path)
 		return (EXIT_FAILURE);
-	oldpwd = getcwd(NULL, 0);	if (chdir(path) == -1)
+	oldpwd = getcwd(NULL, 0);
+	if (chdir(path) == -1)
 	{
 		free(path);
 		return (print_builtin_error("cd", cmds[0], strerror(errno)),

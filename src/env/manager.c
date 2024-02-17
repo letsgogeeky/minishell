@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   manager.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/17 19:31:18 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/17 19:31:19 by ramoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/minishell.h"
 
 int    exists_in_env(char *key, char **envp)
@@ -29,7 +41,6 @@ int update_env_variable(char *key, char *value, t_minishell *ms)
     free(ms->envp[i]);
     tmp = ft_strjoin(key, "=");
     ms->envp[i] = ft_strjoin(tmp, value);
-    printf("ms->envp[%d]: %s\n", i, ms->envp[i]);
     free(tmp);
     return (EXIT_SUCCESS);
 }
@@ -52,6 +63,8 @@ char    **add_to_env(char *key, char *value, char **envp)
     key = ft_strjoin(key, "=");
     new_envp[i] = ft_strjoin(key, value);
     new_envp[i + 1] = NULL;
+	free(key);
+	free(envp);
     return (new_envp);
 }
 
@@ -80,6 +93,7 @@ char    **remove_from_env(char *key, char **envp)
         j++;
     }
     new_envp[j - 1] = NULL;
+	free(envp);
     return (new_envp);
 }
 

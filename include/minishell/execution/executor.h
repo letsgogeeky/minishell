@@ -9,6 +9,13 @@
 # include <sys/wait.h>
 # include "minishell/minishell.h"
 
+typedef struct s_quote_state
+{
+	bool	is_quoted;
+	bool	is_wrapped;
+	bool	had_quote;
+	bool	is_single;
+}	t_quote_state;
 
 char		*get_path(char *cmd, char **envp);
 void		do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file);
@@ -26,5 +33,6 @@ t_ast_node	*get_last_sibiling(t_ast_node *node);
 char		**get_arr_without_last(char **arr);
 int			count_cmds(t_minishell *ms, t_ast_node *node, bool is_child);
 int			parse_heredoc(t_minishell *ms, t_ast_node *node);
+char		*parse_unclosed_quote(t_minishell *ms, char *delimiter, char *base);
 
 #endif

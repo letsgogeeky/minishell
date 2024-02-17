@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:37:16 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/14 19:37:20 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 19:32:09 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,14 @@ int     is_valid_env_name(char *name);
 char 	*get_env_value(char *key, char **envp);
 char 	*get_env_key(char *key);
 char	**copy_env(char **envp);
-int		free_env(char **envp);
 char	**get_environment(void);
 
 void	expand_ast(t_minishell *ms, t_ast_node *node, int level);
 char	*expand(t_minishell *ms, char *cmds);
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);
+
+void	destroy_ms(t_minishell *ms);
+void	post_execute_destroy(t_minishell *ms);
 
 #endif

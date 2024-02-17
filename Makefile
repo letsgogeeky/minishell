@@ -12,13 +12,14 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/exit.c execution/builtins/echo.c \
 	execution/builtins/export.c execution/builtins/unset.c \
 	execution/builtins/cd.c
-SRC_EXECUTION := execution/command_path.c execution/executor.c \
-	execution/io.c execution/utils.c execution/executor/tree_utils.c \
+SRC_EXECUTION := execution/command_path.c execution/executor/executor.c \
+	execution/io/io.c execution/io/sync.c execution/executor/tree_utils.c \
+	execution/executor/utils.c \
 	execution/here_doc.c
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c
 SRC_ENV := env/manager.c env/utils.c
-SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c
+SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c destroy.c
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV) $(SRC_DS)
 
 OBJS := ${addprefix src/, ${SRCS:.c=.o}}
@@ -40,6 +41,9 @@ BASELIB:
 		git clone git@github.com:letsgogeeky/ft-baselib.git ${BASELIB};\
 	fi
 	make --directory=${BASELIB}
+
+debug: 
+	@$(MAKE) CFLAGS="-Wextra -Wall -Werror -g -D LOG_DETAILS=1" re
 
 clean:
 	@rm -rf $(OBJS)

@@ -18,6 +18,21 @@ static	bool is_empty(char *str)
 	return (true);
 }
 
+static	void deploy(t_minishell *ms)
+{
+
+	// USE strace in dorker to see the system calls
+	ms->ast = parse_input(ms->input);
+	add_history(ms->input);
+	reset_terminos();
+	expand_ast(ms, ms->ast, 0);
+	ms->count = count_cmds(ms, ms->ast, false);
+	init_fds(ms);
+	execute_ast(ms, ms->ast);
+	post_execute_destroy(ms);
+	update_terminos();
+}
+
 
 static int interactive_mode(t_minishell *ms)
 {
@@ -25,44 +40,50 @@ static int interactive_mode(t_minishell *ms)
     while (ms->input && ms->input[0] != EOF)
     {
 		if (ms->input[0] != '\0' && !is_empty(ms->input))
-		{
-			printf("input: %s\n", ms->input);
-			ms->ast = parse_input(ms->input);
-			printf("\nast: %p\n", ms->ast);
-			print_ast(ms->ast, 0);
-			add_history(ms->input);
-            reset_terminos();
-			expand_ast(ms, ms->ast, 0);
-			ms->count = count_cmds(ms, ms->ast, false);
-			init_fds(ms);
-			execute_ast(ms, ms->ast);
-            update_terminos();
-        }
+			deploy(ms);
         ms->input = readline("massiveshell$ ");
 		use_parent_signals();
     }
     printf("byeEeEeEe...\n");
-    // TODO: free memory before exiting
-    // This function should also be called when exiting the shell using `exit` builtin
-    reset_terminos();
+	destroy_ms(ms);
     return (0);
+}
+char	*join_args(char **args)
+{
+	int		i;
+	char	*str;
+	char	*tmp;
+
+	i = 1;
+	str = ft_strdup(args[i]);
+	while (args[++i])
+	{
+		tmp = ft_strjoin(str, " ");
+		free(str);
+		str = ft_strjoin(tmp, args[i]);
+		free(tmp);
+	}
+	return (str);
 }
 
 int main(int argc, char **argv)
 {
 	t_minishell *ms;
+	int			exit_code;
 
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
-    if (argc >= 2)
-        return (1); // TODO: handle non-interactive mode if required or desired
-    if (isatty(STDIN_FILENO))
-    {
-		ms->args = argv;
-		ms->exit_code = 0;
-		ms->file_node = NULL;
-		ms->envp = get_environment();
-        use_parent_signals();
-        interactive_mode(ms);
-    }
-    return (ms->exit_code);
+	ms->args = argv;
+	ms->exit_code = 0;
+	ms->file_node = NULL;
+	ms->stack = NULL;
+	ms->first_cmd = NULL;
+	ms->envp = get_environment();
+	use_parent_signals();
+	if (argc == 1 && isatty(STDIN_FILENO))
+		return (interactive_mode(ms));
+	ms->input = join_args(argv);
+	deploy(ms);
+	exit_code = ms->exit_code;
+	free(ms);
+    return (exit_code);
 }

@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "minishell/parsing/parser.h"
+#include "baselib.h"
 
 
 //UTIL FUNCTIONS
@@ -71,7 +72,10 @@ void destroy_ast(t_ast_node *node)
 		return;
 	destroy_ast(node->child);
 	destroy_ast(node->sibling);
-	free(node->data);
+	if (LOG_DETAILS)
+		printf("Destroying node: %s\n", node->data);
+	if (node->data)
+		free(node->data);
 	free(node);
 }
 
@@ -84,9 +88,10 @@ t_ast_node_type determine_node_type(t_token_type type)
 		return (N_CMD_PARAM);
 	else if (type == ASSIGNMENT)
 		return (N_CMD_PARAM);
-	else if (type == GREAT || type == LESS \
-		|| type == DLESS || type == DGREAT)
+	else if (type == LESS || type == DLESS)
 		return (N_INFILE);
+	else if (type == GREAT || type == DGREAT)
+		return (N_OUTFILE);
 	else
 		return (printf("Unknown token type encountered.\n"), \
 			N_ERROR);
@@ -111,7 +116,7 @@ t_ast_node *parse_redirect(t_parser_state *state)
 	consume(state);
 	file = consume(state);
 	node = create_node(determine_node_type(type));
-	node->data = strdup(file.lexeme);
+	node->data = ft_strdup(file.lexeme);
 	if (type == GREAT)
 		node->fd = open_file(file.lexeme, O_TRUNC);
 	else if (type == DGREAT)
@@ -139,7 +144,7 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
 		else
 		{
         	node = create_node(determine_node_type(peek(state).type));
-			node->data = strdup(peek(state).lexeme);
+			node->data = ft_strdup(peek(state).lexeme);
 		}
 		if (!head)
 			head = node;
@@ -165,7 +170,7 @@ t_ast_node *parse_cmd_prefix(t_parser_state *state)
 		else if (peek(state).type == ASSIGNMENT)
 		{
 			node = create_node(determine_node_type(peek(state).type));
-			node->data = strdup(peek(state).lexeme);
+			node->data = ft_strdup(peek(state).lexeme);
 			consume(state);
 		}
 		if (!head)
@@ -197,7 +202,7 @@ t_ast_node *parse_command(t_parser_state *state)
 	if (peek(state).type == WORD)
 	{
 		cmd_word = create_node(N_CMD_WORD);
-		cmd_word->data = strdup(peek(state).lexeme);
+		cmd_word->data = ft_strdup(peek(state).lexeme);
 		consume(state);
 		if (last_child)
 			last_child->sibling = cmd_word;
@@ -259,6 +264,15 @@ t_ast_node	*parse_input(const char *input)
 	tokens = lex(input);
 	init_parser_state(&state, tokens);
 	ast = parse_complete_command(&state);
+	if (LOG_DETAILS)
+	{
+		printf("\033[1;31m Tokens:::: \033[0m \n");
+		log_tokens(tokens);
+		printf("\033[1;31m AST:::: \033[0m \n");
+		print_ast(ast, 0);
+		printf("\033[0;33m Output:::: \033[0m \n");
+	}
+	destroy_tokens(tokens);
 	return (ast);
 }
 
@@ -304,15 +318,13 @@ void print_ast(t_ast_node *node, int level)
 	if (node == NULL) return;
 	for (int i = 0; i < level; ++i) printf("  ");
 	printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
-	// printf("fd: %d\n", node->fd);
-	// printf("is_heredoc: %d\n", node->is_heredoc);
 	if (node->child)
 		print_ast(node->child, level + 2);
 	if (node->sibling)
 		print_ast(node->sibling, level);
 }
 
-
+/*
 // int main() {
 //     t_token *tokens = create_mock_tokens();
 //     t_parser_state state;
@@ -320,8 +332,4 @@ void print_ast(t_ast_node *node, int level)
 
 //     t_ast_node *ast = parse_complete_command(&state);
 //     print_ast(ast, 0);
-
-
-// 	destroy_ast(ast);
-//     return 0;
-// }
+*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramymoussa <ramymoussa@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:40:29 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/13 16:18:22 by ramymoussa       ###   ########.fr       */
+/*   Updated: 2024/02/16 02:53:23 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	exec_builtin(t_minishell *ms, char *cmd, char **options)
 	if (!ft_strncmp(cmd, "env", 3))
 		return (builtins_env(ms->envp));
 	if (!ft_strncmp(cmd, "exit", 4))
-		return (builtins_exit(ms), 0);
+		return (builtins_exit(ms, options), 0);
 	if (!ft_strncmp(cmd, "echo", 4))
-		return (builtins_echo(options), 1);
+		return (builtins_echo(ms, options), 1);
 	if (!ft_strncmp(cmd, "export", 6))
 		return (builtins_export(options, ms), 0);
 	if (!ft_strncmp(cmd, "unset", 5))
