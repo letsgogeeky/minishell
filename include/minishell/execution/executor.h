@@ -9,6 +9,13 @@
 # include <sys/wait.h>
 # include "minishell/minishell.h"
 
+typedef struct s_quote_state
+{
+	bool	is_quoted;
+	bool	is_wrapped;
+	bool	had_quote;
+	bool	is_single;
+}	t_quote_state;
 
 char		*get_path(char *cmd, char **envp);
 void		do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file);

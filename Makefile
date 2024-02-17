@@ -14,6 +14,7 @@ SRC_BUILTINS := execution/builtins.c \
 	execution/builtins/cd.c
 SRC_EXECUTION := execution/command_path.c execution/executor/executor.c \
 	execution/io/io.c execution/io/sync.c execution/executor/tree_utils.c \
+	execution/executor/utils.c \
 	execution/here_doc.c
 SRC_EXPANDER := expander/expander.c
 SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c

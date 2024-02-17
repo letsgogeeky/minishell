@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:50 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 19:30:51 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 21:23:49 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,65 +16,44 @@
 #include "minishell/error.h"
 #include "minishell/stack.h"
 
-int		exec_cmd(t_minishell *ms, char *cmd, char **options);
-void	executor(t_minishell *ms, t_ast_node *node, int order);
+int			exec_cmd(t_minishell *ms, char *cmd, char **options);
+void		executor(t_minishell *ms, t_ast_node *node, int order);
 t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order);
-char	**join_cmd_and_options(char *cmd, char **options);
+char		**join_cmd_and_options(char *cmd, char **options);
+void		spawn_process(t_minishell *ms, \
+				t_ast_node *node, int order, \
+				char **siblings);
 
-void execute_ast(t_minishell *ms, t_ast_node *root)
+void	execute_ast(t_minishell *ms, t_ast_node *root)
 {
-	int	order;
-	t_stack_data top;
-	t_ast_node *node;
+	int				order;
+	t_stack_data	top;
+	t_ast_node		*node;
 
 	ms->last_pid = 1;
 	order = 0;
-    stack_push(&ms->stack, root, false);
-    while (!stack_is_empty(ms->stack))
+	stack_push(&ms->stack, root, false);
+	while (!stack_is_empty(ms->stack))
 	{
-        top = stack_pop(&ms->stack);
-        node = top.node;
-        if (node == NULL) continue;
-        if (top.is_child && is_executable_node(node))
+		top = stack_pop(&ms->stack);
+		node = top.node;
+		if (top.is_child && is_executable_node(node))
 		{
 			node = pre_execute(ms, node, order);
 			executor(ms, node, order);
 			order++;
-        }
-        if (node->sibling)
-            stack_push(&(ms->stack), node->sibling, false);
-        if (node->child)
-            stack_push(&(ms->stack), node->child, true);
-    }
+		}
+		if (node->sibling)
+			stack_push(&(ms->stack), node->sibling, false);
+		if (node->child)
+			stack_push(&(ms->stack), node->child, true);
+	}
 	restore_io(ms->system_fd, ms->pipe_fd, ms->count == 0);
 	wait_for_children(ms->last_pid, ms);
 }
 
 t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order)
 {
-	// t_ast_node *sibling;
-
-	// sibling = node;
-	// if (sibling->type == N_INFILE)
-	// {
-	// 	ms->file_node = sibling;
-	// 	node = node->sibling;
-	// }
-	// else
-	// {
-	// 	while (sibling)
-	// 	{
-	// 		if (sibling->type == N_INFILE)
-	// 		{
-	// 			ms->file_node = sibling;
-	// 			break ;
-	// 		}
-	// 		sibling = sibling->sibling;
-	// 	}
-	// }
-	// if (order == 0 && node)
-	// 	ms->first_cmd = ft_strdup(node->data);
-	// return (node);
 	if (order == 0 && node->type == N_INFILE)
 	{
 		ms->file_node = node;
@@ -84,7 +63,6 @@ t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order)
 		ms->first_cmd = ft_strdup(node->data);
 	return (node);
 }
-
 
 void	executor(t_minishell *ms, t_ast_node *node, int order)
 {
@@ -107,6 +85,13 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 		str_arr_free(siblings);
 		return ;
 	}
+	spawn_process(ms, node, order, siblings);
+	str_arr_free(siblings);
+}
+
+void	spawn_process(t_minishell *ms, t_ast_node *node, \
+			int order, char **siblings)
+{
 	ms->last_pid = fork();
 	if (ms->last_pid == 0)
 	{
@@ -114,14 +99,13 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 		use_child_signals();
 		exec_cmd(ms, node->data, siblings);
 	}
-	str_arr_free(siblings);
 }
 
 int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 {
 	char	*path;
 	char	**parts;
-	
+
 	if (is_builtin(cmd))
 	{
 		exec_builtin(ms, cmd, options);
@@ -135,28 +119,10 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 	{
 		str_arr_free(parts);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
-			return (free(path), err(cmd, "Permission denied", 126, ms), EXIT_FAILURE);
-		return (free(path), err(cmd, "command not found", 127, ms), EXIT_FAILURE);
+			return (free(path), err(cmd, "Permission denied", 126, ms), \
+				EXIT_FAILURE);
+		return (free(path), err(cmd, "command not found", 127, ms), \
+			EXIT_FAILURE);
 	}
 	return (free(path), str_arr_free(parts), EXIT_SUCCESS);
-}
-
-char	**join_cmd_and_options(char *cmd, char **options)
-{
-	char	**cmd_and_options;
-	int		i;
-
-	i = 0;
-	while (options[i])
-		i++;
-	cmd_and_options = (char **)malloc(sizeof(char *) * (i + 2));
-	cmd_and_options[0] = ft_strdup(cmd);
-	i = 0;
-	while (options[i])
-	{
-		cmd_and_options[i + 1] = ft_strdup(options[i]);
-		i++;
-	}
-	cmd_and_options[i + 1] = NULL;
-	return (cmd_and_options);
 }
