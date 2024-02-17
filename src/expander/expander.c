@@ -18,37 +18,26 @@ char *expand(t_minishell *ms, char *cmds)
 {
     int i;
     char *expanded;
-    char *tmp;
 	bool	is_quoted;
 
 	is_quoted = false;
     i = -1;
-    while (cmds[++i])
+    while (cmds && cmds[++i])
     {
 		if (cmds[i] == '\'')
 			is_quoted = !is_quoted;
 		if (cmds[i] == '$' && !is_quoted)
 		{
 			expanded = expand_variable(cmds, i, ms->envp, ms->exit_code);
-			tmp = expanded;
-			expanded = ft_strjoin(expanded, cmds + i + 1 + key_length(cmds + i + 1));
-			free(tmp);
+			if (cmds[i + 1 + key_length(cmds + i + 1)])
+				expanded = ft_strjoin_s1_free(expanded, cmds + i + 1 + key_length(cmds + i + 1));
+			else
+				return (free(cmds), expanded);
 			free(cmds);
 			cmds = expanded;
 		}
 	}
 	return (cmds);
-}
-
-int	key_length(char *start)
-{
-	char *key;
-	int len;
-
-	key = get_env_key(start);
-	len = ft_strlen(key);
-	free(key);
-	return (len);
 }
 
 char	*expand_variable(char *cursor, int j, char **envp, int exit_code)
@@ -76,15 +65,13 @@ char	*expand_variable(char *cursor, int j, char **envp, int exit_code)
 	return (expanded);
 }
 
-bool	is_between_single_quotes(char *str, int i)
+int	key_length(char *start)
 {
-	int count;
+	char *key;
+	int len;
 
-	count = 0;
-	while (--i >= 0)
-	{
-		if (str[i] == '\'')
-			count++;
-	}
-	return (count % 2);
+	key = get_env_key(start);
+	len = ft_strlen(key);
+	free(key);
+	return (len);
 }

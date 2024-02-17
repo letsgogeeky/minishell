@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/17 19:30:50 by ramoussa          #+#    #+#             */
+/*   Updated: 2024/02/17 19:30:51 by ramoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/execution/executor.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
@@ -7,6 +19,7 @@
 int		exec_cmd(t_minishell *ms, char *cmd, char **options);
 void	executor(t_minishell *ms, t_ast_node *node, int order);
 t_ast_node	*pre_execute(t_minishell *ms, t_ast_node *node, int order);
+char	**join_cmd_and_options(char *cmd, char **options);
 
 void execute_ast(t_minishell *ms, t_ast_node *root)
 {
@@ -126,4 +139,24 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 		return (free(path), err(cmd, "command not found", 127, ms), EXIT_FAILURE);
 	}
 	return (free(path), str_arr_free(parts), EXIT_SUCCESS);
+}
+
+char	**join_cmd_and_options(char *cmd, char **options)
+{
+	char	**cmd_and_options;
+	int		i;
+
+	i = 0;
+	while (options[i])
+		i++;
+	cmd_and_options = (char **)malloc(sizeof(char *) * (i + 2));
+	cmd_and_options[0] = ft_strdup(cmd);
+	i = 0;
+	while (options[i])
+	{
+		cmd_and_options[i + 1] = ft_strdup(options[i]);
+		i++;
+	}
+	cmd_and_options[i + 1] = NULL;
+	return (cmd_and_options);
 }
