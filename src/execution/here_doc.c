@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 00:36:15 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 22:59:45 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 char	*remove_trailing_newline(char *str)
 {
 	int	len;
-
+	
+	if (!str)
+		return (NULL);
 	len = ft_strlen(str);
 	if (str[len - 1] == '\n')
 		str[len - 1] = '\0';

@@ -145,13 +145,13 @@ t_ast_node *parse_cmd_suffix(t_parser_state *state)
 		{
         	node = create_node(determine_node_type(peek(state).type));
 			node->data = ft_strdup(peek(state).lexeme);
+			consume(state);
 		}
 		if (!head)
 			head = node;
 		else
 			current->sibling = node;
 		current = node;
-		consume(state);
 	}
 	return (head);
 }

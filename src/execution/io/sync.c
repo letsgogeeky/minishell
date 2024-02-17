@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:31 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 19:30:32 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 00:25:09 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,6 @@ void	wait_for_children(pid_t last_pid, t_minishell *ms)
 		wait(NULL);
 		i++;
 	}
+	free(ms->first_cmd);
+	ms->first_cmd = NULL;
 }
