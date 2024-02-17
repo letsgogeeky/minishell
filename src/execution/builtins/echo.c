@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 21:37:51 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/17 21:39:35 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 void	prettify_str(t_minishell *ms, char *str);
 char	*get_final_str(t_minishell *ms, char *str, t_quote_state qs);
+char	*do_quote_magic(t_minishell *ms, char *str);
 
 void	builtins_echo(t_minishell *ms, char **cmds)
 {
