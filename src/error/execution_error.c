@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_error.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:44:08 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/18 00:08:36 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:09:36 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 #include "minishell/error.h"
 #include "baselib.h"
 
-void    print_builtin_error(char *cmd, char *arg, char *msg)
+void	print_builtin_error(char *cmd, char *arg, char *msg)
 {
-    ft_putstr_fd("minishell: ", STDERR_FILENO);
-    ft_putstr_fd(cmd, STDERR_FILENO);
-    if (arg)
-    {
-        ft_putstr_fd(": ", STDERR_FILENO);
-        ft_putstr_fd(arg, STDERR_FILENO);
-    }
-    ft_putstr_fd(": ", STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
-    ft_putstr_fd("\n", STDERR_FILENO);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (arg)
+	{
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+	}
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-void   print_execve_error(char *cmd, char *msg)
+void	print_execve_error(char *cmd, char *msg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
