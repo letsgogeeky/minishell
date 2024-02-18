@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sync.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:31 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 01:59:24 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:38:45 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 void	wait_for_children(pid_t last_pid, t_minishell *ms)
 {
-	int i;
+	int	i;
 
 	if (!ms->count)
 		return ;
-	if (ms->count == 0 || (
-		ms->count == 1 && runs_on_parent(ms->first_cmd)))
+	if (ms->count == 0 || \
+		(ms->count == 1 && runs_on_parent(ms->first_cmd)))
 		return ;
 	signal(SIGINT, SIG_IGN);
 	waitpid(last_pid, &ms->exit_code, 0);
@@ -34,10 +34,7 @@ void	wait_for_children(pid_t last_pid, t_minishell *ms)
 	}
 	else
 		ms->exit_code = WEXITSTATUS(ms->exit_code);
-	i = 0;
-	while (ms->count > i)
-	{
+	i = -1;
+	while (ms->count > ++i)
 		wait(NULL);
-		i++;
-	}
 }

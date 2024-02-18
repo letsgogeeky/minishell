@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 17:49:38 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:13:32 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	builtins_echo(t_minishell *ms, char **cmds)
 	{
 		if (!ft_strncmp(cmds[i], "-n", 2))
 			newline = 0;
-		i++;
+		++i;
 	}
 	while (cmds[i])
 	{
 		prettify_str(ms, cmds[i]);
 		if (cmds[i + 1])
 			printf(" ");
-		i++;
+		++i;
 	}
 	if (newline)
 		printf("\n");

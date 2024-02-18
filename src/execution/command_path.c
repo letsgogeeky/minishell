@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 19:31:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 02:19:04 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:11:59 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*find_path_in_env(char **envp, char *program)
 
 	idx = 0;
 	while (envp[idx] && ft_strncmp(envp[idx], "PATH=", 5))
-		idx++;
+		++idx;
 	if (!envp[idx])
 		return (NULL);
 	path = ft_substr(envp[idx], 5, ft_strlen(envp[idx]) - 5);
