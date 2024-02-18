@@ -1,27 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/18 21:14:22 by fvoicu            #+#    #+#             */
+/*   Updated: 2024/02/18 21:18:39 by fvoicu           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell/minishell.h"
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
 #include "minishell/parsing/parser.h"
 
 struct termios	g_settings;
-static	bool is_empty(char *str)
-{
-	int i;
 
-	i = 0;
-	while (str[i])
-	{
+static bool	is_empty(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
 		if (str[i] != ' ' && str[i] != '\t')
 			return (false);
-		i++;
-	}
 	return (true);
 }
 
-static	void deploy(t_minishell *ms)
+static void	deploy(t_minishell *ms)
 {
-
-	// USE strace in dorker to see the system calls
 	ms->ast = parse_input(ms->input);
 	add_history(ms->input);
 	reset_terminos();
@@ -33,21 +41,21 @@ static	void deploy(t_minishell *ms)
 	update_terminos();
 }
 
-
-static int interactive_mode(t_minishell *ms)
+static int	interactive_mode(t_minishell *ms)
 {
-    ms->input = readline("massiveshell$ ");
-    while (ms->input && ms->input[0] != EOF)
-    {
+	ms->input = readline("massiveshell$ ");
+	while (ms->input && ms->input[0] != EOF)
+	{
 		if (ms->input[0] != '\0' && !is_empty(ms->input))
 			deploy(ms);
 		use_parent_signals();
-        ms->input = readline("massiveshell$ ");
-    }
-    printf("byeEeEeEe...\n");
+		ms->input = readline("massiveshell$ ");
+	}
+	printf("byeEeEeEe...\n");
 	destroy_ms(ms);
-    return (0);
+	return (0);
 }
+
 char	*join_args(char **args)
 {
 	int		i;
@@ -66,9 +74,9 @@ char	*join_args(char **args)
 	return (str);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_minishell *ms;
+	t_minishell	*ms;
 	int			exit_code;
 
 	ms = (t_minishell *)malloc(sizeof(t_minishell));
@@ -85,5 +93,5 @@ int main(int argc, char **argv)
 	deploy(ms);
 	exit_code = ms->exit_code;
 	free(ms);
-    return (exit_code);
+	return (exit_code);
 }
