@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:43:44 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 02:00:53 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 00:52:38 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	destroy_ms(t_minishell *ms)
 {
+	printf("byeEeEeEe...\n");
 	clear_history();
 	reset_terminos();
 	str_arr_free(ms->envp);

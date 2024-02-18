@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:26:30 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 21:02:11 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 00:21:50 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,20 @@ void	handle_sigint(int sig)
 
 void	update_terminos(void)
 {
-	tcgetattr(STDIN_FILENO, &g_settings);
-	g_settings.c_lflag &= ~(ECHOCTL | IEXTEN);
-	tcsetattr(STDIN_FILENO, TCSANOW, &g_settings);
+	struct termios	settings;
+
+	tcgetattr(STDIN_FILENO, &settings);
+	settings.c_lflag &= ~(ECHOCTL | IEXTEN);
+	tcsetattr(STDIN_FILENO, TCSANOW, &settings);
 }
 
 void	reset_terminos(void)
 {
-	tcgetattr(STDIN_FILENO, &g_settings);
-	g_settings.c_lflag |= (ECHOCTL | IEXTEN);
-	tcsetattr(STDIN_FILENO, TCSANOW, &g_settings);
+	struct termios	settings;
+
+	tcgetattr(STDIN_FILENO, &settings);
+	settings.c_lflag |= (ECHOCTL | IEXTEN);
+	tcsetattr(STDIN_FILENO, TCSANOW, &settings);
 }
 
 void	use_parent_signals(void)

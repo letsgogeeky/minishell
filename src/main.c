@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:14:22 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/18 21:18:39 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 00:54:42 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/execution/executor.h"
 #include "minishell/parsing/parser.h"
-
-struct termios	g_settings;
 
 static bool	is_empty(char *str)
 {
@@ -43,17 +41,31 @@ static void	deploy(t_minishell *ms)
 
 static int	interactive_mode(t_minishell *ms)
 {
-	ms->input = readline("massiveshell$ ");
-	while (ms->input && ms->input[0] != EOF)
+	char	*rl_input;
+	char	**tmp;
+	int	i;
+	
+	i = -1;
+	rl_input = readline("massiveshell$ ");
+	tmp = ft_split(rl_input, '\n');
+	while (rl_input && rl_input[0] != EOF)
 	{
-		if (ms->input[0] != '\0' && !is_empty(ms->input))
-			deploy(ms);
-		use_parent_signals();
-		ms->input = readline("massiveshell$ ");
+		while (tmp && tmp[++i] && tmp[i][0] != EOF)
+		{
+			ms->input = ft_strdup(tmp[i]);
+			if (ms->input[0] != '\0' && !is_empty(ms->input))
+				deploy(ms);
+			use_parent_signals();
+		}
+		free(rl_input);
+		if (tmp[i] && tmp[i][0] != EOF)
+			break ;
+		str_arr_free(tmp);
+		rl_input = readline("massiveshell$ ");
+		tmp = ft_split(rl_input, '\n');
+		i = -1;
 	}
-	printf("byeEeEeEe...\n");
-	destroy_ms(ms);
-	return (0);
+	return (destroy_ms(ms), 0);
 }
 
 char	*join_args(char **args)
