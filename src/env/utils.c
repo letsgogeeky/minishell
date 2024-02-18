@@ -3,55 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:31:44 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 19:32:15 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:06:04 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/minishell.h"
 
-char *get_env_value(char *key, char **envp)
+char	*get_env_value(char *key, char **envp)
 {
-    int		i;
-    int		j;
-    char	*value;
+	int		i;
+	int		j;
+	char	*value;
 
-    i = 0;
-    while (envp[i])
-    {
-        j = 0;
-        while (envp[i][j] && envp[i][j] == key[j])
-            j++;
-        if (envp[i][j] == '=' && (!key[j] || key[j] == ' '))
-        {
-            value = ft_strdup(envp[i] + j + 1);
-            return (value);
-        }
-        i++;
-    }
-    return (ft_strdup(""));
+	i = -1;
+	while (envp[++i])
+	{
+		j = 0;
+		while (envp[i][j] && envp[i][j] == key[j])
+			++j;
+		if (envp[i][j] == '=' && (!key[j] || key[j] == ' '))
+		{
+			value = ft_strdup(envp[i] + j + 1);
+			return (value);
+		}
+	}
+	return (ft_strdup(""));
 }
 
-int is_valid_env_key_char(char c) {
-    return c && c != ' ' && \
+int	is_valid_env_key_char(char c)
+{
+	return (c && c != ' ' && \
 		c != '$' && c != '=' && \
 		c != '/' && c != '\\' && \
 		c != '\'' && c != '\"' && \
 		c != ';' && c != '|' && c != '&' && \
 		c != '(' && c != ')' && \
-		c != '{' && c != '}' && c != '<' && c != '>';
+		c != '{' && c != '}' && c != '<' && c != '>');
 }
 
-char *get_env_key(char *key)
+char	*get_env_key(char *key)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (key[i] && is_valid_env_key_char(key[i]))
-        i++;
-    return (ft_substr(key, 0, i));
+	i = 0;
+	while (key[i] && is_valid_env_key_char(key[i]))
+		++i;
+	return (ft_substr(key, 0, i));
 }
 
 char	**get_environment(void)
@@ -62,7 +62,7 @@ char	**get_environment(void)
 
 	i = 0;
 	while (environ[i])
-		i++;
+		++i;
 	envp = malloc(sizeof(char *) * (i + 1));
 	if (!envp)
 		return (NULL);
@@ -83,16 +83,13 @@ char	**copy_env(char **envp)
 
 	i = 0;
 	while (envp[i])
-		i++;
+		++i;
 	copy = malloc(sizeof(char *) * (i + 1));
 	if (!copy)
 		return (NULL);
-	i = 0;
-	while (envp[i])
-	{
+	i = -1;
+	while (envp[++i])
 		copy[i] = ft_strdup(envp[i]);
-		i++;
-	}
 	copy[i] = NULL;
 	return (copy);
 }
