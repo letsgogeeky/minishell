@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 21:39:35 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:49:38 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	prettify_str(t_minishell *ms, char *str);
 char	*get_final_str(t_minishell *ms, char *str, t_quote_state qs);
 char	*do_quote_magic(t_minishell *ms, char *str);
 
-void	builtins_echo(t_minishell *ms, char **cmds)
+int	builtins_echo(t_minishell *ms, char **cmds)
 {
 	int	i;
 	int	newline;
@@ -41,6 +41,7 @@ void	builtins_echo(t_minishell *ms, char **cmds)
 	}
 	if (newline)
 		printf("\n");
+	return (EXIT_SUCCESS);
 }
 
 void	prettify_str(t_minishell *ms, char *str)
@@ -83,6 +84,10 @@ char	*do_quote_magic(t_minishell *ms, char *str)
 			i++;
 		else if (str[i] == '\'' || str[i] == '\"')
 		{
+			if (qs.had_quote && qs.is_single && str[i] == '\"')
+				continue ;
+			if (qs.had_quote && !qs.is_single && str[i] == '\'')
+				continue ;
 			qs.is_wrapped = true;
 			qs.had_quote = true;
 			if (str[i] == '\'')

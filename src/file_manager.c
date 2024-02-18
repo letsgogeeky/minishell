@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:31:42 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/15 00:33:39 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 19:02:07 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,20 @@ int	error_permission_denied(char *path)
 int	open_file(char *path, int flags)
 {
 	int	fd;
+	int	access_ret;
 
-	if (flags == O_RDONLY && access(path, F_OK) == -1)
+	access_ret = access(path, F_OK);
+	if (flags == O_RDONLY && access_ret == -1)
 		return (error_file_not_found(path));
 	if (flags == O_RDONLY && access(path, R_OK) == -1)
 		return (error_permission_denied(path));
-	if (flags > O_RDONLY && !access(path, F_OK) && access(path, W_OK) == -1)
-		return (error_permission_denied(path));
+	if (flags > O_RDONLY)
+	{
+		fd = open(path, O_WRONLY | O_CREAT | flags, 0644);
+		if (fd == -1)
+			return (error_permission_denied(path));
+	}
 	if (flags == O_RDONLY)
 		fd = open(path, flags);
-	else
-		fd = open(path, O_WRONLY | O_CREAT | flags, 0644);
 	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:48:32 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 01:56:07 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:43:20 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-void	builtins_exit(t_minishell *ms, char **options, char *cmd)
+int	builtins_exit(t_minishell *ms, char **options, char *cmd)
 {
 	if (options && options[0])
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		ms->exit_code = 1;
-		return ;
+		return (EXIT_FAILURE);
 	}
 	printf("exit\n");
 	clear_history();
@@ -39,4 +39,5 @@ void	builtins_exit(t_minishell *ms, char **options, char *cmd)
 	free(ms);
 	free(cmd);
 	exit(0);
+	return (EXIT_SUCCESS);
 }

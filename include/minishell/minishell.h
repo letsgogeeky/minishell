@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:37:16 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 19:32:09 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:03:40 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,18 @@
 extern struct termios	settings;
 
 typedef struct	s_minishell {
-	char	**envp;
-	char	**args;
-	char	*input;
-	int		pipe_fd[2];
-	int		system_fd[2];
-	int		exit_code;
-	pid_t	last_pid;
-	t_ast_node	*ast;
-	t_ast_node	*file_node;
-	char		*first_cmd;
+	char			**envp;
+	char			**args;
+	char			*input;
+	int				pipe_fd[2];
+	int				system_fd[2];
+	int				exit_code;
+	pid_t			last_pid;
+	t_ast_node		*ast;
+	t_ast_node		*file_node;
+	char			*first_cmd;
 	t_stack_node	*stack;
-	int			count;
+	int				count;
 }	t_minishell;
 
 void	update_terminos(void);

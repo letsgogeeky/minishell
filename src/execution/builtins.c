@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:40:29 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 23:44:44 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:43:14 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ int	exec_builtin(t_minishell *ms, char *cmd, char **options)
 	if (!ft_strncmp(cmd, "env", 3))
 		return (builtins_env(ms->envp));
 	if (!ft_strncmp(cmd, "exit", 4))
-		return (builtins_exit(ms, options, cmd), 0);
+		return (builtins_exit(ms, options, cmd));
 	if (!ft_strncmp(cmd, "echo", 4))
-		return (builtins_echo(ms, options), 1);
+		return (builtins_echo(ms, options));
 	if (!ft_strncmp(cmd, "export", 6))
-		return (builtins_export(options, ms), 0);
+		return (builtins_export(options, ms));
 	if (!ft_strncmp(cmd, "unset", 5))
 		return (builtins_unset(options, ms));
 	if (!ft_strncmp(cmd, "cd", 2))
 		return (builtins_cd(options, ms));
-	return (0);
+	return (EXIT_FAILURE);
 }

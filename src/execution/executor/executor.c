@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:50 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 02:35:49 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 19:13:14 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	pre_execute(t_minishell *ms, t_ast_node *node, int order)
 				err_io(tmp->data, "Ambiguous input redirections..", 1, ms);
 			else
 			{
+				ms->file_node = tmp;
 				do_input_redirection(ms, !order, tmp);
 				has_infile = true;
 			}
@@ -171,13 +172,20 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 
 void	spawn_process(t_minishell *ms, t_ast_node *node, int order, char *cmd, char **options)
 {
+	bool	infile_error;
+
+	infile_error = false;
+	if (ms->file_node && ms->file_node->type == N_INFILE && ms->file_node->fd == -1)
+		infile_error = true;
+	ms->file_node = NULL;
 	ms->last_pid = fork();
 	if (ms->last_pid == 0)
 	{
-		ms->file_node = NULL;
 		if (order + 1 == ms->count && has_outfile(node))
 			ms->file_node = get_outfile_node(node);
 		do_output_redirection(ms, order + 1 == ms->count, ms->file_node);
+		if (infile_error || (ms->file_node != NULL && ms->file_node->fd == -1))
+			exit(1);
 		use_child_signals();
 		if (ft_strlen(cmd) > 0)
 		{

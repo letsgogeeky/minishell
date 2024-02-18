@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 18:34:53 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/18 00:45:23 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 19:30:04 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,11 @@ void	do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file)
 {
     if (file)
     {
-        dup2(file->fd, STDOUT_FILENO);
-        close(file->fd);
+		if (file->fd != -1 && file->type == N_OUTFILE)
+		{
+			dup2(file->fd, STDOUT_FILENO);
+			close(file->fd);
+		}
     }
     else if (is_last_cmd)
         dup2(ms->system_fd[1], STDOUT_FILENO);
