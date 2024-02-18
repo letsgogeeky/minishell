@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:44:08 by ramymoussa        #+#    #+#             */
-/*   Updated: 2024/02/11 00:55:53 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 00:08:36 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,16 @@ void   print_execve_error(char *cmd, char *msg)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
+void	err_io(char *cmd, char *msg, int exit_code, t_minishell *ms)
+{
+	print_builtin_error(cmd, NULL, msg);
+	ms->exit_code = exit_code;
+}
+
 void	err(char *cmd, char *msg, int exit_code, t_minishell *ms)
 {
 	print_execve_error(cmd, msg);
 	ms->exit_code = exit_code;
+	free(cmd);
 	exit(ms->exit_code);
 }

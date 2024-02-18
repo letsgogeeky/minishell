@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 00:11:28 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 20:58:16 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 02:06:29 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,38 @@ char	**siblings_to_array(t_ast_node *node)
 	return (arr);
 }
 
-t_ast_node	*get_last_sibiling(t_ast_node *node)
+bool	has_outfile(t_ast_node *node)
 {
 	t_ast_node	*sibling;
 
 	sibling = node;
-	while (sibling->sibling)
+	while (sibling)
+	{
+		if (sibling->type == N_OUTFILE)
+			return (true);
 		sibling = sibling->sibling;
-	return (sibling);
+	}
+	return (false);
+}
+
+t_ast_node	*get_outfile_node(t_ast_node *node)
+{
+	t_ast_node	*sibling;
+	t_ast_node	*outfile;
+	
+	sibling = node;
+	outfile = NULL;
+	while (sibling)
+	{
+		if (sibling->type == N_OUTFILE)
+		{
+			if (outfile)
+				close(outfile->fd);
+			outfile = sibling;
+		}
+		sibling = sibling->sibling;
+	}
+	return (outfile);
 }
 
 char	**get_arr_without_last(char **arr)
