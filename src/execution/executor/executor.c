@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:50 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 00:46:32 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 02:35:49 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	pre_execute(t_minishell *ms, t_ast_node *node, int order)
 		if (tmp->type == N_INFILE)
 		{
 			if (has_infile)
-				err_io(node->data, "Ambiguous input redirections..", 1, ms);
+				err_io(tmp->data, "Ambiguous input redirections..", 1, ms);
 			else
 			{
 				do_input_redirection(ms, !order, tmp);
@@ -179,8 +179,13 @@ void	spawn_process(t_minishell *ms, t_ast_node *node, int order, char *cmd, char
 			ms->file_node = get_outfile_node(node);
 		do_output_redirection(ms, order + 1 == ms->count, ms->file_node);
 		use_child_signals();
-		exec_cmd(ms, cmd, options);
-		free(cmd);
+		if (ft_strlen(cmd) > 0)
+		{
+			exec_cmd(ms, cmd, options);
+			free(cmd);
+		}
+		else
+			exit(0);
 	}
 }
 
@@ -191,7 +196,7 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 
 	if (is_builtin(cmd))
 	{
-		exec_builtin(ms, cmd, options);
+		ms->exit_code = exec_builtin(ms, cmd, options);
 		str_arr_free(options);
 		exit(ms->exit_code);
 	}

@@ -41,8 +41,8 @@ static int interactive_mode(t_minishell *ms)
     {
 		if (ms->input[0] != '\0' && !is_empty(ms->input))
 			deploy(ms);
-        ms->input = readline("massiveshell$ ");
 		use_parent_signals();
+        ms->input = readline("massiveshell$ ");
     }
     printf("byeEeEeEe...\n");
 	destroy_ms(ms);

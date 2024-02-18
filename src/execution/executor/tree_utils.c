@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 00:11:28 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 00:16:42 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 02:06:29 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,11 @@ t_ast_node	*get_outfile_node(t_ast_node *node)
 	while (sibling)
 	{
 		if (sibling->type == N_OUTFILE)
+		{
+			if (outfile)
+				close(outfile->fd);
 			outfile = sibling;
+		}
 		sibling = sibling->sibling;
 	}
 	return (outfile);

@@ -66,14 +66,42 @@ t_ast_node	*create_node(t_ast_node_type type)
 	node->fd = -1;
 	return (node);
 }
+
+char	*node_type_to_string(t_ast_node_type type)
+{
+	if (type == N_COMMAND)
+		return ("N_COMMAND");
+	else if (type == N_PIPE)
+		return ("N_PIPE");
+	else if (type == N_CMD_WORD)
+		return ("N_CMD_WORD");
+	else if (type == N_CMD_PREFIX)
+		return ("N_CMD_PREFIX");
+	else if (type == N_CMD_SUFFIX)
+		return ("N_CMD_SUFFIX");
+	else if (type == N_CMD_PARAM)
+		return ("N_CMD_PARAM");
+	else if (type == N_INFILE)
+		return ("N_INFILE");
+	else if (type == N_OUTFILE)
+		return ("N_OUTFILE");
+	else if (type == N_HEREDOC)
+		return ("N_HEREDOC");
+	else if (type == N_ERROR)
+		return ("N_ERROR");
+	else
+		return ("Unknown node type");
+}
+
+
 void destroy_ast(t_ast_node *node)
 {
 	if (!node)
-		return;
+		return ;
 	destroy_ast(node->child);
 	destroy_ast(node->sibling);
 	if (LOG_DETAILS)
-		printf("Destroying node: %s\n", node->data);
+		printf("Destroying node: %s of type: %s\n", node->data, node_type_to_string(node->type));
 	if (node->data)
 		free(node->data);
 	free(node);

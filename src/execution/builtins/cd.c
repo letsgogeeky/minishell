@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:42:58 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 21:38:07 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 02:34:31 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ char	*get_cd_path(char **cmd, char **envp)
 {
 	char	*path;
 
+	if (str_arr_len(cmd) > 1)
+		return (print_builtin_error("cd", NULL, "too many arguments"), NULL);
 	if (!cmd[0] || !ft_strncmp(cmd[0], "~", 1) || !ft_strncmp(cmd[0], "~/", 2))
 	{
 		path = get_env_value("HOME", envp);
