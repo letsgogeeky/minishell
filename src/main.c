@@ -3,7 +3,7 @@
 #include "minishell/execution/executor.h"
 #include "minishell/parsing/parser.h"
 
-struct termios	settings;
+struct termios	g_settings;
 static	bool is_empty(char *str)
 {
 	int i;

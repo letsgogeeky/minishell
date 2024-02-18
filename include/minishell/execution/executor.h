@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/18 21:06:23 by fvoicu            #+#    #+#             */
+/*   Updated: 2024/02/18 21:08:23 by fvoicu           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
@@ -18,8 +29,10 @@ typedef struct s_quote_state
 }	t_quote_state;
 
 char		*get_path(char *cmd, char **envp);
-void		do_input_redirection(t_minishell *ms, bool is_first_cmd, t_ast_node *file);
-void		do_output_redirection(t_minishell *ms, bool is_last_cmd, t_ast_node *file);
+void		do_input_redirection(t_minishell *ms, bool is_first_cmd, \
+								t_ast_node *file);
+void		do_output_redirection(t_minishell *ms, bool is_last_cmd, \
+								t_ast_node *file);
 void		restore_io(int *system_io, int *pipe_io, bool is_empty);
 void		init_fds(t_minishell *ms);
 void		execute_ast(t_minishell *ms, t_ast_node *root);
