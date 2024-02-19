@@ -6,55 +6,70 @@
 /*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 02:37:09 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/19 02:54:03 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 03:22:43 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell/parsing/parser.h"
 #include "baselib.h"
 
+t_ast_node	*parse_complete_command(t_parser_state *state);
+
+t_ast_node	*handle_pipe_sequence(t_parser_state *state, t_ast_node *cmd)
+{
+	t_ast_node	*pipe;
+	t_ast_node	*next_cmd;
+
+	pipe = create_node(N_PIPE);
+	next_cmd = parse_complete_command(state);
+	pipe->child = cmd;
+	cmd->parent = pipe;
+	if (next_cmd)
+	{
+		next_cmd->parent = pipe;
+		cmd->sibling = next_cmd;
+	}
+	return (pipe);
+}
+
+t_ast_node	*handle_error(t_ast_node *cmd)
+{
+	t_ast_node	*error;
+
+	error = create_node(N_ERROR);
+	error->child = cmd;
+	cmd->parent = error;
+	return (error);
+}
+
 t_ast_node	*parse_complete_command(t_parser_state *state)
 {
 	t_ast_node	*command;
-	t_ast_node	*pipe;
-	t_ast_node	*next_cmd;
-	t_ast_node	*error;
 
 	command = parse_command(state);
 	if (match(state, PIPE))
-	{
-		pipe = create_node(N_PIPE);
-		next_cmd = parse_complete_command(state);
-		pipe->child = command;
-		command->parent = pipe;
-		if (next_cmd)
-		{
-			next_cmd->parent = pipe;
-			command->sibling = next_cmd;
-		}
-		return (pipe);
-	}
+		return (handle_pipe_sequence(state, command));
 	else if (peek(state).type == EOF_TOKEN)
 		return (command);
 	else
-	{
-		error = create_node(N_ERROR);
-		error->child = command;
-		command->parent = error;
-		return (error);
-	}
+		return (handle_error(command));
 }
 
 void	print_ast(t_ast_node *node, int level)
 {
-	int	i;
+	const char	*data_display;
+	int			i;
 
 	if (node == NULL)
 		return ;
 	i = -1;
 	while (++i < level)
 		printf("  ");
-	printf("%d: %s\n", node->type, node->data ? node->data : "NULL");
+	if (node->data)
+		data_display = node->data;
+	else
+		data_display = "NULL";
+	printf("Node Type: %d | Data: %s\n", node->type, data_display);
 	if (node->child)
 		print_ast(node->child, level + 2);
 	if (node->sibling)
