@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:37:16 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/19 02:02:42 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:46:04 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	expand_ast(t_minishell *ms, t_ast_node *node, int level);
 char	*expand(t_minishell *ms, char *cmds);
 char	*trim_start(char *str, bool free_str);
 char	*trim_end(char *str, bool free_str);
+char	*get_dequoted_value(char *value);
 
 void	destroy_ms(t_minishell *ms);
 void	post_execute_destroy(t_minishell *ms);

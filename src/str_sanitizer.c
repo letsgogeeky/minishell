@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_sanitizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:29:52 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/12 00:31:22 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:45:39 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,16 @@ char	*trim_end(char *str, bool free_str)
 	if (free_str)
 		free(str);
 	return (trimmed);
+}
+
+char	*get_dequoted_value(char *value)
+{
+	if (!value || ft_strlen(value) < 2)
+		return (ft_strdup(value));
+	if (value[0] != '\'' && value[0] != '\"')
+		return (ft_strdup(value));
+	if ((value[0] == '\'' && value[ft_strlen(value) - 1] == '\'') || \
+		(value[0] == '\"' && value[ft_strlen(value) - 1] == '\"'))
+		return (ft_substr(value, 1, ft_strlen(value) - 2));
+	return (ft_strdup(value));
 }

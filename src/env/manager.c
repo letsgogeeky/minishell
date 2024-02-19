@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manager.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:31:18 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/19 01:45:45 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:45:33 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ int	exists_in_env(char *key, char **envp)
 		++i;
 	}
 	return (-1);
-}
-
-char	*get_dequoted_value(char *value)
-{
-	if (!value || ft_strlen(value) < 2)
-		return (ft_strdup(value));
-	if (value[0] != '\'' && value[0] != '\"')
-		return (ft_strdup(value));
-	if ((value[0] == '\'' && value[ft_strlen(value) - 1] == '\'') || \
-		(value[0] == '\"' && value[ft_strlen(value) - 1] == '\"'))
-		return (ft_substr(value, 1, ft_strlen(value) - 2));
-	return (ft_strdup(value));
 }
 
 int	update_env_variable(char *key, char *value, t_minishell *ms)
