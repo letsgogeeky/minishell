@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:14:22 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/19 03:13:11 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:43:12 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	deploy(t_minishell *ms)
 static int	interactive_mode(t_minishell *ms)
 {
 	char	*rl_input;
-	int	i;
+	int		i;
 
 	i = -1;
 	rl_input = readline("massiveshell$ ");
