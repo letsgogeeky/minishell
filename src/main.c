@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:14:22 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/19 02:23:25 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:13:11 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	interactive_mode(t_minishell *ms)
 {
 	char	*rl_input;
 	int	i;
-	
+
 	i = -1;
 	rl_input = readline("massiveshell$ ");
 	ms->rl_input = ft_split(rl_input, '\n');

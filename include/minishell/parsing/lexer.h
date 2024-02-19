@@ -6,14 +6,14 @@
 /*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 01:25:36 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/19 01:07:42 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 01:18:35 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
-#include <stdlib.h>
-#include <stdio.h>
+# include <stdlib.h>
+# include <stdio.h>
 
 typedef enum e_token_type
 {
