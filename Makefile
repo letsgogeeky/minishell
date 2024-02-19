@@ -17,7 +17,9 @@ SRC_EXECUTION := execution/command_path.c execution/executor/executor.c \
 	execution/executor/ast_analysis_utils.c execution/executor/utils.c \
 	execution/here_doc.c
 SRC_EXPANDER := expander/expander.c
-SRC_PARSER := parsing/parser/parsepars.c parsing/lexer/lexlex.c
+SRC_PARSER :=  parsing/lexer/logg.c parsing/lexer/token_mgmt.c \
+	parsing/lexer/token_types.c parsing/lexer/token_complex_types.c \
+	parsing/lexer/lexi_lex.c parsing/parser/parsepars.c 
 SRC_ENV := env/manager.c env/utils.c
 SRC_MAIN := signals.c main.c file_manager.c str_sanitizer.c destroy.c
 SRCS := $(SRC_ERROR) $(SRC_BUILTINS) $(SRC_MAIN) $(SRC_EXECUTION) $(SRC_PARSER) $(SRC_EXPANDER) $(SRC_ENV) $(SRC_DS)
