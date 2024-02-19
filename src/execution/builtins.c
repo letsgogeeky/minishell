@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:40:29 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 17:43:14 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:42:02 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	runs_on_parent(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_minishell *ms, char *cmd, char **options)
+int	exec_builtin(t_minishell *ms, char *cmd, char **options, bool is_parent)
 {
 	if (!ft_strncmp(cmd, "pwd", 3))
 		return (builtins_pwd());
 	if (!ft_strncmp(cmd, "env", 3))
 		return (builtins_env(ms->envp));
 	if (!ft_strncmp(cmd, "exit", 4))
-		return (builtins_exit(ms, options, cmd));
+		return (builtins_exit(ms, options, cmd, is_parent));
 	if (!ft_strncmp(cmd, "echo", 4))
 		return (builtins_echo(ms, options));
 	if (!ft_strncmp(cmd, "export", 6))

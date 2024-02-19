@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:48:32 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/19 03:11:23 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:46:33 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-void	free_cmd_related(t_minishell *ms);
+void	do_cleanup(t_minishell *ms);
 
-int	builtins_exit(t_minishell *ms, char **options, char *cmd)
+int	builtins_exit(t_minishell *ms, char **options, char *cmd, bool is_parent)
 {
 	int	exit_code;
 
@@ -39,14 +39,16 @@ int	builtins_exit(t_minishell *ms, char **options, char *cmd)
 		}
 	}
 	printf("exit\n");
-	clear_history();
-	reset_terminos();
-	free_cmd_related(ms);
+	if (!is_parent)
+		return (exit(exit_code), EXIT_SUCCESS);
+	do_cleanup(ms);
 	return (free(cmd), free(ms), exit(exit_code), EXIT_SUCCESS);
 }
 
-void	free_cmd_related(t_minishell *ms)
+void	do_cleanup(t_minishell *ms)
 {
+	clear_history();
+	reset_terminos();
 	str_arr_free(ms->envp);
 	if (ms->first_cmd)
 		free(ms->first_cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logg.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 00:52:19 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/19 01:00:26 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 03:30:02 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,10 @@ void	log_tokens(t_token *tokens)
 	int	i;
 
 	i = -1;
-	while (tokens[i].type != EOF_TOKEN)
+	while (tokens[++i].type != EOF_TOKEN)
 	{
 		printf("-->");
 		print_token(&tokens[i]);
-		++i;
 	}
 	print_token(&tokens[i]);
 	printf("\n");

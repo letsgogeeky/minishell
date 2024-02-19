@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:06:23 by fvoicu            #+#    #+#             */
-/*   Updated: 2024/02/18 21:08:23 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 04:00:46 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,7 @@ char		*parse_unclosed_quote(t_minishell *ms, char *delimiter, char *base);
 
 t_ast_node	*get_outfile_node(t_ast_node *node);
 bool		has_outfile(t_ast_node *node);
+char		**collect_options(t_ast_node *node);
+char		*collect_cmd(t_ast_node *node);
 
 #endif
