@@ -17,7 +17,7 @@ SRC_EXECUTION := execution/command_path.c execution/executor/executor.c \
 	execution/executor/ast_analysis_utils.c execution/executor/utils.c \
 	execution/here_doc.c
 SRC_EXPANDER := expander/expander.c
-SRC_PARSER :=  parsing/lexer/logg.c parsing/lexer/token_mgmt.c \
+SRC_PARSER :=  parsing/lexer/log.c parsing/lexer/token_mgmt.c \
 	parsing/lexer/token_types.c parsing/lexer/token_complex_types.c \
 	parsing/parser/ast_generation.c parsing/parser/cmd_parsing.c \
 	parsing/parser/parser_core.c parsing/parser/redir_parsing.c \
