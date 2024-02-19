@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:30:50 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 19:13:14 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 04:02:57 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,77 +20,8 @@ int			exec_cmd(t_minishell *ms, char *cmd, char **options);
 void		executor(t_minishell *ms, t_ast_node *node, int order);
 void		pre_execute(t_minishell *ms, t_ast_node *node, int order);
 char		**join_cmd_and_options(char *cmd, char **options);
-void		spawn_process(t_minishell *ms, t_ast_node *node, int order, char *cmd, char **options);
-
-bool	is_collectible_node(t_ast_node *node)
-{
-	return (node->type == N_CMD_WORD || \
-			node->type == N_CMD_PREFIX || \
-			node->type == N_CMD_SUFFIX || \
-			node->type == N_CMD_PARAM);
-}
-int	count_options(t_ast_node *node)
-{
-	int		i;
-	t_ast_node	*tmp;
-	bool	cmd_encountered;
-
-	cmd_encountered = false;
-	i = 0;
-	tmp = node;
-	while (tmp)
-	{
-		if (is_collectible_node(tmp) && cmd_encountered)
-			i++;
-		if (is_collectible_node(tmp) && !cmd_encountered)
-			cmd_encountered = true;
-		tmp = tmp->sibling;
-	}
-	return (i);
-}
-char	**collect_options(t_ast_node *node)
-{
-	char	**options;
-	int		i;
-	bool	cmd_encountered;
-	t_ast_node	*tmp;
-
-	i = count_options(node);
-	tmp = node;
-	cmd_encountered = false;
-	options = (char **)malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	tmp = node;
-	while (tmp)
-	{
-		if (is_collectible_node(tmp) && cmd_encountered)
-		{
-			options[i] = ft_strdup(tmp->data);
-			i++;
-		}
-		if (is_collectible_node(tmp) && !cmd_encountered)
-			cmd_encountered = true;
-		tmp = tmp->sibling;
-	}
-	return (options[i] = NULL, options);
-}
-
-
-char	*collect_cmd(t_ast_node *node)
-{
-	t_ast_node	*tmp;
-
-	tmp = node;
-	while (tmp)
-	{
-		if (is_collectible_node(tmp))
-		{
-			return (ft_strdup(tmp->data));
-		}
-		tmp = tmp->sibling;
-	}
-	return (ft_strdup(""));
-}
+void		spawn_process(t_minishell *ms, t_ast_node *node, \
+				int order, char *cmd);
 
 void	execute_ast(t_minishell *ms, t_ast_node *root)
 {
@@ -158,24 +89,28 @@ void	executor(t_minishell *ms, t_ast_node *node, int order)
 	if (!node)
 		return ;
 	pipe(ms->pipe_fd);
-	if (is_builtin(node->data) && runs_on_parent(node->data))
+	if (is_builtin(node->data) && runs_on_parent(node->data) && \
+		order + 1 == ms->count)
 	{
-		ms->exit_code = exec_builtin(ms, cmd, options);
+		ms->exit_code = exec_builtin(ms, cmd, options, true);
 		str_arr_free(options);
 		free(cmd);
 		return ;
 	}
-	spawn_process(ms, node, order, cmd, options);
-	str_arr_free(options);
+	spawn_process(ms, node, order, cmd);
 	free(cmd);
+	str_arr_free(options);
 }
 
-void	spawn_process(t_minishell *ms, t_ast_node *node, int order, char *cmd, char **options)
+void	spawn_process(t_minishell *ms, t_ast_node *node, \
+			int order, char *cmd)
 {
 	bool	infile_error;
+	char	**options;
 
 	infile_error = false;
-	if (ms->file_node && ms->file_node->type == N_INFILE && ms->file_node->fd == -1)
+	if (ms->file_node && ms->file_node->type == N_INFILE \
+		&& ms->file_node->fd == -1)
 		infile_error = true;
 	ms->file_node = NULL;
 	ms->last_pid = fork();
@@ -187,13 +122,12 @@ void	spawn_process(t_minishell *ms, t_ast_node *node, int order, char *cmd, char
 		if (infile_error || (ms->file_node != NULL && ms->file_node->fd == -1))
 			exit(1);
 		use_child_signals();
-		if (ft_strlen(cmd) > 0)
-		{
-			exec_cmd(ms, cmd, options);
-			free(cmd);
-		}
-		else
+		if (ft_strlen(cmd) == 0)
 			exit(0);
+		options = collect_options(node);
+		exec_cmd(ms, cmd, options);
+		free(cmd);
+		str_arr_free(options);
 	}
 }
 
@@ -204,7 +138,7 @@ int	exec_cmd(t_minishell *ms, char *cmd, char **options)
 
 	if (is_builtin(cmd))
 	{
-		ms->exit_code = exec_builtin(ms, cmd, options);
+		ms->exit_code = exec_builtin(ms, cmd, options, false);
 		str_arr_free(options);
 		exit(ms->exit_code);
 	}

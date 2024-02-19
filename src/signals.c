@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:26:30 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/12 00:28:24 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 00:21:50 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	handle_sigint(int sig)
 
 void	update_terminos(void)
 {
+	struct termios	settings;
+
 	tcgetattr(STDIN_FILENO, &settings);
 	settings.c_lflag &= ~(ECHOCTL | IEXTEN);
 	tcsetattr(STDIN_FILENO, TCSANOW, &settings);
@@ -31,6 +33,8 @@ void	update_terminos(void)
 
 void	reset_terminos(void)
 {
+	struct termios	settings;
+
 	tcgetattr(STDIN_FILENO, &settings);
 	settings.c_lflag |= (ECHOCTL | IEXTEN);
 	tcsetattr(STDIN_FILENO, TCSANOW, &settings);

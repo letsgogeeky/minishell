@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 03:03:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/17 22:59:45 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:12:42 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*remove_trailing_newline(char *str)
 {
 	int	len;
-	
+
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
@@ -24,15 +24,15 @@ char	*remove_trailing_newline(char *str)
 	return (str);
 }
 
-int parse_heredoc(t_minishell *ms, t_ast_node *node)
+int	parse_heredoc(t_minishell *ms, t_ast_node *node)
 {
-    char	*doc;
+	char	*doc;
 	int		fd;
 	char	*delimiter;
 
 	delimiter = node->data;
 	fd = open("/tmp/demons", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    doc = NULL;
+	doc = NULL;
 	if (isatty(STDIN_FILENO))
 		doc = readline("heredoc> ");
 	doc = remove_trailing_newline(doc);

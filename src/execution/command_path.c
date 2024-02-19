@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 19:31:03 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 02:19:04 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 01:11:31 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*find_path_in_env(char **envp, char *program)
 
 	idx = 0;
 	while (envp[idx] && ft_strncmp(envp[idx], "PATH=", 5))
-		idx++;
+		++idx;
 	if (!envp[idx])
 		return (NULL);
 	path = ft_substr(envp[idx], 5, ft_strlen(envp[idx]) - 5);
@@ -51,7 +51,11 @@ char	*get_path(char *cmd, char **envp)
 	if (!envp || str_arr_len(envp) == 0)
 		return (ft_strjoin_s1_free(ft_strdup("/usr/bin/"), cmd));
 	if (ft_strncmp(cmd, "./", 2) == 0)
+	{
+		if (!access(cmd, X_OK | F_OK))
+			return (ft_strdup(cmd));
 		return (ft_strdup("/bin/sh"));
+	}
 	path = find_path_in_env(envp, cmd);
 	if (!path)
 		return (ft_strdup(cmd));

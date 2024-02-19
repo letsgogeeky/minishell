@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:31:42 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 19:02:07 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 21:14:05 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@ int	error_permission_denied(char *path)
 	return (-1);
 }
 
-/*
->> O_APPEND
-> O_TRUNC
-< O_RDONLY
-*/
 int	open_file(char *path, int flags)
 {
 	int	fd;

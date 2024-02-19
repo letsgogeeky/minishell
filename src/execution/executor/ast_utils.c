@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 00:11:28 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 02:06:29 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:16:40 by fvoicu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_ast_node	*get_outfile_node(t_ast_node *node)
 {
 	t_ast_node	*sibling;
 	t_ast_node	*outfile;
-	
+
 	sibling = node;
 	outfile = NULL;
 	while (sibling)
@@ -92,26 +92,4 @@ t_ast_node	*get_outfile_node(t_ast_node *node)
 		sibling = sibling->sibling;
 	}
 	return (outfile);
-}
-
-char	**get_arr_without_last(char **arr)
-{
-	int		i;
-	char	**new_arr;
-
-	if (!arr)
-		return (NULL);
-	i = 0;
-	while (arr[i])
-		i++;
-	new_arr = (char **)malloc(sizeof(char *) * i);
-	i = 0;
-	while (arr[i + 1])
-	{
-		new_arr[i] = ft_strdup(arr[i]);
-		i++;
-	}
-	new_arr[i] = NULL;
-	str_arr_free(arr);
-	return (new_arr);
 }

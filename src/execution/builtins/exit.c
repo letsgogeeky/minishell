@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:48:32 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 17:43:20 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 03:46:33 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,39 @@
 #include "minishell/execution/builtins.h"
 #include "minishell/minishell.h"
 
-int	builtins_exit(t_minishell *ms, char **options, char *cmd)
+void	do_cleanup(t_minishell *ms);
+
+int	builtins_exit(t_minishell *ms, char **options, char *cmd, bool is_parent)
 {
+	int	exit_code;
+
+	exit_code = ms->exit_code;
 	if (options && options[0])
 	{
-		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		ms->exit_code = 1;
-		return (EXIT_FAILURE);
+		if (options[0][0] != '-' && !ra_is_int(options[0]))
+		{
+			print_builtin_error("exit", options[0], \
+				"numeric argument required");
+			exit_code = 255;
+		}
+		else if (options[0][0] != '-' && ra_is_int(options[0]))
+			exit_code = ft_atoi(options[0]);
+		else
+		{
+			ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+			ms->exit_code = 1;
+			return (EXIT_FAILURE);
+		}
 	}
 	printf("exit\n");
+	if (!is_parent)
+		return (exit(exit_code), EXIT_SUCCESS);
+	do_cleanup(ms);
+	return (free(cmd), free(ms), exit(exit_code), EXIT_SUCCESS);
+}
+
+void	do_cleanup(t_minishell *ms)
+{
 	clear_history();
 	reset_terminos();
 	str_arr_free(ms->envp);
@@ -36,8 +60,5 @@ int	builtins_exit(t_minishell *ms, char **options, char *cmd)
 			printf("\033[1;31m Offloading AST:::: \033[0m \n");
 		destroy_ast(ms->ast);
 	}
-	free(ms);
-	free(cmd);
-	exit(0);
-	return (EXIT_SUCCESS);
+	str_arr_free(ms->rl_input);
 }
