@@ -6,7 +6,7 @@
 /*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:37:16 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/19 00:22:29 by ramoussa         ###   ########.fr       */
+/*   Updated: 2024/02/19 02:02:42 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_minishell
 	char			*first_cmd;
 	t_stack_node	*stack;
 	int				count;
+	char			**rl_input;
 }		t_minishell;
 
 void	update_terminos(void);

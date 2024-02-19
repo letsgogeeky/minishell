@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:44:56 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 22:13:32 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 03:10:43 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 void	prettify_str(t_minishell *ms, char *str);
 char	*get_final_str(t_minishell *ms, char *str, t_quote_state qs);
 char	*do_quote_magic(t_minishell *ms, char *str);
+bool	should_print_space(char *curr, char *next);
 
 int	builtins_echo(t_minishell *ms, char **cmds)
 {
@@ -36,7 +37,10 @@ int	builtins_echo(t_minishell *ms, char **cmds)
 	{
 		prettify_str(ms, cmds[i]);
 		if (cmds[i + 1])
-			printf(" ");
+		{
+			if (should_print_space(cmds[i], cmds[i + 1]))
+				printf(" ");
+		}
 		++i;
 	}
 	if (newline)
@@ -110,4 +114,12 @@ char	*get_final_str(t_minishell *ms, char *str, t_quote_state qs)
 			return (parse_unclosed_quote(ms, "\"", str));
 	}
 	return (ft_strdup(str));
+}
+
+bool	should_print_space(char *curr, char *next)
+{
+	if ((ft_strlen(next) == 1 && !ft_strncmp(next, "=", 1)) || \
+		(ft_strlen(curr) == 1 && !ft_strncmp(curr, "=", 1)))
+		return (false);
+	return (true);
 }

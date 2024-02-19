@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manager.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fvoicu <fvoicu@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: ramoussa <ramoussa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 19:31:18 by ramoussa          #+#    #+#             */
-/*   Updated: 2024/02/18 22:02:21 by fvoicu           ###   ########.fr       */
+/*   Updated: 2024/02/19 01:45:45 by ramoussa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,32 @@ int	exists_in_env(char *key, char **envp)
 	return (-1);
 }
 
+char	*get_dequoted_value(char *value)
+{
+	if (!value || ft_strlen(value) < 2)
+		return (ft_strdup(value));
+	if (value[0] != '\'' && value[0] != '\"')
+		return (ft_strdup(value));
+	if ((value[0] == '\'' && value[ft_strlen(value) - 1] == '\'') || \
+		(value[0] == '\"' && value[ft_strlen(value) - 1] == '\"'))
+		return (ft_substr(value, 1, ft_strlen(value) - 2));
+	return (ft_strdup(value));
+}
+
 int	update_env_variable(char *key, char *value, t_minishell *ms)
 {
 	int		i;
 	char	*tmp;
+	char	*dequoted;
 
 	i = exists_in_env(key, ms->envp);
 	if (i == -1)
 		return (-1);
 	free(ms->envp[i]);
 	tmp = ft_strjoin(key, "=");
-	ms->envp[i] = ft_strjoin(tmp, value);
+	dequoted = get_dequoted_value(value);
+	ms->envp[i] = ft_strjoin(tmp, dequoted);
+	free(dequoted);
 	free(tmp);
 	return (EXIT_SUCCESS);
 }
@@ -49,6 +64,7 @@ char	**add_to_env(char *key, char *value, char **envp)
 {
 	int		i;
 	char	**new_envp;
+	char	*dequoted;
 
 	i = 0;
 	while (envp[i])
@@ -58,7 +74,9 @@ char	**add_to_env(char *key, char *value, char **envp)
 	while (envp[++i])
 		new_envp[i] = envp[i];
 	key = ft_strjoin(key, "=");
-	new_envp[i] = ft_strjoin(key, value);
+	dequoted = get_dequoted_value(value);
+	new_envp[i] = ft_strjoin(key, dequoted);
+	free(dequoted);
 	new_envp[i + 1] = NULL;
 	free(key);
 	free(envp);
